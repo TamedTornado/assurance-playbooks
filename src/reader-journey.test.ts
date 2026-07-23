@@ -169,6 +169,16 @@ describe("reader-first assurance journeys", () => {
     expect(verification).toContain("Tested");
     expect(verification).toContain("Do not enumerate the full cross-product");
     expect(verification).toContain("capability-to-verification map");
+    expect(verification).toContain("production-system participation map");
+    expect(verification).toContain("Production implementation exercised");
+    expect(verification).toContain("Production implementation present but not exercised");
+    expect(verification).toContain("Boundary simulator");
+    expect(verification).toContain("Test-only substitute");
+    expect(verification).toContain("Reimplemented by the test");
+    expect(verification).toContain("approved replacement boundary");
+    expect(verification).toContain(
+      "A production component absent from one test is not automatically a gap",
+    );
     expect(verification).not.toContain("### 5.");
     expect(verification).not.toContain("semantic mutation");
     expect(verification).not.toContain("mutation count");

@@ -10,7 +10,7 @@ playbook: codebase-assurance
 phase: design-counterexamples
 purpose: Determine which product capabilities the existing verification meaningfully protects and which remain weak falsely protected or untested.
 inputs: [Product expectation worksheet, Design consistency review, Product audit record, Application source, Existing tests and CI configuration]
-outputs: [Application capability inventory, Verification inventory, Capability-to-verification map, Verification findings]
+outputs: [Application capability inventory, Verification inventory, Production-system participation map, Capability-to-verification map, Verification findings]
 ---
 # Map what the product does against what its tests verify
 
@@ -198,6 +198,81 @@ For each existing test or coherent test group, record:
   represents; and
 - whether the ordinary repository or CI route runs it.
 
+#### Map production-system participation
+
+An integration test earns confidence from the production machinery it actually
+exercises, not from its name or the number of components started around it.
+
+For every capability that claims integration or system-level protection, first
+reconstruct the relevant production path:
+
+```text
+[product entry point]
+→ [application components]
+→ [state, work, and integration boundaries]
+→ [consequential product result]
+```
+
+Then reconstruct the path the test actually uses. Use composition roots,
+dependency-injection registrations, test overrides, factories, patches,
+containers, process boundaries, and runtime traces. Compare the two paths in a
+production-system participation map.
+
+Classify each material component:
+
+- **Production implementation exercised:** The real implementation received
+  consequential calls during the test.
+- **Production implementation present but not exercised:** The component was
+  constructed or registered, but the tested flow never reached it.
+- **Production implementation with test configuration:** The same production
+  code ran with a controlled database, account, endpoint, clock, filesystem, or
+  environment.
+- **Boundary simulator:** An external dependency was deliberately replaced at
+  an approved seam by a controlled equivalent.
+- **Test-only substitute:** A fake, mock, stub, in-memory implementation, or
+  alternate runner replaced production behavior.
+- **Bypassed:** The test entered below the production component.
+- **Reimplemented by the test:** Test helpers duplicated production behavior
+  instead of invoking the production implementation.
+- **Indeterminate:** Available static or runtime evidence cannot establish
+  participation.
+
+The map must distinguish a real component being available from it being
+exercised. Booting the application does not prove that a scenario reached its
+queue, worker, transaction manager, authorization policy, retry handler, or
+artifact writer.
+
+Record the approved replacement boundary for each integration suite:
+
+> What is the outermost component deliberately replaced, and why?
+
+Everything before that boundary should use the production implementation or be
+reported as a limitation. Everything beyond it remains outside what the test
+can establish.
+
+This boundary is especially important when the external component is expensive,
+nondeterministic, unsafe, or unavailable. An agentic system may reasonably
+replace the actual model call while retaining its production scheduler, state,
+queue, worker, runner, prompt construction, response handling, artifacts,
+approvals, retries, and budgets. Replacing the production runner with a fake
+runner moves the seam inward and removes all of that behavior from the
+integration evidence.
+
+For each substitution or bypass, record the behavior it removes:
+
+- serialization and protocol handling;
+- authentication and authorization;
+- transaction and persistence semantics;
+- retries, idempotency, timeouts, and cancellation;
+- concurrency and ordering;
+- middleware and validation;
+- artifact identity and routing;
+- failure translation and recovery; or
+- another product-owned responsibility.
+
+Do not assume an in-memory implementation is equivalent merely because it
+implements the same interface.
+
 Separate four facts that are often collapsed into “covered”:
 
 1. code belonging to the capability executed;
@@ -223,6 +298,17 @@ Attach a test to a capability only at the level its executed route and
 assertions support. A test may protect the base happy path while leaving
 particular roles, data shapes, transitions, integrations, or failure conditions
 unprotected.
+
+For integration claims, compare three things:
+
+1. the production systems required by the capability;
+2. the systems the existing test actually exercises; and
+3. the consequential behavior and state the test asserts.
+
+A production component absent from one test is not automatically a gap. It is a
+gap when that component participates in the production path for the capability
+the test claims to protect and the missing participation removes material
+behavior.
 
 For each capability and important dimension, classify the existing
 verification:
@@ -264,7 +350,8 @@ disclosure:
 ├── Important dimensions
 ├── Existing verification
 ├── What that verification actually asserts
-├── Real and replaced boundaries
+├── Production-system participation
+├── Approved replacement boundary
 └── Gaps and limits
 ```
 
@@ -312,6 +399,23 @@ A test that imports the public facade but asserts only that a type can be
 constructed touches external consumption. It does not establish that a
 downstream game can perform the representative product workflow.
 
+For a Moria edit-and-present integration test, the participation map might
+look like:
+
+| Production system | Test participation |
+| --- | --- |
+| Public edit facade | Production implementation exercised |
+| Authoritative world state | Production implementation exercised |
+| Work scheduler | Production implementation exercised |
+| Presentation preparation | Production implementation present but not exercised |
+| GPU upload and acknowledgement | Boundary simulator |
+| Save and restore | Not part of this scenario |
+
+That test may meaningfully protect command admission and world-state mutation.
+It cannot establish visible presentation latency merely because the graphics
+types were registered. The GPU seam and missing presentation execution remain
+visible in the map.
+
 Similarly, a headed benchmark test may protect report generation while
 replacing the real graphics boundary or using a smaller workload. The map must
 retain that reduced boundary rather than marking performance “covered.”
@@ -336,14 +440,21 @@ systems into product requirements.
 > and run the existing verification through the project's ordinary and CI
 > routes. For each test or coherent group, record its invocation, setup, entry
 > point, execution depth, real and replaced components, asserted result, covered
-> dimensions, and whether it actually runs normally. Map tests to capabilities
-> only at the level supported by executed routes and assertions. Classify each
-> capability as meaningfully protected, touched but not established, isolated
-> only, reduced path, happy path only, absent from the ordinary route,
-> unprotected, or indeterminate. Also identify tests for obsolete, unreachable,
-> or unauthorized product behavior. Produce a capability-to-verification map
-> with linked evidence. Do not treat names, counts, coverage, or visual
-> inspection as proof that consequential behavior is verified.
+> dimensions, and whether it actually runs normally. For every integration or
+> system claim, reconstruct the required production path and the path actually
+> taken by the test. Classify each material component as production
+> implementation exercised, production implementation present but not
+> exercised, production implementation with test configuration, boundary
+> simulator, test-only substitute, bypassed, reimplemented by the test, or
+> indeterminate. Record the approved replacement boundary and the production
+> behavior removed by each substitution. Map tests to capabilities only at the
+> level supported by executed routes and assertions. Classify each capability
+> as meaningfully protected, touched but not established, isolated only,
+> reduced path, happy path only, absent from the ordinary route, unprotected,
+> or indeterminate. Also identify tests for obsolete, unreachable, or
+> unauthorized product behavior. Produce a capability-to-verification map with
+> linked evidence. Do not treat names, counts, coverage, or visual inspection
+> as proof that consequential behavior is verified.
 
 ## Required output
 
@@ -352,6 +463,8 @@ Produce:
 - an application surface inventory with certainty and evidence;
 - a hierarchical product capability inventory with important dimensions;
 - an existing-verification inventory describing execution and assertions;
+- a production-system participation map for integration and system tests;
+- approved replacement boundaries and the behavior each replacement removes;
 - a capability-to-verification map;
 - consequential verification gaps and limitations;
 - tests absent from ordinary execution; and
@@ -365,8 +478,10 @@ asking the operator to maintain them manually.
 
 Preserve application and test target identity, inventory tool versions,
 ordinary and CI commands, test discovery and results, coverage or execution
-traces where used, assertions inspected, real and replaced boundaries,
-capability mappings, uncertainty, and review corrections.
+traces where used, assertions inspected, production composition, test
+composition, runtime participation, approved replacement boundaries,
+substitution behavior, capability mappings, uncertainty, and review
+corrections.
 
 ## Stop and escalate
 
@@ -389,6 +504,7 @@ generalize from the visible subset.
 
 A product owner can see what the application does and which important behavior
 has weak or absent protection. A technical reviewer can trace every mapping to
-the actual application surface, existing test route, real or replaced
-boundaries, and consequential assertion. Coverage, test volume, and agent
-opinion cannot create a stronger conclusion than that evidence supports.
+the actual application surface, existing test route, participating production
+systems, approved replacement boundary, substitutions, and consequential
+assertion. Coverage, test volume, and agent opinion cannot create a stronger
+conclusion than that evidence supports.
