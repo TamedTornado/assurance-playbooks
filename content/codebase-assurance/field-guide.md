@@ -9,13 +9,17 @@ produces evidence for the next one. If the evidence says the product claim is
 false, preserve that result. The purpose is not to shepherd every row toward
 green.
 
-## Start with the reason for assurance, not the repository
+## Start with the client's account, not the repository
 
 Before opening the code, name:
 
 - the trigger or concern that made assurance necessary;
-- the person authorized to act on the result;
-- the product or operational action the evidence could change;
+- what the client believed they commissioned;
+- what they believe has been delivered;
+- what they have observed and what remains opaque;
+- important quality, architectural, and prohibited-shortcut expectations;
+- what they plan to do with the product next;
+- the person authorized to act on the eventual result;
 - the users, money, data, safety, or authority exposed if the claim is false;
 - the exact repositories, revisions, services, environments, and workloads in
   scope;
@@ -26,49 +30,50 @@ Before opening the code, name:
 
 Record these in the shared [acceptance
 criteria](../shared/acceptance-criteria.md). The client need not arrive with a
-formal decision. If they arrive with “we no longer trust this AI-built
-codebase,” help determine what evidence could enable, narrow, delay, or prevent
-before starting a broad scan.
+formal decision or technical claim. “Agents built this in a language I cannot
+read, and I do not know what to trust” is a sufficient starting point.
 
-## Phase 1: Define the decision and assurance case
+## Phase 1: Understand what was supposed to be built
 
-Executable procedure: [Map the claims the decision relies
-on](procedures/define-assurance-case.md).
+Executable procedure: [Reconstruct the expected
+product](procedures/understand-expected-product.md).
 
-**Decision:** Which product claims matter enough to challenge?
+**Question:** What did the client reasonably expect, and what remains opaque
+to them?
 
-This is not a requirements exercise. Extract claims the product already makes
-or that somebody is about to rely upon:
+Begin with the client's account in ordinary language:
 
-- What decision will this work change?
-- What does the product say or imply is true now?
-- What failure would stop the launch, migration, acquisition, or authority
-  increase?
-- What does the demo or UI appear to prove that the underlying system may not?
-- What could remain false while the demonstration and current tests look
-  successful?
+- What did they ask to have built?
+- What were they told was complete?
+- What have they personally seen working?
+- What performance, scale, reliability, architecture, or forbidden shortcuts
+  mattered?
+- What can they not independently verify?
+- What do they expect to do with it next?
 
-Preserve the original language, then decompose broad promises into factual
-propositions. “This is a reusable library” may require the proposition “the
-reference application uses no capability unavailable to an independent
-consumer.” Give every proposition an evidence question, a falsification
-question, and only the conditions and exclusions needed to interpret it.
+Compare that account with requirements, designs, demonstrations, reports, and
+technical accounts without silently forcing them to agree. Confirm a
+plain-language product expectation brief with the client. Then, as operator
+work, translate consequential expectations into technical questions, evidence
+needs, and false-success paths.
 
-**Evidence to keep:** decision statement, source promises, claim map,
-consequences, evidence and falsification questions, conditions, exclusions,
-disagreements, and owner confirmation.
+**Evidence to keep:** client account, expectation sources, demonstrations,
+product material, conflicts, confirmed expectation brief, technical questions,
+false-success paths, coverage statement, and investigation plan.
 
-**Move on when:** the decision owner agrees that a failure of any selected
-claim would affect the decision and that exclusions are explicit.
+**Move on when:** the client confirms that the expectation brief faithfully
+describes what they expected and could not verify, and an independent reviewer
+can trace the planned technical investigation back to it.
 
 **Ways to fool yourself:** deriving importance from whichever tests already
-exist; accepting “the whole platform” as a scope; treating a polished demo as
-the product contract.
+exist; treating the implementation as the source of intent; asking the client
+to design the investigation; treating a polished demo as the product contract.
 
-Moria’s top-level proposition was that it was a reusable voxel substrate, not
-application-specific machinery hidden by a convincing demo. Five selected
-propositions exposed ways that claim could be undeserved. The future game was
-not turned into a backlog inside the assurance work.
+For Moria, the client could see an attractive editable world but could not read
+the Rust. The expectation brief connected “reusable,” “only the voxels on the
+GPU,” and “super performant” to the reasons those promises mattered. The
+operator then translated them into investigations of public-consumer access,
+state authority, memory scaling, workload, and user-visible latency.
 
 ## Phase 2: Make the design tell one story
 

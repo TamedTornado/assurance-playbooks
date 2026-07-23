@@ -2,7 +2,7 @@
 
 | Field-guide phase | Executable procedure | Primary output | Worked-example anchor |
 | --- | --- | --- | --- |
-| Define the decision and assurance case | [Map the claims the decision relies on](define-assurance-case.md) | Decision statement and selected assurance case | Moria separates the reusable-substrate claim from five ways it could be undeserved |
+| Understand what was supposed to be built | [Reconstruct the expected product](understand-expected-product.md) | Product expectation brief and investigation plan | Moria connects reusability, GPU authority, responsiveness, and the reference game to inspectable questions |
 | Make the design tell one story | [Review the design](review-design.md) | Claim trace, contradictions, divergences | Water, diagnostics, load ownership, latency, memory |
 | Reproduce the consequential path | [Reproduce the path](reproduce-path.md) | Baseline evidence or blocked finding | Pinned public consumer and acceptance machines |
 | Find the cheaper implementation | [Discover invariants and design counterexamples](design-counterexamples.md) | Invariants and adversarial fixtures | Invalid assets must fail through ordinary tests |

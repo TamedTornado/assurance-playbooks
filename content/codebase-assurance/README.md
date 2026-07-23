@@ -5,39 +5,34 @@ organization understands—and whether the available evidence will survive the
 next consequential change.
 
 Codebase Assurance is a method for examining a product that has become too
-important to trust on appearance alone. It begins with the concern that made
-assurance necessary and identifies the action its evidence could change. It
-then follows the claims behind that action
-claims through the product boundary, design, implementation, tests,
-dependencies, runtime behavior, and failure handling.
+important to trust on appearance alone. It begins by reconstructing what the
+client believed they commissioned, what they were told was complete, and what
+they cannot independently verify. It then follows the important expectations
+through the product boundary, design, implementation, tests, dependencies,
+runtime behavior, and failure handling.
 
 The purpose is not to inventory every imperfection. It is to establish what the
 software deserves to be trusted to do, expose the most important unsupported
 assumptions, and leave behind a gate that rejects one material failure the
 system previously accepted.
 
-## The decision this method supports
+## Why clients use this method
 
-Use this method when somebody accountable needs to decide:
+Use this method when a client needs independent visibility into:
 
-- whether an AI-built product is ready for a launch, migration, enterprise
-  customer, acquisition, or increased operational responsibility;
+- whether an AI-built product is actually the product they commissioned;
+- whether its architecture supports the future work it was meant to enable;
+- whether performance, scale, reliability, and resource claims measure the
+  behavior the client was promised;
 - whether a green test suite actually supports a consequential product claim;
-- where limited remediation effort will buy the largest increase in confidence;
+- whether a demonstration uses the real product or privileged shortcuts;
 - whether an inherited system can be operated and changed safely;
-- whether a known fragility is a reachable risk or merely unattractive code; or
-- which remaining unknowns must be accepted, contained, or resolved.
+- where remediation will buy the largest increase in justified confidence; and
+- what is trustworthy, contradicted, fragile, or still unknown.
 
-The client does not need to arrive with that decision already written. They
-may arrive because a launch is approaching, agents built code they no longer
-trust, or a previous failure might recur. The operator converts that trigger
-into a decision before examining the repository. “Assess the codebase” is not
-enough. A useful decision sounds like: “Can we move recurring
-billing to this service without creating duplicate charges under retry?” or
-“Can this substrate be consumed through its public interface without the demo
-depending on privileged internals?”
-
-That decision keeps the work from becoming a generic code review.
+The client does not need to arrive with a formal decision or read the
+implementation language. “Agents built this, the demonstration works, and I
+cannot tell what I really own” is a sufficient starting point.
 
 ## When this is the wrong method
 
@@ -54,19 +49,18 @@ decision, and states the edge of the evidence.
 
 ## What happens in practice
 
-### 1. Define the decision and assurance case
+### 1. Understand what was supposed to be built
 
-The sponsor explains why assurance is needed now and what concerns them. The
-operator helps formulate the action the evidence could enable, narrow, delay,
-or prevent. The operator then extracts claims the product already makes,
-decomposes the consequential ones into investigable propositions, and gives
-each an evidence question and a falsification question.
+The client explains what they asked for, what they believe was delivered, what
+they have seen working, and what remains opaque. The conversation includes
+visible behavior, performance and scale, architectural promises, prohibited
+shortcuts, completion evidence, and what they expect to do next.
 
-This is not backlog writing or an attempt to define the whole product.
-Conditions and exclusions are attached only where needed to interpret a
-claim. AI-built systems often contain a credible promise plus a cheaper
-implementation that the demo and existing tests cannot distinguish. The claim
-map makes those alternatives explicit before repository analysis begins.
+The operator compares that account with project material and returns a
+plain-language product expectation brief for correction. Only after that is
+confirmed does the operator translate it into technical questions, evidence
+needs, and ways the implementation could look successful while violating an
+important expectation. The client is not asked to design the investigation.
 
 ### 2. Review the contract before trusting the implementation
 
@@ -165,8 +159,8 @@ Read the full [Moria worked example](examples/moria.md).
 
 ## What you leave with
 
-- **A decision and product-boundary record.** What decision is being supported,
-  what system and revisions are included, and what is explicitly outside it.
+- **A product expectation brief.** What the client commissioned, what they were
+  shown, what remains opaque, and how the project material agrees or conflicts.
 - **A claim and contradiction map.** Consequential expectations, design
   conflicts, assumptions, owners, and plausible counterexamples.
 - **A reproducible baseline.** The inputs, environment, commands, artifacts,
@@ -182,11 +176,11 @@ Read the full [Moria worked example](examples/moria.md).
 
 ## What this method asks of your team
 
-The sponsor must explain the consequential concern and have authority to act
-on the result. The operator helps turn that concern into an explicit decision;
-the client is not expected to bring one fully formed. A technical owner must
-provide the real system, people, environments, and dependencies—or own the
-consequence when those are blocked.
+The client must explain what they expected, what they were shown, and what they
+cannot verify. The operator reconstructs that account and owns its translation
+into a technical investigation. A technical owner must provide the real
+system, people, environments, and dependencies—or own the consequence when
+those are blocked.
 
 The operator needs freedom to preserve failed evidence, challenge existing
 tests, and distinguish an uncomfortable result from incomplete work. The
@@ -206,7 +200,7 @@ far more explicit and defensible.
 ## Run it yourself
 
 Use the [Codebase Assurance field guide](field-guide.md) to perform the method.
-It is written as a sequence of decisions and exercises, with practical
+It is written as a sequence of questions and exercises, with practical
 questions, evidence, stop conditions, and examples.
 
 Every phase links to an [executable procedure card](procedures/) containing the

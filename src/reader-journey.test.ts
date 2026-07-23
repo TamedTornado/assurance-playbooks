@@ -22,22 +22,34 @@ describe("reader-first assurance journeys", () => {
     }
   });
 
-  it.each(["codebase-assurance", "agentic-delivery-assurance"])(
-    "explains the %s method as a decision journey",
-    async (playbook) => {
-      const source = await document(`content/${playbook}/README.md`);
-      for (const heading of [
-        "## The decision this method supports",
-        "## What happens in practice",
-        "## A real example",
-        "## What you leave with",
-        "## What this method cannot tell you",
-        "## Run it yourself",
-      ]) {
-        expect(source).toContain(heading);
-      }
-    },
-  );
+  it("explains codebase assurance from the client's need for visibility", async () => {
+    const source = await document("content/codebase-assurance/README.md");
+    for (const heading of [
+      "## Why clients use this method",
+      "## What happens in practice",
+      "### 1. Understand what was supposed to be built",
+      "## A real example",
+      "## What you leave with",
+      "## What this method cannot tell you",
+      "## Run it yourself",
+    ]) {
+      expect(source).toContain(heading);
+    }
+  });
+
+  it("explains agentic delivery assurance as a decision journey", async () => {
+    const source = await document("content/agentic-delivery-assurance/README.md");
+    for (const heading of [
+      "## The decision this method supports",
+      "## What happens in practice",
+      "## A real example",
+      "## What you leave with",
+      "## What this method cannot tell you",
+      "## Run it yourself",
+    ]) {
+      expect(source).toContain(heading);
+    }
+  });
 
   it("covers design coherence in codebase assurance", async () => {
     const index = await document("content/codebase-assurance/index.md");
