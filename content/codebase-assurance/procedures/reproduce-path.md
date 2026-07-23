@@ -17,149 +17,76 @@ outputs: [Product audit record, Raw evidence, Findings or blocked records]
 The previous phases established what the product claims to be and whether its
 design describes that product consistently.
 
-Now audit the delivered application itself.
-
-The question is:
+Now audit the delivered application itself:
 
 > Does the delivered product perform its important functions correctly under
 > the conditions it claims to support?
 
-This is not an exhaustive regression test of every feature. It is an
-independent assessment of the capabilities, qualities, and operating boundaries
-that define whether the product is genuinely usable.
-
-## What this phase establishes
-
-For each important product capability, establish:
-
-- whether the complete behavior can actually be performed;
-- whether the resulting state is correct;
-- whether it works through the supported interface;
-- whether it works from a clean and documented starting point;
-- whether the result is repeatable;
-- whether stated performance or scale requirements are met where relevant; and
-- what remains broken, partial, blocked, or untested.
+This is not an exhaustive regression test. It is an independent assessment of
+the capabilities and operating boundaries that determine whether the delivered
+product is genuinely usable.
 
 A product does not pass merely because it compiles, opens, or presents an
-attractive demonstration.
+attractive demonstration:
 
-For example:
-
-- Compiling a library does not establish that another application can use it.
-- Accepting a request does not establish that the requested work completed.
-- Displaying an edit does not establish that it was saved correctly.
-- Producing a report does not establish that the reported threshold was met.
-- Passing a small workload does not establish the claimed production capacity.
-- A healthy process does not establish correct product state.
-- A convincing demo does not establish that the supported product interface
-  was used.
+- compiling a library does not establish that another application can use it;
+- accepting a request does not establish that the work completed;
+- displaying a change does not establish that the correct state was saved;
+- producing a report does not establish that the reported target was met;
+- surviving a sample workload does not establish the claimed operating
+  capacity; and
+- a healthy process does not establish healthy product state.
 
 ## Inputs
 
-Bring:
-
-- the product expectation worksheet;
-- the design consistency review;
-- the delivered repository, artifact, or deployment;
-- the exact version under audit;
-- installation, build, deployment, and operating instructions;
-- representative accounts, data, assets, and integrations;
-- stated performance, scale, and reliability requirements;
-- any demonstrations or acceptance evidence already supplied; and
-- access to the environments required by the product's claims.
+Bring the product expectation worksheet, design consistency review, delivered
+repository or artifact, product instructions, representative data and
+integrations, and access to the environments required by the product's claims.
 
 ## Human procedure
 
-### 1. Identify the functions that define the product
+### 1. Choose what defines the product
 
-Return to the product expectation worksheet.
-
-Ask:
+Return to the expectation worksheet and ask:
 
 > If these things do not work, is this still the product it claims to be?
 
-Select the important capabilities that define the delivered product. Include:
+Select the capabilities that define the product rather than every feature it
+contains. Cover the central user or consumer workflows, important state
+changes, required integrations, and any performance, scale, or architectural
+promise whose failure would materially change what was delivered.
 
-- its central user workflows;
-- the supported interfaces used by customers or downstream systems;
-- important state changes and persistence;
-- consequential calculations or transformations;
-- required integrations;
-- stated performance or scale characteristics; and
-- architectural constraints whose violation would materially change the
-  product.
+For each capability, write one complete audit scenario:
 
-Do not choose functions merely because they are easy to demonstrate. Do not
-attempt to test every button, endpoint, or helper.
+- who or what uses the product;
+- the starting state;
+- the action performed;
+- the visible result;
+- the resulting product state;
+- the conditions it is supposed to support;
+- what would clearly mean it did not work; and
+- what a successful run would still not prove.
 
-A typical audit might select five to ten capabilities. A small product may
-require fewer. A larger product may require representative scenarios grouped
-by capability.
-
-### 2. Record the claimed operating conditions
-
-For each capability, record the conditions under which it is supposed to work:
-
-- intended user or consumer;
-- supported environment;
-- relevant data shape and volume;
-- expected concurrency or workload;
-- required dependencies;
-- performance boundary;
-- persistence and recovery expectations; and
-- explicitly unsupported conditions.
-
-This defines the audit boundary.
-
-“Works on the developer's machine with sample data” cannot establish a claim
-about production load. Conversely, an internal prototype should not be failed
-against operating conditions it never claimed to support.
-
-### 3. Define a complete audit scenario
-
-Write a concrete scenario for each selected capability:
-
-- **Starting state:** What product, account, data, and environment exist before
-  the test?
-- **Action:** What does the user, consumer, or operator do?
-- **Expected result:** What should visibly happen?
-- **Expected state:** What should be true after the action?
-- **Failure condition:** What result would show that the capability is broken?
-- **Evidence:** What observation or artifact can establish the result?
-- **Limit:** What does this scenario not prove?
-
-Prefer complete product behavior over internal milestones.
-
-For example:
+Prefer one complete scenario over several internal checks. For example:
 
 > Starting from an unmodified saved world, a player removes material from a
 > solid hillside, sees the surface update, saves the world, terminates the
 > process, reloads the save, and observes the same removed material.
 
-This is stronger than separate checks that an edit command was accepted and a
-save file was written.
+That scenario tests more of the delivered product than separate observations
+that an edit command was accepted and a file was written.
 
-### 4. Pin the delivered product
+Do not choose scenarios merely because they are easy to demonstrate. A typical
+audit may cover five to ten defining capabilities, grouped into fewer complete
+scenarios where that keeps the work understandable.
 
-Record the identity of what is being audited:
+### 2. Test the product as delivered
 
-- repository and commit;
-- release or deployment artifact;
-- local modifications;
-- configuration and feature flags;
-- data and asset versions;
-- external dependency versions where material; and
-- named hardware when the claim depends on it.
+Pin the exact target: repository and commit, release or deployment artifact,
+local modifications, material configuration, data and asset versions, and
+named hardware where relevant.
 
-Do not audit an unidentified branch, mutable image tag, unexplained local
-build, or convenient replacement revision.
-
-If the team cannot identify the delivered product, record that as an audit
-finding.
-
-### 5. Approach the product through its supported route
-
-Use the route available to the intended user or consumer:
+Approach it through the route supplied to its intended user or consumer:
 
 - public installation instructions;
 - supported package or API;
@@ -168,257 +95,168 @@ Use the route available to the intended user or consumer:
 - normal operator controls; or
 - named acceptance harness.
 
-Do not begin with private implementation knowledge.
+Run each scenario through to its actual product consequence. Preserve the first
+attempt before repairing anything: starting conditions, exact actions,
+observed behavior, resulting state, errors, artifacts, measurements, and
+anything the operator had to infer.
 
-The original developer may explain the product, but the audit must distinguish
-between:
+When something must change before the scenario can run, classify it:
 
-- what the delivered product supports;
-- what works only through undocumented knowledge; and
-- what can be made to work only by modifying the product.
+- **Environment repair:** the audit environment lacks a documented
+  prerequisite or required access.
+- **Instruction repair:** the product can perform the behavior, but its
+  supplied route is missing, stale, ambiguous, or wrong.
+- **Product repair:** delivered code, shipped configuration, data, assets,
+  supported interface, or behavior must change.
 
-### 6. Preserve the first attempt
+Environment and instruction repairs remain visible in the audit. A product
+repair means the delivered target did not pass. A repaired version can be
+audited as a new target, but it does not erase the original result.
 
-Run the scenario as supplied and preserve:
+Check the resulting state, not only the visible intermediate event. Depending
+on the scenario, that may require inspecting persisted data, downstream
+effects, generated artifacts, external-system state, authorization boundaries,
+or behavior after restart.
 
-- the exact commands or actions;
-- the starting conditions;
-- the observed behavior;
-- resulting state;
-- errors and warnings;
-- produced artifacts;
-- measurements where relevant; and
-- anything the operator had to infer.
+Do not replace a failed supported route with private developer knowledge and
+then call the product working.
 
-Do not silently repair the environment, instructions, data, or product before
-recording the first result.
+### 3. Test the conditions the product claims to support
 
-The first attempt establishes whether the delivered product can be used as
-delivered.
+Where the product claims a workload, scale, latency, resource, environment, or
+repeatability boundary, run the relevant complete scenario under that
+condition.
 
-### 7. Classify every required repair
+Use the workload the product claims to support—not an arbitrary torture test
+and not a smaller convenient proxy. Record the material conditions:
 
-Before changing anything, classify the proposed repair.
-
-#### Environment repair
-
-The audit environment lacks a documented prerequisite or required access.
-
-Examples include installing the documented toolchain, obtaining a required
-test credential, or using the named hardware profile.
-
-#### Instruction repair
-
-The product can perform the behavior, but its supplied instructions are
-missing, stale, ambiguous, or incorrect.
-
-Examples include an undocumented startup command, a missing migration step,
-controls absent from the user documentation, or a required environment
-variable described under the wrong name.
-
-#### Product repair
-
-The delivered code, shipped configuration, data, assets, supported interface,
-or product behavior must change.
-
-Examples include implementing a missing API, correcting corrupted state,
-changing a workload threshold, modifying the application so the scenario can
-complete, or granting the demo access unavailable to real consumers.
-
-A product repair means the delivered product did not pass that scenario. A
-later repaired version may be audited separately, but it does not erase the
-original result.
-
-### 8. Execute the complete scenario
-
-Run through to the actual product consequence.
-
-Check both the visible behavior and resulting state.
-
-Depending on the capability, this may require inspecting:
-
-- persisted data;
-- downstream effects;
-- generated artifacts;
-- external-system state;
-- authorization boundaries;
-- timing and resource measurements;
-- behavior after restart; or
-- results observed by another consumer.
-
-Do not stop at the first green intermediate result.
-
-### 9. Exercise the stated operating boundary
-
-Where the capability includes a stated workload, scale, latency, or resource
-expectation, repeat the scenario under that condition.
-
-Use the workload the product claims to support—not an arbitrary stress test and
-not a smaller convenient proxy.
-
-Record:
-
-- workload identity;
-- data volume;
-- concurrency;
-- duration;
+- data and workload identity;
+- concurrency and duration;
 - machine and environment;
 - warm or cold state;
-- observed latency and throughput;
-- resource consumption;
-- errors and degraded behavior; and
+- latency and throughput;
+- resource use;
+- errors or degraded behavior; and
 - resulting product state.
 
-A threshold measured on another machine or with another workload remains
-evidence for that narrower condition only.
+If the claimed environment is unavailable, record the capability as blocked
+or untested. A result from a different machine or workload supports only that
+narrower condition.
 
-This phase establishes whether the claimed operating case works. Later phases
-deliberately challenge dependency failure, recovery, and deceptive evidence.
+Repeat successful scenarios from the documented starting state. Use a second
+operator or clean environment where practical. A single successful run is an
+observation; a clean repeat supports a stronger audit conclusion.
 
-### 10. Repeat successful scenarios from a clean state
+This phase establishes whether the normal product works under its claimed
+conditions. Later phases deliberately test convincing wrong implementations,
+dependency failures, and recovery.
 
-For any scenario considered successful:
+### 4. Report what actually works
 
-- restore the documented starting state;
-- repeat the procedure without relying on shell history or unstated setup;
-- use a second operator or clean environment where practical; and
-- compare the material result.
+Give every selected capability one result:
 
-A single successful run is an observation. A repeatable run supports a stronger
-audit conclusion.
+- **Working:** The complete expected behavior and resulting state were obtained
+  and repeated under the claimed conditions.
+- **Working with limitations:** The central behavior works, but the evidence
+  covers a narrower workload, environment, interface, state transition, or
+  degree of repeatability than the product claims.
+- **Not working:** The delivered product did not produce the expected behavior
+  or correct resulting state.
+- **Blocked:** A required dependency, credential, dataset, environment, or
+  hardware target could not be obtained after the agreed attempts.
+- **Not tested:** The capability was deliberately left outside the performed
+  audit.
 
-### 11. Assign an audit result
+For each result, state:
 
-Give every selected capability one result.
-
-#### Working
-
-The complete expected behavior and resulting state were obtained and repeated
-under the claimed conditions.
-
-#### Working with limitations
-
-The central behavior works, but a material limitation remains, such as a
-narrower workload, one supported environment, undocumented setup, incomplete
-persistence, weaker measurement, or lack of independent repetition.
-
-#### Not working
-
-The delivered product did not produce the expected behavior or correct
-resulting state.
-
-#### Blocked
-
-A required environment, dependency, credential, dataset, hardware target, or
-external system could not be obtained after the agreed attempts.
-
-#### Not tested
-
-The capability was deliberately left outside the performed audit.
-
-For every result, state:
-
-- what was observed;
+- what was tested;
+- what happened;
 - the evidence;
 - the exact conditions;
-- the limitation of the conclusion; and
+- any repairs required;
+- what the result establishes;
+- what it does not establish; and
 - any resulting finding.
 
-Do not average the results into a score.
+Do not average the results into a score. The audit should make mixed results
+easy to see rather than hiding them behind “mostly working.”
 
 ## A Moria-shaped example
 
 Moria claims to be a reusable voxel-world substrate, not merely a
-demonstration application.
-
-The functional audit should therefore cover capabilities such as these.
+demonstration application. A functional audit could cover these defining
+capabilities.
 
 ### External consumption
 
 A clean downstream Rust/Bevy project pins the audited Moria revision and uses
-only the supported public facade to configure a world, obtain a meaningful
-world observation, submit an edit, and observe completion.
+only the public facade to configure a world, obtain a meaningful observation,
+submit an edit, and observe completion.
 
 If the included demo works but the external consumer cannot perform the same
 representative behavior, the reusable-substrate capability is not working.
 
-### Continuous editable world
+### Editable and persistent world
 
-Run the actual visual consumer and verify that a user can enter the generated
-world, travel through representative terrain, identify a solid hillside,
-remove or place material, and observe the correct surface change.
-
-The resulting world state must agree with the visible result.
-
-### Persistence
-
-After an edit, save through the supported interface, terminate the process,
-start from a clean process, reload the save, and verify the edited world through
-supported queries and presentation.
+Run the visual consumer, enter the generated world, remove or place material,
+and verify the resulting world state. Save through the supported interface,
+terminate the process, reload from a clean process, and verify that the same
+change remains visible and queryable.
 
 Successful file creation is not sufficient if the restored world is wrong.
 
-### Responsiveness
+### Responsiveness and intended workload
 
-Run the agreed edit workload on the named machine and measure from the user or
-consumer action to the promised visible consequence.
+Run the agreed edit and streaming workload on the named machine. Measure from
+the user or consumer action to the promised visible consequence, while
+checking that the resulting world remains correct.
 
-An internal measurement beginning after the request has already waited cannot
-establish the user-facing latency requirement.
+An internal timer beginning after the request has already waited cannot
+establish the user-facing latency claim. A reduced world or different machine
+supports only a narrower conclusion.
 
-### Intended workload and scale
+### Architectural expectation
 
-Run the agreed representative world, streaming, mutation, and presentation
-workload with its required data and machine profile.
+A successful world demonstration cannot establish that Moria is the
+GPU-resident substrate the client commissioned. The same visible behavior may
+be produced by a CPU-authoritative implementation.
 
-Record whether the product remains correct while meeting the claimed latency,
-throughput, and resource boundaries.
-
-### Architectural expectations
-
-A successful functional demonstration does not automatically establish that
-the product uses the commissioned architecture.
-
-The visual world may work while CPU-authoritative state has replaced the
-promised GPU-resident substrate. Functional evidence should record that
-limitation. The later adversarial phase must use evidence capable of
-distinguishing the promised architecture from a convincing substitute.
+Record the functional result and its architectural limitation separately. The
+later adversarial phase must use evidence capable of distinguishing the
+promised architecture from the convincing substitute.
 
 ## Copyable agent prompt
 
-> Independently audit whether the supplied delivered product performs the
-> important functions defined by its product expectation worksheet under the
-> conditions it claims to support. Select the capabilities that define the
-> product rather than every feature. For each capability, draft a complete
-> scenario containing starting state, user or consumer action, visible result,
-> resulting state, failure condition, evidence, claimed workload, and the limit
-> of the conclusion. Pin the exact product and use its supported route.
-> Preserve the first attempt before suggesting changes. Classify every proposed
-> change as an environment repair, instruction repair, or product repair; a
-> product repair means the delivered target did not pass. Execute through the
-> complete product consequence, exercise stated operating boundaries where
-> relevant, and repeat successful scenarios cleanly. Assign working, working
-> with limitations, not working, blocked, or not tested to every selected
-> capability. Do not infer success from compilation, intermediate events,
-> process health, generated reports, reduced workloads, or private developer
-> routes.
+> Independently audit whether the delivered product performs the defining
+> capabilities in its product expectation worksheet under the conditions it
+> claims to support. Group related requirements into complete product scenarios
+> rather than creating a test for every internal feature. For each scenario,
+> state the user or consumer, starting state, action, visible result, resulting
+> state, claimed conditions, failure condition, and evidence limit. Pin the
+> exact product and use its supported route. Preserve the first attempt.
+> Classify required changes as environment repair, instruction repair, or
+> product repair; a product repair means the delivered target did not pass.
+> Exercise the stated workload or environment where relevant, inspect final
+> product state, and repeat successful scenarios cleanly. Assign working,
+> working with limitations, not working, blocked, or not tested to every
+> selected capability. Do not infer success from compilation, intermediate
+> events, process health, generated reports, reduced workloads, or private
+> developer routes.
 
 ## Required output
 
 Produce one product audit record containing:
 
 - the exact product audited;
-- its claimed operating conditions;
-- the defining capabilities selected;
-- the scenario for each capability;
-- first attempts;
-- environment, instruction, and product repairs;
+- the defining capabilities and complete scenarios selected;
+- the claimed operating conditions;
+- first attempts and repairs;
 - observed behavior and resulting state;
-- workload and performance evidence where applicable;
+- workload evidence where applicable;
 - repeatability;
-- audit result for every capability;
-- findings; and
-- explicit untested or unsupported areas.
+- the audit result for every capability;
+- material findings; and
+- explicit blocked, untested, and unsupported areas.
 
 Create separate [finding records](../../shared/finding.md) only for material
 issues requiring their own owner or remediation. Use a
@@ -428,8 +266,8 @@ observation cannot be reached after the agreed attempts.
 ## Preserve as evidence
 
 Preserve target identity, scenario, starting state, first attempt, repair
-classification, exact route, resulting product state, raw receipts, workload
-identity, environment, repetition result, and limitations.
+classification, supported route, resulting product state, raw receipts,
+workload and environment identity, repetition result, and limitations.
 
 ## Stop and escalate
 
@@ -442,8 +280,8 @@ Stop a scenario when:
 - the required environment remains unavailable; or
 - the available substitute removes the behavior being audited.
 
-Record the scenario as not working, blocked, or not tested as appropriate. Do
-not improvise a passing result.
+Record the result as not working, blocked, or not tested as appropriate. Do not
+improvise a passing result.
 
 ## Review test
 

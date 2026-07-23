@@ -131,13 +131,18 @@ describe("reader-first assurance journeys", () => {
     expect(procedure).toContain(
       "Does the delivered product perform its important functions correctly",
     );
-    expect(procedure).toContain("### 1. Identify the functions that define the product");
-    expect(procedure).toContain("### 9. Exercise the stated operating boundary");
-    expect(procedure).toContain("#### Environment repair");
-    expect(procedure).toContain("#### Instruction repair");
-    expect(procedure).toContain("#### Product repair");
-    expect(procedure).toContain("#### Working with limitations");
-    expect(procedure).toContain("#### Not working");
+    expect(procedure).toContain("### 1. Choose what defines the product");
+    expect(procedure).toContain("### 2. Test the product as delivered");
+    expect(procedure).toContain(
+      "### 3. Test the conditions the product claims to support",
+    );
+    expect(procedure).toContain("### 4. Report what actually works");
+    expect(procedure).toContain("Environment repair");
+    expect(procedure).toContain("Instruction repair");
+    expect(procedure).toContain("Product repair");
+    expect(procedure).toContain("Working with limitations");
+    expect(procedure).toContain("Not working");
+    expect(procedure).not.toContain("### 5.");
     expect(procedure).not.toContain("client’s decision");
   });
 
