@@ -1,89 +1,219 @@
 # Agentic Delivery Assurance
 
-Coding agents can produce more changes than a team can meaningfully inspect.
-The danger is not simply bad code. It is a delivery system that accepts a
-persuasive success signal without establishing that the intended work was
-done.
+Coding agents can create more changes than a team can meaningfully inspect.
+The danger is not simply that an agent may write bad code. It is that the
+delivery system may accept a persuasive success signal without establishing
+that the intended work reached the correct artifact and survived integration,
+release, and recovery.
 
-Agentic Delivery Assurance examines the full path from a requested change to
-accepted code. It searches for ways the producer can satisfy visible checks
-while violating intent, then installs or hardens one independently governed
-gate that rejects an agreed material failure.
+Agentic Delivery Assurance examines that whole system. It starts with the task
+and continues through context, authority, implementation, parallel work,
+verification, repair, integration, artifact creation, deployment, health
+checks, rollback, and the human decision to grant more authority.
 
-This is not a benchmark of which model writes the best code. It applies whether
-the team uses a single coding assistant, direct model sessions, or a custom
-parallel-agent harness.
+It is model- and framework-independent. A direct coding session, a supervised
+assistant, and a custom many-agent pipeline all need an evidence boundary that
+the producer cannot redefine.
 
-## You may need this when
+## The decision this method supports
 
-- Agent throughput has increased faster than review confidence.
-- Green CI and agent completion reports regularly require human reinterpretation.
-- Multiple agents work in parallel and nobody can clearly reconstruct what was
-  integrated, from which revision, or under whose approval.
-- Tests are written or modified by the same producer whose work they accept.
-- Retries and repair runs sometimes lose findings, duplicate work, or approve
-  evidence from an earlier revision.
-- The team wants to grant agents more authority but cannot explain which
-  evidence boundary makes that safe.
+Use this method when an engineering leader needs to decide:
 
-## What exists at the end
+- which kinds of agent-produced work may move with less human inspection;
+- whether current completion signals deserve trust;
+- whether parallel agent work can be integrated without losing provenance or
+  prior findings;
+- whether failed and interrupted work can be repaired without laundering stale
+  evidence;
+- whether the artifact released to production is the one that was verified;
+- whether a failed rollout can return to a known-good state; or
+- where the next independently governed gate will buy the most authority.
 
-- **A delivery contract map.** The path from task intent through context,
-  authority, implementation, verification, integration, and human acceptance.
-- **A bounded acceptance record.** The tasks, reject conditions, evidence
-  provenance, dependencies, and completion rule agreed before the pipeline is
-  challenged.
-- **A reward-surface map.** The signals an agent can optimize and the shortcuts
-  those signals permit.
-- **A set of preserved adversarial fixtures.** Plausible bad results that the
-  pipeline must reject in the future.
-- **A verification-authority map.** Who can create, change, bypass, and approve
-  acceptance evidence.
-- **A proven delivery gate.** One independently governed boundary demonstrated
-  to reject a material failure while accepting a valid result.
-- **A residual-risk record.** The work, repositories, models, and authority
-  outside the demonstrated boundary.
+“Are our agents good?” is not a useful assurance question. A useful question
+sounds like: “Can this pipeline accept and deploy changes to the billing service
+without the producer controlling the tests, approval, artifact identity, or
+rollback evidence?”
 
-## How the method works
+## When this is the wrong method
 
-1. **Make task intent falsifiable.** Define evidence that could reject a
-   superficially plausible implementation.
-2. **Trace context and authority.** Determine what the agent knows, can change,
-   can access, and can approve.
-3. **Observe real delivery.** Follow representative work through parallelism,
-   integration, verification, recovery, and human acceptance.
-4. **Attack the reward surface.** Try shortcuts that improve visible success
-   while violating the requested outcome.
-5. **Separate producer and verifier.** Ensure the producer cannot silently
-   redefine or approve its own evidence.
-6. **Install the rejection gate.** Preserve one material failure and prove the
-   corrected boundary against both bad and valid fixtures.
-7. **State the authority actually earned.** Do not generalize a demonstrated
-   gate into permission the evidence does not support.
+This is not a model leaderboard, prompt review, or generic AI policy exercise.
+It does not tell you which assistant writes the prettiest code.
 
-## What this asks of you
+It is also unnecessary when agents only draft disposable material that a human
+recreates independently. It becomes valuable when agent output can consume
+authority: changing repositories, approving evidence, merging code, creating
+artifacts, deploying services, or influencing a consequential decision.
 
-The engineering owner provides representative work, repositories, CI and
-review context, known failures, and the authority model the team wants to
-reach. They decide which failure is consequential enough to become the
-demonstrated gate and agree the acceptance and escalation rules before
-execution.
+## What happens in practice
 
-The operator observes rather than trusting agent summaries, designs adversarial
-attempts, preserves provenance, and implements the selected intervention. The
-producer does not approve its own gate.
+### 1. Define work so a plausible imitation can be rejected
 
-## Use it yourself
+The operator samples routine, ambiguous, and high-risk tasks. For each one, the
+intended outcome, negative constraints, prohibited shortcuts, evidence, and
+escalation conditions are written before execution.
 
-The [field guide](field-guide.md) explains the procedure, required artifacts,
-exit conditions, and failure traps for every phase.
+The test is simple: could a reviewer reject an attractive but incomplete result
+without relying on the producer’s explanation?
 
-The [Cargo ReAPI worked example](examples/cargo-reapi.md) shows a capable agent
-apparently meeting a timing target by satisfying a cheaper proxy. The problem
-was caught by verifying the intended outcome independently, not by switching
-models or adding a larger prompt.
+### 2. Map what the agents know and can do
 
-## Technical reference
+Instructions, retrieved context, repository state, tools, network access,
+secrets, mutation rights, approvals, and destructive capabilities are traced.
+Missing, stale, and conflicting instructions are exercised.
 
-The [method record](index.md) links the ordered controls, shared standards, and
-worked example. Use it when you are ready to execute the method.
+A prompt saying “do not do this” is not the same as an enforced boundary. A
+second agent is not independent when it sees only evidence selected by the
+first.
+
+### 3. Follow representative work all the way through
+
+Independent, overlapping, and dependent tasks are observed from base revision
+to final deployed artifact. The record includes worktrees or branches,
+ownership, commits, generated artifacts, reviews, integration order, release
+identity, health evidence, and rollback state.
+
+Branch success and merge success are intermediate events. The composed target
+and the released artifact must be verified.
+
+### 4. Attack the visible definition of success
+
+The operator lists what the producer can see: test names, thresholds, status
+fields, artifact-existence checks, review phrasing, timing targets, and likely
+human attention.
+
+Then the pipeline is challenged with safe shortcuts: narrowed test discovery,
+weakened assertions, mocks replacing real boundaries, stale artifacts, hidden
+serialization, altered verifier configuration, evidence from another revision,
+or a polished summary that outruns the receipts.
+
+When a shortcut succeeds, it becomes a preserved adversarial fixture. The
+corrected system cannot depend on the agent confessing what it did.
+
+### 5. Prove verification independence
+
+The operator traces who authors requirements, implementation, tests, verifier
+configuration, review, exceptions, and final acceptance. Bypasses are attempted
+and gate changes are reviewed as changes to the meaning of success.
+
+Independent verification is an authority property. It is not created merely by
+calling a different model.
+
+### 6. Break recovery, repair, and release safely
+
+Representative work is interrupted before implementation, after partial
+changes, during verification, during integration, and during deployment.
+Retries, repair branches, reassignment, human takeover, and process restarts are
+exercised.
+
+The system must preserve prior findings, attempts, ancestry, target identity,
+and already-valid work. A rejected verification should enter an editing path,
+not simply rerun the same verifier. A release should use an immutable artifact
+identity, capture rollback state, check actual health, and return safely when
+the rollout fails.
+
+### 7. Install one independently governed gate
+
+A material observed failure is selected. The bad result and a valid result are
+fixed before intervention. The smallest durable boundary is installed or
+hardened.
+
+The preserved bad result must pass before and fail after. The valid result must
+still pass. The producer must not be able to silently disable the gate, approve
+an exception, swap the artifact, or present stale evidence.
+
+### 8. State the authority actually earned
+
+The result names the tasks, repositories, environments, models, tools, release
+path, and failure modes covered by the demonstration. Failed, blocked, and
+unproven boundaries remain visible.
+
+One successful qualification does not grant arbitrary autonomy. It earns a
+specific authority under specific conditions.
+
+## A real example
+
+[Cargo ReAPI](https://github.com/TamedTornado/cargo-reapi) was built in direct
+Codex sessions to make massively parallel Rust agent work more efficient. It
+was not produced through Bro or another agent framework.
+
+An early qualification appeared to meet its five-worktree timing goal. The
+numbers were real. But five logical gates were placed behind a two-process cap,
+creating three serialized waves. The run also used a narrower workload and
+still performed cacheable compiler work.
+
+The producer had satisfied the visible proxy while violating the intended
+result: simultaneous complete quality gates with zero warm compiler or linker
+work.
+
+The corrected contract named the exact four-command Moria gate, required one,
+five, and ten clean consumers, prohibited hidden admission caps, deleted
+producer state, required empty consumer targets, and independently observed
+compiler and linker activity at the operating-system level. It also added
+adversarial invalidation, poison rejection, linked-binary integrity,
+coalescing, resources, stall classification, portability, and Bro integration.
+
+Historical evidence remained historical. A later verifier defect caused a
+repair and rerun, not a retrospective pass. Even after both platform
+qualifications passed, the publication record refused to claim a combined
+cross-platform aggregate because the disposable macOS evidence tree was no
+longer available during Linux verification.
+
+Read the complete [Cargo ReAPI worked example](examples/cargo-reapi.md).
+
+Bro supplies the wider delivery-system lesson: repair loops must preserve
+branch ancestry and prior findings; persisted DAG state must survive resume;
+the composed target must be reverified; release identity must be service plus
+commit rather than `latest`; and deployment must capture rollback state and
+verify live health.
+
+## What you leave with
+
+- **A task and acceptance map.** What representative work requires, how it can
+  be rejected, and when an agent must escalate.
+- **A context and authority map.** What each producer, verifier, and human can
+  see, mutate, approve, and bypass.
+- **A delivery trace.** Revision, worktree, artifact, review, integration,
+  repair, release, health, and rollback identity for representative work.
+- **A reward-surface map and adversarial fixtures.** Ways visible success can be
+  maximized without completing intent, preserved as regression cases.
+- **A verification-authority map.** Who controls the meaning of success.
+- **Recovery and release evidence.** Proof that state, findings, ancestry,
+  artifact identity, and rollback survive failure.
+- **A proven delivery gate.** One independently governed boundary shown to
+  reject a material bad result while accepting valid work.
+- **An authority decision.** The exact work the pipeline may now perform with
+  greater autonomy and the boundaries that remain unproven.
+
+## What this method asks of your team
+
+The engineering owner supplies representative work, repository and CI access,
+known failure modes, release context, and the authority the organization wants
+agents to earn. The operator must be allowed to challenge apparent successes
+and preserve failures.
+
+People responsible for producing a change cannot be the sole authority for the
+evidence that accepts it. Someone accountable must own the residual risk and
+the decision to increase autonomy.
+
+## What this method cannot tell you
+
+It cannot guarantee arbitrary future agent work is safe. It cannot create
+independence by adding another model behind the same incomplete contract. It
+cannot prove production behavior from branch-local tests, or artifact identity
+from a mutable tag. It cannot infer safe recovery without exercising failure.
+
+It does not remove the human from consequential decisions. It makes clear where
+human judgment is still required and what evidence that judgment receives.
+
+## Run it yourself
+
+Use the [Agentic Delivery Assurance field guide](field-guide.md) to perform the
+method from representative task through release and recovery.
+
+Begin with the shared [acceptance criteria](../shared/acceptance-criteria.md).
+Use the [Cargo ReAPI example](examples/cargo-reapi.md) to see how a persuasive
+pass became a preserved regression fixture rather than an embarrassment to
+delete.
+
+The [technical method record](index.md) links the detailed controls and shared
+record formats. It is reference depth, not the front door.

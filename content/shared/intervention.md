@@ -10,11 +10,58 @@ for: intervention
 ---
 # Intervention record
 
-Identify the finding and high-risk path being addressed. Preserve the baseline
-procedure and result, describe the smallest intervention, and repeat the same
-procedure afterward.
+Use this record for the one boundary being installed or materially hardened.
+Agree the fixtures and decision rule before implementation.
 
-Record intended and unintended differences, regressions, rollback instructions,
-and the independent reviewer. A changed test that merely accepts the new
-behavior is not proof. The evidence must demonstrate that the original failure
-is rejected while required behavior still succeeds.
+## Finding and fixtures
+
+- **Intervention ID:**
+- **Finding addressed:**
+- **High-risk path and target:**
+- **Bad fixture:** Preserved unacceptable result or controlled equivalent.
+- **Valid fixture:** Required behavior that must continue to succeed.
+- **Reject condition:**
+- **Accept condition:**
+- **Gate owner:**
+- **Independent reviewer:**
+
+## Before
+
+- **Target revision and environment:**
+- **Exact procedure:**
+- **Bad-fixture result:** The existing boundary must accept or fail to detect it.
+- **Valid-fixture result:**
+- **Evidence records:**
+- **Known limitations:**
+
+If the bad fixture does not demonstrate the weakness before the change, it
+cannot prove the intervention fixed that weakness afterward.
+
+## Change
+
+- **Smallest durable change:**
+- **Code, configuration, workflow, or authority modified:**
+- **Who can change, disable, bypass, or approve exceptions:**
+- **Independent review:**
+- **Expected secondary effects:**
+- **Unexpected differences from the baseline:**
+
+A changed test that merely agrees with the new implementation is not proof. The
+change must alter what the acceptance boundary can reject.
+
+## After and rollback
+
+- **Comparable procedure and target:**
+- **Bad-fixture rejection evidence:**
+- **Valid-fixture success evidence:**
+- **Bypass attempts and results:**
+- **Regression observations:**
+- **Running or released artifact identity, where applicable:**
+- **Rollback procedure and captured target:**
+- **Rollback verification:**
+- **Residual risk and excluded behavior:**
+- **Decision owner approval:**
+
+If the workload, environment, observer, verifier, or target changed, explain
+why the comparison remains valid or collect a new baseline. Preserve both
+before and after evidence.

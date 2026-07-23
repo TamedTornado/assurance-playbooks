@@ -10,6 +10,7 @@ audience: Founders and technical owners whose AI-built product now has consequen
 outcome: A defensible evidence package and one installed or hardened gate demonstrated on an agreed high-risk path.
 controls:
   - codebase-claim-map
+  - codebase-design-coherence
   - codebase-reproducible-baseline
   - codebase-invariant-pressure
   - codebase-verification-strength
@@ -42,19 +43,22 @@ and human sign-off for both methods.
 
 1. [Map consequential claims](controls/claim-map.md) — turn expectations into
    bounded claims and falsification strategies.
-2. [Establish a reproducible baseline](controls/reproducible-baseline.md) —
+2. [Resolve design contradictions](controls/design-coherence.md) — align
+   requirements, interfaces, states, measurements, and test contracts before
+   locally plausible implementations diverge.
+3. [Establish a reproducible baseline](controls/reproducible-baseline.md) —
    preserve observable behavior before drawing conclusions.
-3. [Pressure architectural invariants](controls/invariant-pressure.md) —
+4. [Pressure architectural invariants](controls/invariant-pressure.md) —
    challenge state, concurrency, malformed-input, and partial-failure
    boundaries.
-4. [Measure verification strength](controls/verification-strength.md) —
+5. [Measure verification strength](controls/verification-strength.md) —
    determine whether existing gates reject plausible bad implementations.
-5. [Verify dependency boundaries](controls/dependency-boundaries.md) — test the
+6. [Verify dependency boundaries](controls/dependency-boundaries.md) — test the
    external services, artifacts, and supply-chain assumptions behind local
    confidence.
-6. [Exercise operational failure](controls/operational-failure.md) — establish
+7. [Exercise operational failure](controls/operational-failure.md) — establish
    whether failure is visible, contained, and recoverable.
-7. [Install and prove the assurance gate](controls/proven-gate.md) — leave an
+8. [Install and prove the assurance gate](controls/proven-gate.md) — leave an
    executable boundary that rejects the selected counterexample.
 
 ## Required records

@@ -5,20 +5,76 @@ id: assurance-sign-off
 title: Assurance sign-off
 version: 0.1.0
 status: draft
-summary: The human completion decision and explicit residual-risk statement.
+summary: The human decision and explicit residual-risk statement at completion.
 for: sign-off
 ---
 # Assurance sign-off
 
-List the agreed scope, method version, target revisions, control statuses,
-material findings, installed assurance gate, and acceptance evidence. Include
-every blocked, unproven, and not-applicable claim with its consequence.
+Sign-off records the authority earned by the evidence. It is not a certificate
+that the system is generally safe.
 
-Use the pre-agreed [acceptance criteria](acceptance-criteria.md) rather than a
-retrospective account of what was convenient to complete. Link every blocked
-status to its [blocked-finding record](blocked-finding.md).
+## Decision
 
-The operator and decision owner sign separately. Completion means the agreed
-evidence and gate criteria were met; it does not mean the system is bug-free
-or safe outside the stated scope. A completed assurance record may contain
-failed or blocked claims. It must not describe those claims as passed.
+- **Decision being made:**
+- **Decision owner:**
+- **Independent operator:**
+- **Method and version:**
+- **Target repositories, revisions, artifacts, and environments:**
+- **Representative workloads or tasks:**
+- **Included claims:**
+- **Explicit exclusions:**
+- **Decision:** proceed, proceed with conditions, do not proceed, or deferred
+- **Conditions and expiry or review trigger:**
+
+Use the pre-agreed [acceptance criteria](acceptance-criteria.md), not a
+retrospective description of what proved convenient.
+
+## Claim status
+
+List every in-scope claim:
+
+| Claim | Status | Evidence or record | Decision consequence | Owner |
+| --- | --- | --- | --- | --- |
+| _Claim ID_ | _pass, fail, blocked, not-applicable, or unproven_ | _Stable links_ | _What this changes_ | _Named owner_ |
+
+Every pass cites sufficient evidence. Every fail cites a finding. Every blocked
+status links a [blocked-finding record](blocked-finding.md). Not-applicable and
+unproven claims state their consequence. Do not average the table into a score.
+
+## Gate and residual risk
+
+- **Installed or hardened gate:**
+- **Preserved bad fixture:**
+- **Valid fixture:**
+- **Before-and-after evidence:**
+- **Who owns and may change the gate:**
+- **Bypass and exception authority:**
+- **Rollback:**
+- **What the gate does not cover:**
+- **Residual risks and assumptions:**
+- **Additional evidence required for greater trust or authority:**
+
+Completion means the agreed work and records are complete. It does not mean
+every claim passed. A complete record can support a decision not to proceed.
+
+## Separate approvals
+
+**Independent operator**
+
+- Name:
+- Decision on evidence sufficiency:
+- Qualifications or objections:
+- Date:
+- Signature or immutable approval reference:
+
+**Decision owner**
+
+- Name:
+- Risk decision:
+- Conditions accepted:
+- Residual risk owner:
+- Date:
+- Signature or immutable approval reference:
+
+The person who implemented the selected intervention cannot be the sole
+approver of its evidence.

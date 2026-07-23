@@ -1,267 +1,250 @@
 # Assurance Playbooks
 
-Software can look finished long before it deserves to be trusted.
+Software is now easier to produce than it is to trust.
 
-A product runs in a demo. The test suite is green. The architecture is
-plausible. An agent reports that every requirement has been implemented.
-Perhaps all of those statements are true. None of them, by itself, establishes
-that the system will preserve the outcome its users and owners depend on.
+A founder can turn an idea into a working application without first building
+an engineering organization. A team can run several coding agents at once and
+merge changes faster than anyone can read them. A mature codebase can acquire
+new features, tests, and confident explanations while the people accountable
+for it become less certain what the system will do under pressure.
 
-Assurance is the work of closing that gap. It starts by identifying the claims
-that matter, then collecting evidence capable of showing those claims are
-false. It preserves counterexamples instead of explaining them away, separates
-observation from inference, and turns the most valuable discovery into a
-durable gate.
+The answer is not to distrust AI-generated software. It is to stop treating
+successful production as evidence of successful verification.
 
-This repository contains two open methods for doing that work:
+These playbooks are practical methods for answering two questions:
 
-- [Codebase Assurance](content/codebase-assurance/) examines a consequential
-  product and establishes what its implementation and evidence actually
-  support.
-- [Agentic Delivery Assurance](content/agentic-delivery-assurance/) examines
-  the system that turns agent tasks into accepted software and establishes
-  whether its completion signals deserve confidence.
+- **What does this software actually deserve to be trusted to do?**
+- **What does our delivery system actually prove before it accepts agent-made
+  work?**
 
-They address different objects, but use the same discipline: define the
-intended result, search for cheaper imitations, observe the real system, and
-make acceptance depend on evidence the producer does not control.
+They are open for teams to use without us. The method is public because an
+assurance method that cannot be inspected would contradict its own purpose.
 
-## Why these playbooks exist
+## Start with the situation
 
-AI has made producing software much cheaper. It has not made understanding the
-result proportionally cheaper.
+Choose [Codebase Assurance](content/codebase-assurance/) when the concern is the
+software itself:
 
-A founder can now build a useful application before acquiring the engineering
-organization that would traditionally have designed, reviewed, and operated
-it. An established team can run several coding agents in parallel and produce
-changes faster than its existing review process can absorb. In both cases,
-output grows faster than confidence.
+- a product created or heavily extended with AI is now handling customers,
+  revenue, sensitive data, or consequential operations;
+- the tests pass, but failures keep appearing in behavior the tests seemed to
+  cover;
+- an acquisition, enterprise customer, migration, launch, or reliability
+  decision needs evidence rather than reassurance;
+- the implementation is large enough that nobody can confidently explain all
+  of it; or
+- the team cannot distinguish material risk from accumulated technical
+  ugliness.
 
-The usual response is to add more tests, another reviewer, a larger model, or a
-longer prompt. Those may help, but they do not answer the central question:
-**what evidence distinguishes the result we need from a result that merely
-satisfies the visible checks?**
+Choose [Agentic Delivery Assurance](content/agentic-delivery-assurance/) when
+the concern is how new software gets accepted:
 
-That distinction matters because both people and agents optimize the acceptance
-surface they are given. A system can pass every test while exercising the
-wrong workload. It can produce five apparently parallel results by quietly
-serializing the work. It can replace a difficult integration with a mock,
-weaken an assertion, accept an artifact from the wrong revision, or recover
-from an interrupted task while losing the finding that caused the repair.
+- agent throughput has outrun meaningful review;
+- implementation, tests, evidence, and completion summaries are controlled by
+  the same producer;
+- parallel branches or worktrees are individually green, but the integrated
+  result is difficult to reconstruct;
+- repair runs, retries, or handoffs lose findings and prior state;
+- a passing artifact may not belong to the revision that is deployed; or
+- the organization wants to grant agents more authority but cannot name the
+  boundary that makes that safe.
 
-These playbooks provide a repeatable way to find those gaps without treating
-test volume, agent confidence, or architectural taste as proof.
+Some organizations need both. A sound pipeline does not prove an inherited
+codebase is correct. A strong codebase does not prove that tomorrow’s
+agent-written change will be specified, composed, verified, released, and
+recovered safely.
 
-## The common assurance model
+## What assurance changes
 
-Both playbooks move through the same chain:
+Ordinary engineering asks, “Did the implementation pass the available checks?”
 
-1. **Claim** — State something consequential that the product or delivery
-   system is expected to preserve.
-2. **Counterexample** — Describe a plausible way the visible success signal
-   could be satisfied while the claim is false.
-3. **Evidence** — Observe the real system under a pinned revision and recorded
-   environment. Preserve provenance and limitations.
-4. **Finding** — Separate what was observed from what is inferred. Connect the
-   result to a reachable consequence.
-5. **Intervention** — Select one high-value boundary and change what the system
-   is capable of accepting.
-6. **Gate** — Demonstrate that the preserved failure is now rejected while
-   required behavior still succeeds.
-7. **Sign-off** — State what the evidence supports, what remains unknown, and
-   which authority the result has actually earned.
+Assurance asks:
 
-The method does not produce a universal safety score. Every conclusion is
-bounded by its target revision, environment, scope, evidence, and explicitly
-recorded residual risk.
+1. **What consequential result are we relying on?**
+2. **What cheaper result could look successful while that result is false?**
+3. **Who controls the evidence used to tell the difference?**
+4. **Can another person reproduce the observation against the same target?**
+5. **What happens when the check, agent, dependency, integration, or deployment
+   fails?**
+6. **Which bad result will the system reject after this work that it accepted
+   before?**
 
-## Choose the playbook
+This produces a different kind of engagement and a different kind of internal
+review. The work begins with a decision, not a repository scan. It follows a
+claim through design, implementation, tests, real boundaries, integration,
+deployment, and recovery. It actively looks for ways a polished result could
+be wrong. It leaves behind one demonstrated rejection boundary rather than
+only a report.
+
+The result is bounded. Assurance does not certify an entire company, assign a
+magic safety score, or promise that unknown software is bug-free. It states
+what the evidence supports, what it contradicts, what could not be observed,
+and what remains outside the claim.
+
+## Three lessons from real systems
+
+These methods were extracted from work we actually performed, not designed as
+a greenfield compliance framework.
+
+### Moria: contradictions are cheaper to find before code
+
+[Moria](https://github.com/TamedTornado/moria) is a Rust/Bevy voxel-world
+substrate built through a highly parallel agent pipeline. Its product interview
+established a hard boundary: the reusable substrate was the product; the
+walkable executable was a public-interface validation consumer, not a
+privileged demo.
+
+Before implementation, a hostile review of the technical design found
+contradictions that locally plausible code would have preserved:
+
+- water was represented as occupied while movement treated water as non-solid;
+- required visual diagnostics could not be built through the public observation
+  interface;
+- the reusable library’s load protocol depended on a state owned by the demo;
+- a two-frame visible-edit promise was measured from a later internal event
+  rather than the user action; and
+- a declared graphics-memory target had no measurement capable of proving it.
+
+The valuable artifact was not a count of findings. It was a corrected,
+traceable contract that stopped several teams of agents from implementing
+different reasonable interpretations.
+
+### Cargo ReAPI: a real pass can still prove the wrong thing
+
+[Cargo ReAPI](https://github.com/TamedTornado/cargo-reapi) was built to make
+massively parallel Rust agents practical. An early proof appeared to meet the
+headline five-worktree timing target. The timings were real and the producing
+agent had been given careful instructions.
+
+The proof was still wrong. Five logical gates ran in three serialized waves
+behind a two-process cap. The workload was narrower than the required quality
+gate, and cacheable compiler work still occurred. The run optimized the visible
+proxy rather than the intended result.
+
+The corrected qualification fixed the workload identity, prohibited hidden
+serialization, required every consumer to overlap, deleted producer state,
+started consumers empty, observed compiler and linker activity outside the
+system under test, and failed closed on missing or mismatched receipts. When a
+verifier defect was later found, the verifier was repaired and the
+qualification rerun. Old evidence was not relabelled.
+
+### Bro: delivery continues after an agent says “done”
+
+[Bro](https://github.com/TamedTornado/Bro) runs supervised agent workflows
+through planning, implementation, verification, repair, integration, and
+release. Its harder assurance problems are not model benchmarks. They are
+state and identity problems:
+
+- Does a rejected verification enter an editing repair path rather than merely
+  rerun the verifier?
+- Does a second repair retain the first repair’s branch ancestry and findings?
+- Does a resumed DAG preserve attempts, context, sessions, and completed work?
+- Does the final verification exercise the composed target rather than green
+  component branches?
+- Is the deployed image identified by service and commit rather than `latest`?
+- Can a failed rollout return to a captured known-good image?
+
+This extends Agentic Delivery Assurance beyond prompts and CI. The system under
+review runs from intent to the artifact in production and through recovery.
+
+## Choose a playbook
 
 | | Codebase Assurance | Agentic Delivery Assurance |
 | --- | --- | --- |
-| **Object under review** | The product and the claims its users or owners depend on | The delivery system that turns agent tasks into accepted changes |
-| **Typical concern** | “This works, but we do not know where it is fragile or what the tests really establish.” | “We are producing agent-written work faster than we can confidently verify it.” |
-| **Starting point** | Business consequences, product boundaries, runtime behavior, and existing verification | Task contracts, context, authority, parallel work, integration, verification, recovery, and human acceptance |
-| **Adversarial question** | “What plausible implementation would pass the current checks while violating the product claim?” | “How can the producer maximize visible success without completing the intended work?” |
-| **Durable result** | A gate on an agreed high-risk product path | An independently governed rejection gate in the delivery pipeline |
-| **Worked example** | [Moria](content/codebase-assurance/examples/moria.md) | [Cargo ReAPI](content/agentic-delivery-assurance/examples/cargo-reapi.md) |
+| **Object under review** | A consequential product or system | The machinery that turns agent tasks into released software |
+| **Decision supported** | What can we rely on this software to do, and what must change before a specific decision? | What agent-produced work can this pipeline accept, release, and recover without unsupported trust? |
+| **Starting point** | User/business consequence, product boundary, and explicit non-goals | Representative tasks, authority, state transitions, evidence, and release path |
+| **Typical counterexample** | A plausible implementation or mock passes the suite while violating the real product claim | The producer satisfies visible checks with narrowed work, stale evidence, lost state, or the wrong artifact |
+| **Durable change** | A demonstrated gate on a high-risk product path | An independently governed gate on a high-risk delivery path |
+| **Detailed example** | [Moria](content/codebase-assurance/examples/moria.md) | [Cargo ReAPI](content/agentic-delivery-assurance/examples/cargo-reapi.md) |
 
-Some organizations need both. A strong delivery pipeline cannot establish that
-an inherited product already behaves correctly. A well-tested codebase cannot
-establish that new agent-written changes are being specified, integrated, and
-accepted safely.
+Start with the playbook overview. It is written for the engineering leader who
+owns the decision. Open the field guide when someone is ready to perform the
+work. The controls and record templates are reference material, not required
+vocabulary for understanding the offer.
 
-## Codebase Assurance
+## The shared method
 
-[Codebase Assurance](content/codebase-assurance/) is for a product that has
-become too consequential to trust on appearance alone.
+Both playbooks use the same seven moves:
 
-It begins with the things that must be true for customers, operations, revenue,
-security, or a pending decision. Those expectations are translated into
-observable claims. The relevant system is reproduced at a pinned revision, and
-the claims are challenged through real boundaries: state transitions, retries,
-concurrency, malformed inputs, external dependencies, partial failure,
-recovery, and plausible incorrect implementations.
+1. **Name the decision.** State what someone needs to decide and which failure
+   would change that decision.
+2. **Define “done” before seeing the result.** Pin the target, claims,
+   evidence, reject conditions, dependencies, and completion rule.
+3. **Follow the real path.** Observe the actual product or delivery system from
+   input to consequence, including composition and recovery.
+4. **Search for the cheaper imitation.** Construct a plausible result that
+   passes visible checks while the important claim is false.
+5. **Preserve what happened.** Keep failed and superseded evidence, separate
+   observation from inference, and bind evidence to its target.
+6. **Change one acceptance boundary.** Install or harden a gate that rejects a
+   material preserved failure.
+7. **Prove and bound the result.** Show the bad fixture now fails, a valid
+   fixture still passes, bypasses are controlled, and residual risk is owned.
 
-The result is not a list of everything an engineer might prefer to change. It
-is a claim map, reproducible evidence, findings tied to consequences, explicit
-unknowns, and one installed or materially hardened assurance gate demonstrated
-against comparable before-and-after evidence.
+This is not a linear checklist in which activity earns a pass. A failed result
+remains failed. A missing required observation remains unproven or becomes an
+evidenced blocked finding. `Not applicable` needs a rationale tied to the
+decision. Silence never becomes confidence.
 
-Start with the [human overview](content/codebase-assurance/). To perform the
-method, use the [Codebase Assurance field
-guide](content/codebase-assurance/field-guide.md). The detailed control records
-sit underneath it as technical reference.
+## What you can expect to have
 
-## Agentic Delivery Assurance
+The exact artifacts vary with the system, but a complete application of either
+method produces:
 
-[Agentic Delivery Assurance](content/agentic-delivery-assurance/) is for a team
-whose ability to produce agent-written changes is beginning to exceed its
-ability to verify them.
+- a decision and scope record written before execution;
+- a map from consequential claims to possible counterexamples;
+- a reproducible baseline tied to immutable targets and environments;
+- evidence that distinguishes observed fact, interpretation, and limitation;
+- findings tied to reachable technical and organizational consequences;
+- an explicit account of failed, blocked, excluded, and unproven claims;
+- one installed or materially hardened gate;
+- comparable before-and-after proof using bad and valid fixtures; and
+- a human sign-off that states what authority the evidence actually earned.
 
-It treats the whole delivery path as the system under review. That includes the
-task contract, instructions and retrieved context, tool and secret authority,
-worktree or branch isolation, parallel dependencies, tests, verifier
-governance, integration, retries, repairs, and the human acceptance decision.
+## Use the methods yourself
 
-The operator maps the signals an agent can observe about success and then tries
-to satisfy those signals without satisfying intent. A useful result does not
-merely identify the weakness. It preserves a material failure as an adversarial
-fixture, changes the acceptance boundary, and demonstrates that the bad result
-is rejected while valid work continues to pass.
+For a leader deciding where to begin:
 
-Start with the [human overview](content/agentic-delivery-assurance/). To perform
-the method, use the [Agentic Delivery Assurance field
-guide](content/agentic-delivery-assurance/field-guide.md).
+- [Codebase Assurance overview](content/codebase-assurance/)
+- [Agentic Delivery Assurance overview](content/agentic-delivery-assurance/)
 
-## A concrete example: the proof that was not proof
-
-Cargo ReAPI was built to make massively parallel Rust agent work more
-efficient. An early agent-produced qualification appeared to meet the headline
-five-worktree timing target. The numbers were real, and the agent had been
-given detailed, deliberate instructions.
-
-The proof was still wrong.
-
-Five logical gates had been placed behind a two-process admission cap,
-producing three serialized waves. The run also exercised a narrower workload
-and continued to perform cacheable compiler actions. It optimized the measured
-proxy while violating the intended requirement: simultaneous complete quality
-gates with zero warm compiler or linker work.
-
-The failure was caught because the agent’s `PASS`, timing, and self-reported
-action count were not treated as the evidence. The corrected qualification
-required the intended command, all members to overlap, empty consumer targets,
-no admission caps, and independent operating-system observation of compiler
-and linker activity. A verifier defect discovered later caused the
-qualification to be repaired and rerun rather than retroactively accepted.
-
-The lesson is not that a particular model or prompt was weak. It is that strong
-agents and good prompts still require a verification boundary that measures
-the intended outcome rather than the cheapest visible proxy.
-
-Read the complete [Cargo ReAPI worked
-example](content/agentic-delivery-assurance/examples/cargo-reapi.md).
-
-## What “open” means here
-
-These playbooks are not promotional summaries or a funnel leading to a hidden
-method. The procedures, evidence standards, acceptance rules, templates,
-control definitions, and public examples are intended to be sufficient for a
-capable team to use on its own.
-
-You may copy the templates, adapt the controls, apply the field guides, and
-challenge the methods. If an important step is missing, the correct response is
-to improve the public playbook rather than reserve it as consulting secret
-sauce.
-
-What remains irreducibly difficult is judgment:
-
-- identifying which claims are consequential rather than merely measurable;
-- designing adversarial experiments for the actual system;
-- deciding whether evidence is representative and independently repeatable;
-- distinguishing a material finding from noise;
-- implementing an intervention without invalidating the comparison;
-- and accepting the residual risk on behalf of the organization.
-
-The lightweight validation code in this repository checks structure,
-relationships, and links. It does not choose controls, run an engagement,
-assign severity, produce findings, or declare a system safe.
-
-## How to use this repository
-
-### If you are deciding whether the methods apply
-
-Read the two human overviews:
-
-- [Codebase Assurance](content/codebase-assurance/)
-- [Agentic Delivery Assurance](content/agentic-delivery-assurance/)
-
-Each explains the symptoms, process, participation, and durable result without
-requiring the technical control vocabulary.
-
-### If you want to perform the work
-
-Use the field guides:
+For an operator performing the work:
 
 - [Codebase Assurance field guide](content/codebase-assurance/field-guide.md)
 - [Agentic Delivery Assurance field guide](content/agentic-delivery-assurance/field-guide.md)
 
-Each phase describes its purpose, procedure, artifact, exit condition, and
-common forms of self-deception. The guides link to the detailed controls only
-where that precision becomes useful.
+For copyable engagement records:
 
-### If you are reviewing or extending the standard
+- [Acceptance criteria](content/shared/acceptance-criteria.md)
+- [Evidence record](content/shared/evidence-record.md)
+- [Finding record](content/shared/finding.md)
+- [Blocked-finding record](content/shared/blocked-finding.md)
+- [Intervention record](content/shared/intervention.md)
+- [Assurance sign-off](content/shared/sign-off.md)
+- [Worked acceptance outcomes](content/shared/acceptance-examples.md)
 
-Read the shared [assurance protocol](content/shared/protocol.md) and the
-technical method records:
+For reviewers extending the standard:
 
+- [Shared assurance protocol](content/shared/protocol.md)
 - [Codebase Assurance controls](content/codebase-assurance/index.md)
 - [Agentic Delivery Assurance controls](content/agentic-delivery-assurance/index.md)
 
-Changes to the method should preserve stable relationships between claims,
-evidence, findings, interventions, and sign-off. Adding activity without
-changing what can be established is not an improvement.
+## What “open” means
 
-### If you are an agent
+The public method is intended to be sufficient for a capable team to apply.
+There is no hidden set of acceptance rules. If a required step is missing, the
+correct response is to improve the public playbook.
 
-Begin with this overview and the relevant field guide. Use the linked controls
-as bounded reference material. Do not infer a passing conclusion from missing
-records, silently convert blocked work into not applicable, or approve evidence
-produced under your own authority.
+The hard part is not access to the checklist. It is judgment: choosing claims
+that matter, understanding where a system can imitate success, designing
+representative experiments, interpreting conflicting evidence, making a safe
+intervention, and accepting residual risk on behalf of an organization.
 
-## Shared records
+The Markdown is the product. TypeScript validates metadata, relationships,
+links, and the public commercial-content boundary; it does not run an
+engagement or declare a system safe.
 
-Both methods use the same public standards:
-
-- [Assurance protocol](content/shared/protocol.md) — statuses, provenance,
-  independence, interventions, and completion.
-- [Evidence record](content/shared/evidence-record.md) — how observations are
-  collected, identified, limited, and preserved.
-- [Finding record](content/shared/finding.md) — how observed fact is separated
-  from inference, severity, and confidence.
-- [Intervention record](content/shared/intervention.md) — how before and after
-  evidence is kept comparable.
-- [Acceptance criteria](content/shared/acceptance-criteria.md) — how scope,
-  evidence, rejection, completion, and change control are agreed before
-  execution.
-- [Blocked finding](content/shared/blocked-finding.md) — how an unavailable
-  dependency remains visible without becoming either a fake pass or an
-  unlimited obligation.
-- [Worked acceptance outcomes](content/shared/acceptance-examples.md) — valid
-  completion, invalid proxy completion, legitimate blockage, and attempted
-  scope expansion.
-- [Human sign-off](content/shared/sign-off.md) — how completion and residual
-  risk are accepted without claiming universal safety.
-
-## Repository status
-
-This is a working draft, currently marked `0.1.0`. The human overviews and
-field guides are being reviewed before the technical control shape is treated
-as stable.
-
-The Markdown is the product. TypeScript currently exists only to reject broken
-metadata and links and to produce deterministic machine-readable exports.
-
-TypeScript code is Apache-2.0. Method prose, templates, and examples are
-CC BY 4.0. See `LICENSE-CODE` and `LICENSE-CONTENT`.
+This repository is a working draft at `0.1.0`. TypeScript code is Apache-2.0.
+Method prose, templates, and examples are CC BY 4.0. See `LICENSE-CODE` and
+`LICENSE-CONTENT`.

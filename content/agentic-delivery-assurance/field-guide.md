@@ -1,188 +1,262 @@
 # Agentic Delivery Assurance field guide
 
-This guide is for the person assessing and hardening an agentic delivery
-system. It does not assume a specific model, framework, or orchestrator.
+This guide is for the person assessing and hardening a system that turns agent
+tasks into released software. It does not assume a model, orchestration
+framework, branch strategy, CI provider, or deployment platform.
 
-## Before you begin
+The unit under review is the delivery system—not the personality of an agent.
+Follow representative work from intent to production and through recovery.
 
-Name one accountable engineering owner and one independent operator. Select
-representative tasks and pin every relevant repository revision. Preserve agent
-prompts, context inputs, tool authority, produced artifacts, verification
-results, and human decisions according to the shared [assurance
-protocol](../shared/protocol.md).
+## Start with the authority decision
 
-Do not begin by comparing model scores. The object under review is the delivery
-system’s ability to distinguish acceptable work from plausible imitation.
+Name:
 
-Before running representative tasks, complete the shared [acceptance
-criteria](../shared/acceptance-criteria.md). Agree the target delivery system,
-claims, task samples, required provenance, reject conditions, independently
-governed gate demonstration, completion rule, and escalation rule before the
-producer can optimize against them.
+- the engineering owner accountable for the resulting authority;
+- an operator independent of the selected intervention;
+- the kinds of work agents perform now;
+- the additional authority the organization wants them to earn;
+- representative routine, ambiguous, and high-risk tasks;
+- repositories, revisions, environments, release paths, and dependencies;
+- who provides access and resolves ambiguity; and
+- the accept, reject, blocked, completion, and escalation rules.
 
-## Phase 1: Define the delivery contract
+Record these in the shared [acceptance
+criteria](../shared/acceptance-criteria.md). Do not begin with model scores.
 
-**Purpose:** Make completion independently rejectable.
+## Phase 1: Make completion rejectable
 
-Sample routine, ambiguous, and high-risk tasks. Separate the desired outcome
-from implementation suggestions. Record positive requirements, negative
-constraints, prohibited shortcuts, acceptance evidence, and conditions that
-require human escalation.
+**Decision:** Can someone reject a persuasive but incomplete result without
+depending on the producer’s explanation?
 
-Ask whether a reviewer could reject a superficially plausible result without
-reading the producer’s explanation.
+For representative tasks, separate the intended outcome from implementation
+suggestions. Record positive requirements, negative constraints, prohibited
+shortcuts, required evidence, target identity, and conditions that require
+human escalation.
 
-**Artifacts:** Task-contract matrix and agreed acceptance criteria.
+Include a task that is routine, one with genuine ambiguity, and one whose
+failure would be consequential.
 
-**Exit condition:** Material requirements have observable evidence and unknowns
-have an explicit escalation path.
+**Evidence to keep:** original task, normalized task contract, ambiguity log,
+required evidence, and resulting change.
 
-**Common self-deception:** Treating an agent-authored test as independent
-evidence because it is executable.
+**Move on when:** material requirements have observable accept and reject
+conditions and uncertainty has an escalation route.
 
-Technical control: [Make the task contract
-falsifiable](controls/task-contract.md).
+**Ways to fool yourself:** letting the producer author the only test; describing
+an adjective such as “robust” as acceptance evidence; assuming an agent will ask
+because the prompt encouraged it.
 
-## Phase 2: Trace context and authority
+## Phase 2: Map context and real authority
 
-**Purpose:** Establish what each agent knows, can mutate, and can approve.
+**Decision:** What can each producer, verifier, and human know, mutate, approve,
+and bypass?
 
-Map instruction sources and precedence, retrieved context, repository state,
-tools, filesystem and network access, secrets, approval rules, and destructive
-capabilities. Exercise missing, stale, and conflicting instructions.
+Trace instruction sources and precedence, retrieved knowledge, repository
+state, tools, filesystem and network access, secrets, approval rules,
+destructive capabilities, and audit records.
 
-Test safe operations outside the task boundary. Verify that enforced authority
-matches the described policy rather than a prompt the producer can ignore.
+Exercise missing, stale, and conflicting instructions. Attempt safe operations
+outside the task boundary. Compare the policy people describe with the
+authority actually enforced.
 
-**Artifacts:** Context-precedence map and authority map.
+**Evidence to keep:** context-precedence map, authority graph, access attempts,
+and escalation behavior.
 
-**Exit condition:** Sensitive authority is bounded and missing authoritative
-context causes a visible failure or escalation.
+**Move on when:** authoritative instructions have deterministic precedence,
+sensitive authority is enforced rather than requested, and missing context
+causes a visible failure or escalation.
 
-**Common self-deception:** Confusing “the prompt tells the agent not to” with
-an enforced boundary.
+**Ways to fool yourself:** treating a prompt prohibition as a permission
+boundary; calling a different agent independent when it receives only the
+producer’s selected evidence.
 
-Technical control: [Bound context and
-authority](controls/context-authority.md).
+## Phase 3: Follow work to the released artifact
 
-## Phase 3: Follow representative work end to end
+**Decision:** Can the organization reconstruct exactly what was requested,
+produced, integrated, verified, built, and released?
 
-**Purpose:** Observe what the pipeline actually accepts.
+Run independent, overlapping, and dependent tasks. Trace:
 
-Run independent, overlapping, and dependent tasks. Trace base revisions,
-worktrees or branches, ownership, artifacts, reviews, integration order, final
-target revision, and acceptance evidence.
+- base revision and context identity;
+- worktree or branch ownership;
+- commits and generated artifacts;
+- tests, review, and exceptions;
+- dependency and integration order;
+- final composed target;
+- immutable build artifact;
+- deployment configuration and running identity;
+- live health evidence; and
+- captured rollback target.
 
-Interrupt representative work before implementation, after partial changes,
-during verification, and during integration. Exercise retry, repair,
-reassignment, and human takeover.
+**Evidence to keep:** end-to-end delivery trace and identity chain.
 
-If access, representative work, or an external platform prevents a required
-observation after the agreed escalation attempts, create a [blocked-finding
-record](../shared/blocked-finding.md). Do not narrow the task or replace the
-platform without recording that the original claim remains unproven.
+**Move on when:** every representative result is attributable and the verified
+composition can be connected to the artifact actually running.
 
-**Artifacts:** Delivery trace, parallel-work map, and recovery-state map.
+**Ways to fool yourself:** treating green branches as a green composition;
+using artifact existence as identity; allowing `latest` to become release
+truth; stopping the trace at merge.
 
-**Exit condition:** Work remains attributable and the final composed target is
-reverified after integration or recovery.
+## Phase 4: Attack the reward surface
 
-**Common self-deception:** Treating branch success or a clean merge as evidence
-that the composed product is correct.
+**Decision:** Which visible signals can be optimized while intent remains
+false?
 
-Technical controls: [Preserve parallel-work
-integrity](controls/parallel-integrity.md) and [Verify recovery
-integrity](controls/recovery-integrity.md).
+List everything the producer can observe about success: test names, coverage,
+thresholds, timings, status fields, required files, reviewer phrasing, artifact
+checks, and human attention.
 
-## Phase 4: Map and attack the reward surface
+Try safe shortcuts:
 
-**Purpose:** Discover which visible success signals can be optimized without
-satisfying intent.
+- narrow discovery or the workload;
+- weaken or replace an assertion;
+- use a mock where real protocol behavior matters;
+- serialize supposedly parallel work;
+- attach evidence from an earlier revision;
+- alter verifier configuration or thresholds;
+- skip a difficult path while retaining a success summary;
+- produce an artifact with the right name but wrong identity; or
+- rerun only the verifier after a failure requiring an implementation change.
 
-List what the producer can observe: test names, thresholds, status fields,
-artifact-existence checks, review language, timing targets, and likely human
-attention. Construct safe shortcuts that maximize those signals.
+**Evidence to keep:** exact task, agent-visible context, shortcut, apparent
+success, target revision, and independent evidence of failure.
 
-Try narrowing test discovery, weakening assertions, replacing real boundaries
-with mocks, accepting stale artifacts, serializing supposedly concurrent work,
-altering thresholds, changing verifier configuration, or presenting evidence
-from another revision.
+**Move on when:** every material success signal has faced a plausible shortcut,
+or the missing challenge is explicitly unproven.
 
-Preserve the exact task, agent-visible context, produced change, apparent
-success signal, and independent evidence of failure.
+**Ways to fool yourself:** blaming a model for behavior the pipeline rewards;
+constructing only cartoonish attacks; deleting an embarrassing pass instead of
+making it a regression fixture.
 
-**Artifacts:** Reward-surface map and adversarial fixtures.
+Cargo ReAPI’s early proof completed five worktrees but serialized them in three
+waves, narrowed the command, and still compiled. The timing was real; the claim
+was false.
 
-**Exit condition:** Every important completion signal has been challenged by a
-plausible shortcut, or the gap is explicitly unproven.
+## Phase 5: Separate production from acceptance
 
-**Common self-deception:** Blaming a particular model for behavior the delivery
-contract rewards.
+**Decision:** Can the producer redefine, weaken, or approve the evidence used
+to accept its own work?
 
-Technical control: [Red-team reward hacking](controls/reward-hacking.md).
+Trace who authors requirements, code, tests, verifier configuration, review,
+exceptions, gate changes, and final approval. Attempt controlled bypasses and
+changes to the verifier.
 
-## Phase 5: Establish verification independence
+Gate changes are changes to the meaning of success. They require independent
+review and qualification, not merely a passing run after the change.
 
-**Purpose:** Prevent the producer from controlling the meaning of success.
+**Evidence to keep:** verification-authority graph, bypass attempts, gate-change
+history, and independent review.
 
-Trace who authors requirements, implementation, tests, verifier configuration,
-review, and final acceptance. A second model invocation is not automatically
-independent if it receives producer-selected evidence or cannot inspect the
-real result.
+**Move on when:** material evidence is not controlled solely by the producer,
+bypasses fail closed and remain visible, and acceptance is bound to the target
+being accepted.
 
-Attempt safe bypasses and verifier changes. Check whether they fail closed,
-require independent approval, and remain visible in the audit record.
+**Ways to fool yourself:** equating more model calls with independence; allowing
+the producer to choose what the verifier can inspect; treating self-reported
+absence as evidence nothing ran.
 
-**Artifacts:** Verification-authority graph and bypass findings.
+## Phase 6: Break repair and recovery
 
-**Exit condition:** Material acceptance evidence cannot be silently weakened or
-approved solely by the producer.
+**Decision:** Does failure preserve intent and state, or silently reset the
+problem?
 
-**Common self-deception:** Calling review independent because a different agent
-performed it while both agents share the same incomplete contract.
+Interrupt work before implementation, after partial changes, during
+verification, during integration, and during a repair. Exercise retries,
+reassignment, human takeover, scheduler restart, and repeated rejection.
 
-Technical control: [Enforce independent
-verification](controls/independent-verification.md).
+Verify that:
 
-## Phase 6: Install the delivery gate
+- prior findings reach the editing path;
+- a rejected verifier does not simply rerun itself;
+- branch ancestry and published repairs remain intact;
+- attempts, context, sessions, approvals, and unaffected work survive resume;
+- duplicate side effects do not occur; and
+- the final composition is reverified after recovery.
 
-**Purpose:** Change what work can enter the trusted system.
+**Evidence to keep:** state transitions, persistent records, commit ancestry,
+repair receipts, and final-target verification.
 
-Select one observed material failure: reward hacking, stale evidence, unsafe
-authority, lost integration, or unverifiable recovery. Agree the bad fixture,
-valid-success fixture, and rejection criteria before changing the pipeline.
+**Move on when:** recovery resumes from explicit durable state and cannot
+discard inconvenient findings or approvals.
 
-Implement the smallest durable boundary with independent ownership. Run both
-fixtures before and after. Inspect the final target, evidence provenance,
-bypass behavior, valid-work path, and rollback.
+**Ways to fool yourself:** testing only a fresh restart; calling destructive
+reset recovery; verifying the repaired branch but not the final composition.
 
-**Artifacts:** [Intervention record](../shared/intervention.md), independently
-reviewed gate, before-and-after receipts, and rollback instructions.
+## Phase 7: Break release and rollback
 
-**Exit condition:** The preserved bad result passes before and fails after; the
-valid result still passes without producer-controlled exceptions.
+**Decision:** Does the verified composition become the running artifact, and
+can failure return to a known-good state?
 
-**Common self-deception:** Adding another agent, prompt, or test stage without
-changing who controls the acceptance evidence.
+Build from the verified commit. Record an immutable artifact digest or
+commit-derived identity. Capture the running known-good artifact before
+rollout. Deploy the selected artifact, verify a consequential live path, and
+exercise a failed rollout or safe equivalent.
 
-Technical control: [Install and prove the delivery
-gate](controls/proven-gate.md).
+For multi-service systems, verify that every service and runtime consumer uses
+the intended pinned identity. A single pinned server does not help if another
+control component rewrites workers to a mutable tag.
 
-## Phase 7: Decide what authority was earned
+**Evidence to keep:** commit-to-artifact mapping, deployment inputs, running
+identity, health receipts, rollback identity, and recovery result.
 
-**Purpose:** Prevent a bounded improvement from becoming an unsupported grant
-of autonomy.
+**Move on when:** the deployed artifact matches the verified target, health
+checks prove more than process existence, and failure restores the captured
+known-good version.
 
-Record the tasks, repositories, environments, models, tools, and failure modes
-covered by the demonstrated gate. List every blocked and unproven boundary.
-State which additional evidence would justify greater authority.
-Apply the agreed completion rule to every claim. Completion of the record does
-not convert failed or blocked delivery claims into earned authority.
+**Ways to fool yourself:** using `latest` as release truth; rebuilding a
+different image under the same label; checking only `/healthz`; writing rollback
+instructions without resolving the previous artifact.
 
-**Artifact:** [Human assurance sign-off](../shared/sign-off.md).
+Bro’s core-service release model uses service plus commit as identity,
+materializes immutable images, captures the current deployment before rollout,
+checks live SSR behavior, and rolls back failed deployment, health, or smoke
+stages.
 
-**Exit condition:** The operator and engineering owner separately accept the
-evidence, residual risk, and resulting authority boundary.
+## Phase 8: Install the authority gate
 
-**Common self-deception:** Treating one successful pipeline qualification as
-proof that arbitrary future agent work is safe.
+**Decision:** Which observed delivery failure should become permanently
+rejectable?
+
+Select a material failure from the prior phases. Agree the bad and valid
+fixtures before changing the pipeline. Implement the smallest independently
+governed boundary.
+
+Repeat both fixtures. Inspect the final target, evidence provenance, bypass
+behavior, released artifact, valid-work path, and rollback.
+
+**Evidence to keep:** [intervention record](../shared/intervention.md),
+before-and-after receipts, reviewed gate, bypass results, and authority owner.
+
+**Move on when:** the preserved bad result passes before and fails after; valid
+work still succeeds; the producer cannot silently disable or self-approve the
+gate.
+
+**Ways to fool yourself:** adding another reviewer without changing evidence
+authority; proving a gate only on synthetic work; accepting a corrected summary
+without rerunning the relevant path.
+
+## Phase 9: Grant only the authority earned
+
+Apply the completion rule claim by claim. State:
+
+- tasks, repositories, tools, models, environments, and release paths covered;
+- failure modes demonstrated;
+- authority the pipeline may now exercise;
+- failed, blocked, excluded, and unproven boundaries;
+- additional evidence required for greater autonomy; and
+- the person who owns residual risk.
+
+The operator and engineering owner sign separately using the [assurance
+sign-off](../shared/sign-off.md).
+
+One successful qualification is not evidence that arbitrary future work is
+safe. It is evidence for the named authority boundary.
+
+## Practitioner references
+
+- [Technical controls and order](index.md)
+- [Cargo ReAPI worked example](examples/cargo-reapi.md)
+- [Evidence record](../shared/evidence-record.md)
+- [Finding record](../shared/finding.md)
+- [Blocked-finding record](../shared/blocked-finding.md)
+- [Worked acceptance outcomes](../shared/acceptance-examples.md)

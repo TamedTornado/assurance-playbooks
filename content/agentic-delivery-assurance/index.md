@@ -15,6 +15,7 @@ controls:
   - agentic-independent-verification
   - agentic-reward-hacking
   - agentic-recovery-integrity
+  - agentic-release-integrity
   - agentic-proven-gate
 ---
 # Agentic Delivery Assurance
@@ -53,7 +54,10 @@ and human sign-off for both methods.
    maximize visible success while violating intent.
 6. [Verify recovery integrity](controls/recovery-integrity.md) — test retries,
    repair, interruption, handoff, and durable state.
-7. [Install and prove the delivery gate](controls/proven-gate.md) — leave an
+7. [Preserve release identity and rollback](controls/release-integrity.md) —
+   prove that the verified composition becomes the deployed artifact and can
+   return to a captured known-good state.
+8. [Install and prove the delivery gate](controls/proven-gate.md) — leave an
    independently governed rejection boundary for a preserved failure.
 
 ## Required records
