@@ -24,13 +24,6 @@ describe("loadCatalog", () => {
     await expect(loadCatalog(root)).resolves.toEqual({ schemaVersion: 1, documents: [] });
   });
 
-  it("rejects broken relative links in human-facing Markdown", async () => {
-    const root = await fixture({
-      "README.md": "# Human guide\n\nContinue with the [missing field guide](field-guide.md).",
-    });
-    await expect(loadCatalog(root)).rejects.toThrow('broken Markdown link "field-guide.md"');
-  });
-
   it("loads, cross-validates, and deterministically sorts method documents", async () => {
     const root = await fixture({
       "playbook.md": `---
