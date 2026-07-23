@@ -108,6 +108,32 @@ describe("reader-first assurance journeys", () => {
     expect(consistency).toContain("## Usability observations");
   });
 
+  it("preserves source intent through the agentic delivery playbook", async () => {
+    const contract = await document(
+      "content/agentic-delivery-assurance/procedures/contract-work.md",
+    );
+    const context = await document(
+      "content/agentic-delivery-assurance/procedures/map-context-authority.md",
+    );
+    const reward = await document(
+      "content/agentic-delivery-assurance/procedures/attack-reward-surface.md",
+    );
+    const verification = await document(
+      "content/agentic-delivery-assurance/procedures/test-verification-independence.md",
+    );
+    const lineage = await document(
+      "content/agentic-delivery-assurance/templates/intent-lineage-worksheet.md",
+    );
+
+    expect(contract).toContain("preserved source intent");
+    expect(context).toContain("derived contract");
+    expect(reward).toContain("internally coherent");
+    expect(verification).toContain("original source intent");
+    expect(lineage).toContain("## Original request and governing sources");
+    expect(lineage).toContain("## Derived artifacts and changes");
+    expect(lineage).toContain("### Unapproved changes");
+  });
+
   it("covers artifact identity, deployment, and rollback in agentic delivery assurance", async () => {
     const index = await document("content/agentic-delivery-assurance/index.md");
     expect(index).toContain("agentic-release-integrity");

@@ -23,31 +23,40 @@ Name:
 Record these in the shared [acceptance
 criteria](../shared/acceptance-criteria.md). Do not begin with model scores.
 
-## Phase 1: Make completion rejectable
+## Phase 1: Preserve intent and make completion rejectable
 
-Executable procedure: [Select and contract representative
+Executable procedure: [Preserve intent and contract representative
 work](procedures/contract-work.md).
 
-**Decision:** Can someone reject a persuasive but incomplete result without
-depending on the producer’s explanation?
+**Decision:** Can someone reject work that is persuasive and internally
+coherent but no longer delivers the governing source intent?
 
-For representative tasks, separate the intended outcome from implementation
-suggestions. Record positive requirements, negative constraints, prohibited
-shortcuts, required evidence, target identity, and conditions that require
-human escalation.
+Preserve original requests, architectural constraints, negative requirements,
+and public commitments. Trace how they become requirements, designs, TDDs,
+issues, prompts, tests, and verifier contracts. Record every material change
+and the authority that approved it.
+
+For representative tasks, separate the intended outcome from negotiable
+implementation suggestions without discarding a load-bearing architecture.
+Record positive requirements, negative constraints, prohibited shortcuts,
+required evidence, target identity, and conditions that require human
+escalation.
 
 Include a task that is routine, one with genuine ambiguity, and one whose
 failure would be consequential.
 
-**Evidence to keep:** original task, normalized task contract, ambiguity log,
-required evidence, and resulting change.
+**Evidence to keep:** governing sources, derived-artifact lineage, approvals
+and unapproved changes, original task, normalized task contract, reviewer
+context, required evidence, and resulting change.
 
-**Move on when:** material requirements have observable accept and reject
-conditions and uncertainty has an escalation route.
+**Move on when:** load-bearing requirements trace to governing source or an
+approved visible divergence, material requirements have observable accept and
+reject conditions, and uncertainty has an escalation route.
 
 **Ways to fool yourself:** letting the producer author the only test; describing
-an adjective such as “robust” as acceptance evidence; assuming an agent will ask
-because the prompt encouraged it.
+an adjective such as “robust” as acceptance evidence; giving the reviewer only
+the newest derived contract; assuming an agent will ask because the prompt
+encouraged it.
 
 ## Phase 2: Map context and real authority
 
@@ -57,13 +66,14 @@ authority](procedures/map-context-authority.md).
 **Decision:** What can each producer, verifier, and human know, mutate, approve,
 and bypass?
 
-Trace instruction sources and precedence, retrieved knowledge, repository
-state, tools, filesystem and network access, secrets, approval rules,
-destructive capabilities, and audit records.
+Trace governing source intent, derived contracts, instruction precedence,
+retrieved knowledge, repository state, tools, filesystem and network access,
+secrets, approval rules, destructive capabilities, and audit records.
 
-Exercise missing, stale, and conflicting instructions. Attempt safe operations
-outside the task boundary. Compare the policy people describe with the
-authority actually enforced.
+Exercise missing, stale, and conflicting instructions, including a newer
+derived contract that coherently contradicts a preserved source constraint.
+Attempt safe operations outside the task boundary. Compare the policy people
+describe with the authority actually enforced.
 
 **Evidence to keep:** context-precedence map, authority graph, access attempts,
 and escalation behavior.

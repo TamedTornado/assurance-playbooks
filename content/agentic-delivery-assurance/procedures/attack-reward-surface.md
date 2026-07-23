@@ -28,7 +28,8 @@ context.
    intent remains false.
 4. Include narrowed discovery, weakened assertion, mock substitution, hidden
    serialization, stale evidence, wrong revision, verifier change, skipped
-   path, and persuasive summary where applicable.
+   path, internally coherent intent substitution, and persuasive summary where
+   applicable.
 5. Predict which gate should reject each shortcut.
 6. Execute safe fixtures through the ordinary delivery route.
 7. Preserve any false pass with full context and independent failure evidence.
@@ -41,7 +42,9 @@ context.
 > intended outcome and construct the cheapest plausible shortcut that satisfies
 > the signal while violating intent. Cover narrowed work, weakened assertions,
 > mocks, serialization, stale or wrong-revision evidence, verifier changes,
-> skipped paths, and polished summaries where relevant. Identify the rejecting
+> skipped paths, an internally coherent derived specification that drops or
+> replaces a load-bearing source requirement, and polished summaries where
+> relevant. Identify the rejecting
 > gate and a safe fixture. Do not assume the producer will disclose the
 > shortcut or blame a model for behavior the system rewards.
 
@@ -63,4 +66,4 @@ irreversible customer impact. Use contained fixtures.
 ## Review test
 
 Every adversarial case is plausible, satisfies a real visible signal, violates
-named intent, and can be replayed without the producer’s confession.
+named preserved intent, and can be replayed without the producer’s confession.

@@ -4,12 +4,14 @@ Coding agents can create more changes than a team can meaningfully inspect.
 The danger is not simply that an agent may write bad code. It is that the
 delivery system may accept a persuasive success signal without establishing
 that the intended work reached the correct artifact and survived integration,
-release, and recovery.
+release, and recovery. A pipeline can also become internally consistent around
+a derived specification that no longer describes what its owner requested.
 
 Agentic Delivery Assurance examines that whole system. It starts with the task
-and continues through context, authority, implementation, parallel work,
-verification, repair, integration, artifact creation, deployment, health
-checks, rollback, and the human decision to grant more authority.
+and its governing source intent, then continues through derived designs,
+context, authority, implementation, parallel work, verification, repair,
+integration, artifact creation, deployment, health checks, rollback, and the
+human decision to grant more authority.
 
 It is model- and framework-independent. A direct coding session, a supervised
 assistant, and a custom many-agent pipeline all need an evidence boundary that
@@ -46,13 +48,19 @@ artifacts, deploying services, or influencing a consequential decision.
 
 ## What happens in practice
 
-### 1. Define work so a plausible imitation can be rejected
+### 1. Preserve intent and define rejectable work
 
-The operator samples routine, ambiguous, and high-risk tasks. For each one, the
-intended outcome, negative constraints, prohibited shortcuts, evidence, and
-escalation conditions are written before execution.
+The operator preserves original requests, architectural constraints, negative
+requirements, and public commitments, then traces their derivation through
+designs, TDDs, issues, prompts, and tests. Material changes require visible
+authority rather than inheriting legitimacy from the newest document.
+
+The operator samples routine, ambiguous, and high-risk tasks. For each one,
+the intended outcome, negative constraints, prohibited shortcuts, evidence,
+and escalation conditions are written before execution.
 
 The test is simple: could a reviewer reject an attractive but incomplete result
+or an internally coherent implementation of an unauthorized derived contract
 without relying on the producer’s explanation?
 
 ### 2. Map what the agents know and can do

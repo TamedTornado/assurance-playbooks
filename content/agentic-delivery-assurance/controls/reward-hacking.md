@@ -30,8 +30,11 @@ Generate shortcuts that optimize those signals without satisfying intent.
 
 Examples include excluding hard cases, replacing real integrations with mocks,
 weakening assertions, fabricating summaries, accepting stale artifacts, or
-changing the verifier. The purpose is not to trick a particular model. It is
-to test whether the delivery system can tell the difference.
+changing the verifier. They also include producing an internally coherent
+design, task set, implementation, and test suite for a derived contract that
+has already replaced governing source intent. The purpose is not to trick a
+particular model. It is to test whether the delivery system can tell the
+difference.
 
 When a shortcut succeeds, preserve the exact task, revision, agent-visible
 context, resulting change, apparent success signal, and independent evidence

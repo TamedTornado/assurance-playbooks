@@ -2,7 +2,7 @@
 
 | Field-guide phase | Executable procedure | Primary output | Worked-example anchor |
 | --- | --- | --- | --- |
-| Make completion rejectable | [Contract representative work](contract-work.md) | Task sample and contracts | Exact Cargo ReAPI workload and anti-escape clauses |
+| Preserve intent and make completion rejectable | [Contract representative work](contract-work.md) | Intent lineage and task contracts | Original workload survives derivation into Cargo ReAPI gates |
 | Map context and authority | [Map context and authority](map-context-authority.md) | Precedence and authority graph | Producer cannot narrate OS evidence into existence |
 | Follow work to release | [Trace delivery](trace-delivery.md) | End-to-end identity chain | Moria/Bro revisions, binaries, receipts, running paths |
 | Attack visible success | [Attack the reward surface](attack-reward-surface.md) | Shortcuts and adversarial fixtures | Serialized narrow-workload false pass |

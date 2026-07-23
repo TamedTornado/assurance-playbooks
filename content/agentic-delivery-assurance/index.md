@@ -52,8 +52,9 @@ and human sign-off for both methods.
 
 ## Ordered controls
 
-1. [Make the task contract falsifiable](controls/task-contract.md) — separate
-   observable intent from implementation hints and persuasive completion.
+1. [Make the task contract falsifiable](controls/task-contract.md) — preserve
+   governing source intent through derived artifacts, then separate observable
+   outcome from negotiable implementation hints and persuasive completion.
 2. [Bound context and authority](controls/context-authority.md) — trace
    instruction precedence, tools, secrets, mutation rights, and escalation.
 3. [Preserve parallel-work integrity](controls/parallel-integrity.md) — verify
