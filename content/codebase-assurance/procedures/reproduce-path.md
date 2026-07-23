@@ -2,303 +2,460 @@
 schemaVersion: 1
 kind: procedure
 id: codebase-reproduce-path
-title: Get the real product running and preserve what happens
+title: Test whether the product actually works
 version: 0.1.0
 status: draft
-summary: Turn important client-visible behavior into repeatable demonstrations before judging or changing the product.
+summary: Independently test whether the delivered product performs its important functions correctly under the conditions it claims to support.
 playbook: codebase-assurance
 phase: reproduce-path
-purpose: Establish what another operator can actually make the pinned product do without relying on the original developer's memory.
-inputs: [Product expectation worksheet, Design consistency review, Target repositories and revisions, Existing run instructions, Required access]
-outputs: [Baseline record, Raw run receipts, Findings or blocked records when required]
+purpose: Establish what the delivered product can actually do, where it fails, and the exact boundary of the audit evidence.
+inputs: [Product expectation worksheet, Design consistency review, Delivered product, Product instructions, Claimed operating conditions]
+outputs: [Product audit record, Raw evidence, Findings or blocked records]
 ---
-# Get the real product running and preserve what happens
+# Test whether the product actually works
 
-The client may not be able to read the implementation. They still need an
-answer to a much more useful question:
+The previous phases established what the product claims to be and whether its
+design describes that product consistently.
 
-> Can you make the thing I was promised happen again, from a known version,
-> without relying on the original developer's memory?
+Now audit the delivered application itself.
 
-This phase turns a few important expectations into real demonstrations. It
-does not attempt to run every command, catalogue the whole environment, or
-prove every technical question from the expectation worksheet.
+The question is:
 
-The output is one [baseline record](../templates/baseline-record.md). It starts
-with a client-readable answer, then preserves enough detail for another
-operator to repeat each demonstration. Commands, logs, reports, screenshots,
-and hashes may be attached or linked; the operator should not paste every raw
-receipt into the main document.
+> Does the delivered product perform its important functions correctly under
+> the conditions it claims to support?
+
+This is not an exhaustive regression test of every feature. It is an
+independent assessment of the capabilities, qualities, and operating boundaries
+that define whether the product is genuinely usable.
 
 ## What this phase establishes
 
-A baseline establishes:
+For each important product capability, establish:
 
-- the exact version examined;
-- which important behaviors can be observed now;
-- the real route used to observe them;
-- what had to be repaired before that route worked;
-- whether another operator can repeat it; and
-- which expectations remain blocked or outside the evidence.
+- whether the complete behavior can actually be performed;
+- whether the resulting state is correct;
+- whether it works through the supported interface;
+- whether it works from a clean and documented starting point;
+- whether the result is repeatable;
+- whether stated performance or scale requirements are met where relevant; and
+- what remains broken, partial, blocked, or untested.
 
-It does not establish that the behavior is correct under every condition. It
-does not yet show that the tests can reject a plausible wrong implementation.
-Those questions belong to later phases.
+A product does not pass merely because it compiles, opens, or presents an
+attractive demonstration.
+
+For example:
+
+- Compiling a library does not establish that another application can use it.
+- Accepting a request does not establish that the requested work completed.
+- Displaying an edit does not establish that it was saved correctly.
+- Producing a report does not establish that the reported threshold was met.
+- Passing a small workload does not establish the claimed production capacity.
+- A healthy process does not establish correct product state.
+- A convincing demo does not establish that the supported product interface
+  was used.
 
 ## Inputs
 
 Bring:
 
-- the completed product expectation worksheet;
+- the product expectation worksheet;
 - the design consistency review;
-- the repository, build, package, image, model, or deployed version to examine;
-- the instructions a new developer or customer would receive;
-- the access and data required for the important behavior; and
-- any demonstration, report, recording, or claim the client has already seen.
-
-Do not begin with a generic toolchain inventory. Record technical detail when
-it becomes necessary to repeat a selected demonstration.
+- the delivered repository, artifact, or deployment;
+- the exact version under audit;
+- installation, build, deployment, and operating instructions;
+- representative accounts, data, assets, and integrations;
+- stated performance, scale, and reliability requirements;
+- any demonstrations or acceptance evidence already supplied; and
+- access to the environments required by the product's claims.
 
 ## Human procedure
 
-The operator can run this in one session with a product owner and, where
-necessary, a technical contributor.
+### 1. Identify the functions that define the product
 
-### 1. Ask what should happen in front of us
+Return to the product expectation worksheet.
 
-Start with:
+Ask:
 
-> What should we be able to see happen?
+> If these things do not work, is this still the product it claims to be?
 
-Choose two to five demonstrations that matter to the client's decision. Draw
-them from the expectation worksheet:
+Select the important capabilities that define the delivered product. Include:
 
-- something the client was shown;
-- something a real consumer must be able to do;
-- something whose failure would change whether the product can be used; or
-- something offered as evidence for an important quality or architectural
-  claim.
+- its central user workflows;
+- the supported interfaces used by customers or downstream systems;
+- important state changes and persistence;
+- consequential calculations or transformations;
+- required integrations;
+- stated performance or scale characteristics; and
+- architectural constraints whose violation would materially change the
+  product.
 
-Prefer a visible behavior over an internal subsystem. “An external project can
-add the library and create a world” is a demonstration. “Exercise the package
-boundary” is not.
+Do not choose functions merely because they are easy to demonstrate. Do not
+attempt to test every button, endpoint, or helper.
 
-For each demonstration, record:
+A typical audit might select five to ten capabilities. A small product may
+require fewer. A larger product may require representative scenarios grouped
+by capability.
 
-- what the person does;
-- what they expect to see;
-- why it matters; and
-- which expectation it helps investigate.
+### 2. Record the claimed operating conditions
 
-One demonstration may help investigate several technical questions. Do not
-create a separate run merely to make the worksheet look complete.
+For each capability, record the conditions under which it is supposed to work:
 
-### 2. Agree what this run can prove
+- intended user or consumer;
+- supported environment;
+- relevant data shape and volume;
+- expected concurrency or workload;
+- required dependencies;
+- performance boundary;
+- persistence and recovery expectations; and
+- explicitly unsupported conditions.
 
-Before touching the system, say what a successful run would and would not
-establish.
+This defines the audit boundary.
+
+“Works on the developer's machine with sample data” cannot establish a claim
+about production load. Conversely, an internal prototype should not be failed
+against operating conditions it never claimed to support.
+
+### 3. Define a complete audit scenario
+
+Write a concrete scenario for each selected capability:
+
+- **Starting state:** What product, account, data, and environment exist before
+  the test?
+- **Action:** What does the user, consumer, or operator do?
+- **Expected result:** What should visibly happen?
+- **Expected state:** What should be true after the action?
+- **Failure condition:** What result would show that the capability is broken?
+- **Evidence:** What observation or artifact can establish the result?
+- **Limit:** What does this scenario not prove?
+
+Prefer complete product behavior over internal milestones.
 
 For example:
 
-- A clean external consumer build can show that the public package is usable.
-  It cannot show that every useful operation is available through that public
-  boundary.
-- A visible edit can show that a user action changes the rendered world. It
-  cannot by itself establish where authoritative state lives.
-- A generated performance report can show the observed result on one named
-  machine and workload. It cannot establish the same result on every machine.
+> Starting from an unmodified saved world, a player removes material from a
+> solid hillside, sees the surface update, saves the world, terminates the
+> process, reloads the save, and observes the same removed material.
 
-This prevents a compelling demonstration from silently earning a broader
-conclusion than it supports.
+This is stronger than separate checks that an edit command was accepted and a
+save file was written.
 
-### 3. Pin the thing being demonstrated
+### 4. Pin the delivered product
 
-Record the identity a second operator needs:
+Record the identity of what is being audited:
 
-- repository and revision, or deployed artifact identity;
-- whether the starting tree contains local changes;
-- selected configuration and feature flags;
-- necessary data or generated inputs; and
-- named machine or environment when the claim depends on it.
+- repository and commit;
+- release or deployment artifact;
+- local modifications;
+- configuration and feature flags;
+- data and asset versions;
+- external dependency versions where material; and
+- named hardware when the claim depends on it.
 
-Record tool versions, services, caches, credentials interfaces, drivers, or
-hardware only when they materially affect the route. Prefer commands that
-capture them automatically.
+Do not audit an unidentified branch, mutable image tag, unexplained local
+build, or convenient replacement revision.
 
-If the target cannot be identified, stop. An unidentifiable build cannot become
-a trustworthy baseline.
+If the team cannot identify the delivered product, record that as an audit
+finding.
 
-### 4. Use the route the project gives a newcomer
+### 5. Approach the product through its supported route
 
-Start from a clean checkout, machine, account, or workspace where practical.
-Follow the project's public instructions before using private knowledge.
+Use the route available to the intended user or consumer:
 
-Execute the real composition needed for the behavior:
+- public installation instructions;
+- supported package or API;
+- ordinary user interface;
+- documented deployment;
+- normal operator controls; or
+- named acceptance harness.
 
-- use the public package as a consumer would;
-- run the actual application rather than a mock of it;
-- use the ordinary data and artifact pipeline;
-- call the real safe dependency boundary; and
-- use the named acceptance machine when the claim depends on its hardware.
+Do not begin with private implementation knowledge.
 
-A reduced route is allowed when the real route is unsafe or unavailable, but
-the baseline must name what the substitute removes. A substitute cannot prove
-behavior owned by the omitted part.
+The original developer may explain the product, but the audit must distinguish
+between:
 
-### 5. Preserve the first attempt
+- what the delivered product supports;
+- what works only through undocumented knowledge; and
+- what can be made to work only by modifying the product.
 
-Record the exact command or action and the first observed result before fixing
-anything. Keep the useful output as a linked receipt.
+### 6. Preserve the first attempt
 
-The first attempt answers a product question too: can someone who is not the
-original developer get the promised behavior from what the project currently
-provides?
+Run the scenario as supplied and preserve:
 
-Do not quietly clean up instructions, install a forgotten dependency, supply a
-missing asset, warm a cache, or change configuration and then describe the
-repaired run as the baseline.
+- the exact commands or actions;
+- the starting conditions;
+- the observed behavior;
+- resulting state;
+- errors and warnings;
+- produced artifacts;
+- measurements where relevant; and
+- anything the operator had to infer.
 
-### 6. Classify every repair before making it
+Do not silently repair the environment, instructions, data, or product before
+recording the first result.
 
-Use one of these three labels:
+The first attempt establishes whether the delivered product can be used as
+delivered.
 
-- **Environment repair:** our machine or access was not in the required state.
-  Examples include installing a documented toolchain or obtaining an agreed
-  credential.
-- **Instruction repair:** the product can perform the behavior, but the route
-  given to a newcomer is missing, stale, or wrong. Preserve this as a finding
-  even if the corrected command is simple.
-- **Product change:** code, configuration shipped as part of the product, data
-  contract, or supported behavior must change. Stop treating this as baseline
-  setup. Preserve the failure as a finding and do not alter the target being
-  assessed.
+### 7. Classify every required repair
 
-When the classification is disputed, record both interpretations and the
-decision owner. Do not make a product change merely to obtain a green baseline.
+Before changing anything, classify the proposed repair.
 
-### 7. Establish the repeatable route
+#### Environment repair
 
-After permitted environment and instruction repairs:
+The audit environment lacks a documented prerequisite or required access.
 
-1. return to a clean starting state;
-2. run the corrected route exactly;
-3. record the observable result;
-4. preserve the smallest useful set of raw receipts; and
-5. write the route so it can be copied without oral explanation.
+Examples include installing the documented toolchain, obtaining a required
+test credential, or using the named hardware profile.
 
-The record should contain exact commands where commands exist. For interactive
-behavior, describe the starting state, action, visible result, and receipt.
+#### Instruction repair
 
-Do not make the main record an unfiltered terminal transcript. Link the raw
-transcript and summarize the result a client can understand.
+The product can perform the behavior, but its supplied instructions are
+missing, stale, ambiguous, or incorrect.
 
-### 8. Ask someone else to repeat it
+Examples include an undocumented startup command, a missing migration step,
+controls absent from the user documentation, or a required environment
+variable described under the wrong name.
 
-Give the written route to a second operator who did not create it, or run it in
-a genuinely clean environment without relying on shell history or unstated
-local state.
+#### Product repair
+
+The delivered code, shipped configuration, data, assets, supported interface,
+or product behavior must change.
+
+Examples include implementing a missing API, correcting corrupted state,
+changing a workload threshold, modifying the application so the scenario can
+complete, or granting the demo access unavailable to real consumers.
+
+A product repair means the delivered product did not pass that scenario. A
+later repaired version may be audited separately, but it does not erase the
+original result.
+
+### 8. Execute the complete scenario
+
+Run through to the actual product consequence.
+
+Check both the visible behavior and resulting state.
+
+Depending on the capability, this may require inspecting:
+
+- persisted data;
+- downstream effects;
+- generated artifacts;
+- external-system state;
+- authorization boundaries;
+- timing and resource measurements;
+- behavior after restart; or
+- results observed by another consumer.
+
+Do not stop at the first green intermediate result.
+
+### 9. Exercise the stated operating boundary
+
+Where the capability includes a stated workload, scale, latency, or resource
+expectation, repeat the scenario under that condition.
+
+Use the workload the product claims to support—not an arbitrary stress test and
+not a smaller convenient proxy.
 
 Record:
 
-- whether the same material behavior appeared;
-- any extra knowledge the second attempt required;
-- meaningful differences in result or timing; and
-- the boundary of the repeatability claim.
+- workload identity;
+- data volume;
+- concurrency;
+- duration;
+- machine and environment;
+- warm or cold state;
+- observed latency and throughput;
+- resource consumption;
+- errors and degraded behavior; and
+- resulting product state.
 
-If independent repetition is impractical, say why and mark repeatability
-unproven. The original operator running the same warmed command twice is useful
-diagnostic evidence, but it is not independent reproduction.
+A threshold measured on another machine or with another workload remains
+evidence for that narrower condition only.
 
-### 9. Close every selected demonstration honestly
+This phase establishes whether the claimed operating case works. Later phases
+deliberately challenge dependency failure, recovery, and deceptive evidence.
 
-Give each demonstration one plain-language result:
+### 10. Repeat successful scenarios from a clean state
 
-- **Not run:** the demonstration has been selected, but no attempt has been
-  made. This is a planning state, not evidence about the product.
-- **Reproduced:** another operator can obtain comparable behavior from the
-  recorded route.
-- **Observed once:** the behavior occurred, but independent repeatability has
-  not been established.
-- **Failed:** the pinned product did not produce the expected behavior.
-- **Blocked:** a named missing capability prevents the run.
-- **Substitute only:** a reduced route ran, but it removes part of the behavior
-  the expectation depends on.
+For any scenario considered successful:
 
-Explain what each result means for the client's decision. Do not average the
-results into a project score.
+- restore the documented starting state;
+- repeat the procedure without relying on shell history or unstated setup;
+- use a second operator or clean environment where practical; and
+- compare the material result.
+
+A single successful run is an observation. A repeatable run supports a stronger
+audit conclusion.
+
+### 11. Assign an audit result
+
+Give every selected capability one result.
+
+#### Working
+
+The complete expected behavior and resulting state were obtained and repeated
+under the claimed conditions.
+
+#### Working with limitations
+
+The central behavior works, but a material limitation remains, such as a
+narrower workload, one supported environment, undocumented setup, incomplete
+persistence, weaker measurement, or lack of independent repetition.
+
+#### Not working
+
+The delivered product did not produce the expected behavior or correct
+resulting state.
+
+#### Blocked
+
+A required environment, dependency, credential, dataset, hardware target, or
+external system could not be obtained after the agreed attempts.
+
+#### Not tested
+
+The capability was deliberately left outside the performed audit.
+
+For every result, state:
+
+- what was observed;
+- the evidence;
+- the exact conditions;
+- the limitation of the conclusion; and
+- any resulting finding.
+
+Do not average the results into a score.
 
 ## A Moria-shaped example
 
-Suppose the client says:
+Moria claims to be a reusable voxel-world substrate, not merely a
+demonstration application.
 
-> I expected another game to be able to use Moria as a library, and I expected
-> a player edit to appear quickly without the demo cheating through private
-> state.
+The functional audit should therefore cover capabilities such as these.
 
-Reasonable baseline demonstrations would be:
+### External consumption
 
-1. Create or use a clean external consumer, depend on the pinned Moria
-   revision, and reach a small world through the supported public interface.
-2. Run the actual visual consumer, perform one edit, and preserve the visible
-   result and any machine-readable latency report.
-3. Inspect the demonstrated route only far enough to state whether it used the
-   supported public interface. The deeper question of whether CPU or GPU owns
-   world truth is not proved merely because the edit appeared.
+A clean downstream Rust/Bevy project pins the audited Moria revision and uses
+only the supported public facade to configure a world, obtain a meaningful
+world observation, submit an edit, and observe completion.
 
-If the external consumer builds only after discovering an undocumented native
-dependency, that is an instruction repair. If the consumer requires access to
-a private crate, that is a product failure against the reusable-substrate
-expectation. If no suitable graphics machine is available, the headed result
-is blocked; a headless substitute may support logic conclusions but cannot be
-presented as graphics or frame-latency evidence.
+If the included demo works but the external consumer cannot perform the same
+representative behavior, the reusable-substrate capability is not working.
+
+### Continuous editable world
+
+Run the actual visual consumer and verify that a user can enter the generated
+world, travel through representative terrain, identify a solid hillside,
+remove or place material, and observe the correct surface change.
+
+The resulting world state must agree with the visible result.
+
+### Persistence
+
+After an edit, save through the supported interface, terminate the process,
+start from a clean process, reload the save, and verify the edited world through
+supported queries and presentation.
+
+Successful file creation is not sufficient if the restored world is wrong.
+
+### Responsiveness
+
+Run the agreed edit workload on the named machine and measure from the user or
+consumer action to the promised visible consequence.
+
+An internal measurement beginning after the request has already waited cannot
+establish the user-facing latency requirement.
+
+### Intended workload and scale
+
+Run the agreed representative world, streaming, mutation, and presentation
+workload with its required data and machine profile.
+
+Record whether the product remains correct while meeting the claimed latency,
+throughput, and resource boundaries.
+
+### Architectural expectations
+
+A successful functional demonstration does not automatically establish that
+the product uses the commissioned architecture.
+
+The visual world may work while CPU-authoritative state has replaced the
+promised GPU-resident substrate. Functional evidence should record that
+limitation. The later adversarial phase must use evidence capable of
+distinguishing the promised architecture from a convincing substitute.
 
 ## Copyable agent prompt
 
-> Help me establish a repeatable baseline for the supplied product expectation
-> worksheet and design consistency review. Begin by proposing two to five
-> client-visible demonstrations drawn from what the client was shown, what a
-> real consumer must do, and what would change the client's decision. For each,
-> state what success would and would not prove. Wait for operator confirmation
-> of the demonstrations, then identify the pinned target and execute the
-> project's documented real route from a clean state. Preserve the first
-> attempt before suggesting repairs. Classify every proposed repair as an
-> environment repair, instruction repair, or product change; do not make a
-> product change to obtain a successful baseline. Draft one baseline record
-> with a client summary, exact repeatable routes, linked raw receipts,
-> independent repetition result, limitations, and not-run, failed, blocked, or
-> substitute-only demonstrations. Do not invent missing observations or turn a
-> reduced route into evidence for the omitted behavior.
+> Independently audit whether the supplied delivered product performs the
+> important functions defined by its product expectation worksheet under the
+> conditions it claims to support. Select the capabilities that define the
+> product rather than every feature. For each capability, draft a complete
+> scenario containing starting state, user or consumer action, visible result,
+> resulting state, failure condition, evidence, claimed workload, and the limit
+> of the conclusion. Pin the exact product and use its supported route.
+> Preserve the first attempt before suggesting changes. Classify every proposed
+> change as an environment repair, instruction repair, or product repair; a
+> product repair means the delivered target did not pass. Execute through the
+> complete product consequence, exercise stated operating boundaries where
+> relevant, and repeat successful scenarios cleanly. Assign working, working
+> with limitations, not working, blocked, or not tested to every selected
+> capability. Do not infer success from compilation, intermediate events,
+> process health, generated reports, reduced workloads, or private developer
+> routes.
 
 ## Required output
 
-One completed [baseline record](../templates/baseline-record.md), with linked
-raw receipts. Use a [finding record](../../shared/finding.md) for a material
-product or instruction failure and a
-[blocked-finding record](../../shared/blocked-finding.md) when access or a
-required environment prevents a decision-relevant run.
+Produce one product audit record containing:
+
+- the exact product audited;
+- its claimed operating conditions;
+- the defining capabilities selected;
+- the scenario for each capability;
+- first attempts;
+- environment, instruction, and product repairs;
+- observed behavior and resulting state;
+- workload and performance evidence where applicable;
+- repeatability;
+- audit result for every capability;
+- findings; and
+- explicit untested or unsupported areas.
+
+Create separate [finding records](../../shared/finding.md) only for material
+issues requiring their own owner or remediation. Use a
+[blocked-finding record](../../shared/blocked-finding.md) when a required
+observation cannot be reached after the agreed attempts.
 
 ## Preserve as evidence
 
-Preserve the pinned target, starting state, first attempt, repair
-classification, final route, raw result, artifact identity, independent
-attempt, and stated limits. Hash material files where identity matters; do not
-hash screenshots or transcripts merely to create ceremony.
+Preserve target identity, scenario, starting state, first attempt, repair
+classification, exact route, resulting product state, raw receipts, workload
+identity, environment, repetition result, and limitations.
 
 ## Stop and escalate
 
-Stop when:
+Stop a scenario when:
 
 - the target cannot be identified;
-- a proposed “setup fix” would change the product under assessment;
+- continuing could affect real customers or uncontrolled production state;
 - required data cannot be handled safely;
-- the run could create an uncontrolled customer or production effect;
-- access remains unavailable after the agreed escalation; or
-- the only available substitute removes the behavior the selected expectation
-  depends on.
+- the proposed setup action is actually a product modification;
+- the required environment remains unavailable; or
+- the available substitute removes the behavior being audited.
+
+Record the scenario as not working, blocked, or not tested as appropriate. Do
+not improvise a passing result.
 
 ## Review test
 
-A client can understand what was and was not reproduced. A second operator can
-follow each successful route without oral history and obtain comparable
-behavior. Every repair and substitute remains visible, and no failed or blocked
-demonstration has been converted into a pass.
+A nontechnical owner can answer:
+
+- Does the application's important functionality actually work?
+- Does it produce the correct resulting state?
+- Under what workload and conditions was it tested?
+- What works only with limitations or undocumented help?
+- What is broken?
+- What could not be tested?
+- Which product claims remain unsupported?
+
+A technical reviewer can identify the exact product, reproduce the successful
+scenarios, inspect the evidence, and see where each conclusion ends.

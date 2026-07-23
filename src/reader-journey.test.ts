@@ -122,28 +122,23 @@ describe("reader-first assurance journeys", () => {
     expect(investigation).toContain("## Best candidate for a durable gate");
   });
 
-  it("provides one client-readable baseline record for real demonstrations", async () => {
+  it("audits whether the delivered product actually works", async () => {
     const procedure = await document(
       "content/codebase-assurance/procedures/reproduce-path.md",
     );
-    const baseline = await document(
-      "content/codebase-assurance/templates/baseline-record.md",
-    );
 
+    expect(procedure).toContain("# Test whether the product actually works");
     expect(procedure).toContain(
-      "[baseline record](../templates/baseline-record.md)",
+      "Does the delivered product perform its important functions correctly",
     );
-    expect(procedure).toContain("What should we be able to see happen?");
-    expect(procedure).toContain("environment repair");
-    expect(procedure).toContain("instruction repair");
-    expect(procedure).toContain("product change");
-    expect(baseline).toContain("## What we were able to reproduce");
-    expect(baseline).toContain("## Demonstrations");
-    expect(baseline).toContain("### [What the client expects to see happen]");
-    expect(baseline).toContain("#### First attempt");
-    expect(baseline).toContain("#### Repeatable route");
-    expect(baseline).toContain("#### What this does and does not prove");
-    expect(baseline).not.toContain("Demonstration ID");
+    expect(procedure).toContain("### 1. Identify the functions that define the product");
+    expect(procedure).toContain("### 9. Exercise the stated operating boundary");
+    expect(procedure).toContain("#### Environment repair");
+    expect(procedure).toContain("#### Instruction repair");
+    expect(procedure).toContain("#### Product repair");
+    expect(procedure).toContain("#### Working with limitations");
+    expect(procedure).toContain("#### Not working");
+    expect(procedure).not.toContain("client’s decision");
   });
 
   it("uses one working investigation record across challenge, boundaries, and failure", async () => {
