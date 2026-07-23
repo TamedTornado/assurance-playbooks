@@ -16,6 +16,7 @@ export const playbookSchema = commonSchema.extend({
   audience: z.string().min(10),
   outcome: z.string().min(20),
   controls: z.array(idSchema).min(1),
+  procedures: z.array(idSchema).min(1),
 });
 
 export const controlSchema = commonSchema.extend({
@@ -53,17 +54,28 @@ export const templateSchema = commonSchema.extend({
   ]),
 });
 
+export const procedureSchema = commonSchema.extend({
+  kind: z.literal("procedure"),
+  playbook: idSchema,
+  phase: idSchema,
+  purpose: z.string().min(20),
+  inputs: z.array(z.string().min(3)).min(1),
+  outputs: z.array(z.string().min(3)).min(1),
+});
+
 export const documentDataSchema = z.discriminatedUnion("kind", [
   playbookSchema,
   controlSchema,
   exampleSchema,
   templateSchema,
+  procedureSchema,
 ]);
 
 export type Playbook = z.infer<typeof playbookSchema>;
 export type Control = z.infer<typeof controlSchema>;
 export type Example = z.infer<typeof exampleSchema>;
 export type Template = z.infer<typeof templateSchema>;
+export type Procedure = z.infer<typeof procedureSchema>;
 export type AssuranceDocumentData = z.infer<typeof documentDataSchema>;
 
 export interface AssuranceDocument {

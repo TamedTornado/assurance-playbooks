@@ -44,6 +44,7 @@ summary: A sufficiently descriptive example method summary.
 audience: Teams operating consequential software
 outcome: A defensible evidence-backed assurance result.
 controls: [method-baseline]
+procedures: [method-frame-decision]
 ---
 ${body}`,
       "controls/baseline.md": `---
@@ -63,9 +64,28 @@ outputs: [baseline]
 tags: [baseline]
 ---
 ${body}`,
+      "procedures/frame.md": `---
+schemaVersion: 1
+kind: procedure
+id: method-frame-decision
+title: Frame the decision
+version: 1.0.0
+status: stable
+summary: A sufficiently descriptive executable operator procedure.
+playbook: method
+phase: frame
+purpose: Turn a broad concern into a bounded decision and evidence question.
+inputs: [Decision owner, System context]
+outputs: [Decision record]
+---
+${body}`,
     });
     const catalog = await loadCatalog(root);
-    expect(catalog.documents.map((item) => item.data.id)).toEqual(["method", "method-baseline"]);
+    expect(catalog.documents.map((item) => item.data.id)).toEqual([
+      "method",
+      "method-baseline",
+      "method-frame-decision",
+    ]);
   });
 
   it("rejects a playbook that references an absent control", async () => {
@@ -81,6 +101,7 @@ summary: A sufficiently descriptive example method summary.
 audience: Teams operating consequential software
 outcome: A defensible evidence-backed assurance result.
 controls: [missing-control]
+procedures: [missing-procedure]
 ---
 ${body}`,
     });
@@ -126,4 +147,61 @@ ${body}`,
       });
     },
   );
+
+  it("loads a playbook-owned executable procedure", async () => {
+    const root = await fixture({
+      "playbook.md": `---
+schemaVersion: 1
+kind: playbook
+id: method
+title: Example method
+version: 1.0.0
+status: stable
+summary: A sufficiently descriptive example method summary.
+audience: Teams operating consequential software
+outcome: A defensible evidence-backed assurance result.
+controls: [method-baseline]
+procedures: [method-frame-decision]
+---
+${body}`,
+      "controls/baseline.md": `---
+schemaVersion: 1
+kind: control
+id: method-baseline
+title: Establish the baseline
+version: 1.0.0
+status: stable
+summary: A sufficiently descriptive baseline control summary.
+playbook: method
+objective: Establish observable behavior before intervention.
+required: true
+evidence: [Recorded baseline execution]
+acceptance: [The baseline can be independently repeated]
+outputs: [baseline]
+tags: [baseline]
+---
+${body}`,
+      "procedures/frame.md": `---
+schemaVersion: 1
+kind: procedure
+id: method-frame-decision
+title: Frame the decision
+version: 1.0.0
+status: stable
+summary: A sufficiently descriptive executable operator procedure.
+playbook: method
+phase: frame
+purpose: Turn a broad concern into a bounded decision and evidence question.
+inputs: [Decision owner, System context]
+outputs: [Decision record]
+---
+${body}`,
+    });
+    const catalog = await loadCatalog(root);
+    expect(catalog.documents.find((item) => item.data.id === "method-frame-decision")?.data).toMatchObject({
+      kind: "procedure",
+      playbook: "method",
+      phase: "frame",
+    });
+  });
 });

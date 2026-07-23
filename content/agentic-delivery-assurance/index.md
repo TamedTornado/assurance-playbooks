@@ -17,6 +17,16 @@ controls:
   - agentic-recovery-integrity
   - agentic-release-integrity
   - agentic-proven-gate
+procedures:
+  - agentic-contract-work
+  - agentic-map-context-authority
+  - agentic-trace-delivery
+  - agentic-attack-reward-surface
+  - agentic-test-verification-independence
+  - agentic-exercise-recovery
+  - agentic-exercise-release
+  - agentic-install-authority-gate
+  - agentic-grant-authority
 ---
 # Agentic Delivery Assurance
 
@@ -71,6 +81,12 @@ and human sign-off for both methods.
 
 The [worked acceptance outcomes](../shared/acceptance-examples.md) show how to
 distinguish completion, proxy theatre, blockage, and scope expansion.
+
+## Executable procedures
+
+The [procedure coverage map](procedures/) links every field-guide phase to a
+human sequence, copyable agent prompt, required output, evidence, stop
+conditions, and review test.
 
 ## Worked example
 

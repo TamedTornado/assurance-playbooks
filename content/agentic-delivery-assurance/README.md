@@ -210,6 +210,10 @@ human judgment is still required and what evidence that judgment receives.
 Use the [Agentic Delivery Assurance field guide](field-guide.md) to perform the
 method from representative task through release and recovery.
 
+Every phase links to an [executable procedure card](procedures/) containing the
+same instructions for a human operator and a copyable prompt for a supervised
+agent.
+
 Begin with the shared [acceptance criteria](../shared/acceptance-criteria.md).
 Use the [Cargo ReAPI example](examples/cargo-reapi.md) to see how a persuasive
 pass became a preserved regression fixture rather than an embarrassment to

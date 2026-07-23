@@ -25,6 +25,9 @@ criteria](../shared/acceptance-criteria.md). Do not begin with model scores.
 
 ## Phase 1: Make completion rejectable
 
+Executable procedure: [Select and contract representative
+work](procedures/contract-work.md).
+
 **Decision:** Can someone reject a persuasive but incomplete result without
 depending on the producer’s explanation?
 
@@ -47,6 +50,9 @@ an adjective such as “robust” as acceptance evidence; assuming an agent will
 because the prompt encouraged it.
 
 ## Phase 2: Map context and real authority
+
+Executable procedure: [Map context precedence and real
+authority](procedures/map-context-authority.md).
 
 **Decision:** What can each producer, verifier, and human know, mutate, approve,
 and bypass?
@@ -71,6 +77,9 @@ boundary; calling a different agent independent when it receives only the
 producer’s selected evidence.
 
 ## Phase 3: Follow work to the released artifact
+
+Executable procedure: [Trace work from request to running
+artifact](procedures/trace-delivery.md).
 
 **Decision:** Can the organization reconstruct exactly what was requested,
 produced, integrated, verified, built, and released?
@@ -98,6 +107,9 @@ using artifact existence as identity; allowing `latest` to become release
 truth; stopping the trace at merge.
 
 ## Phase 4: Attack the reward surface
+
+Executable procedure: [Map and attack the reward
+surface](procedures/attack-reward-surface.md).
 
 **Decision:** Which visible signals can be optimized while intent remains
 false?
@@ -134,6 +146,9 @@ was false.
 
 ## Phase 5: Separate production from acceptance
 
+Executable procedure: [Test verification
+independence](procedures/test-verification-independence.md).
+
 **Decision:** Can the producer redefine, weaken, or approve the evidence used
 to accept its own work?
 
@@ -156,6 +171,9 @@ the producer to choose what the verifier can inspect; treating self-reported
 absence as evidence nothing ran.
 
 ## Phase 6: Break repair and recovery
+
+Executable procedure: [Exercise parallel integration, repair, and
+recovery](procedures/exercise-recovery.md).
 
 **Decision:** Does failure preserve intent and state, or silently reset the
 problem?
@@ -183,6 +201,9 @@ discard inconvenient findings or approvals.
 reset recovery; verifying the repaired branch but not the final composition.
 
 ## Phase 7: Break release and rollback
+
+Executable procedure: [Trace release identity and exercise
+rollback](procedures/exercise-release.md).
 
 **Decision:** Does the verified composition become the running artifact, and
 can failure return to a known-good state?
@@ -214,6 +235,9 @@ stages.
 
 ## Phase 8: Install the authority gate
 
+Executable procedure: [Select, install, and prove the delivery
+gate](procedures/install-authority-gate.md).
+
 **Decision:** Which observed delivery failure should become permanently
 rejectable?
 
@@ -237,6 +261,9 @@ without rerunning the relevant path.
 
 ## Phase 9: Grant only the authority earned
 
+Executable procedure: [Grant only the agent authority
+earned](procedures/grant-authority.md).
+
 Apply the completion rule claim by claim. State:
 
 - tasks, repositories, tools, models, environments, and release paths covered;
@@ -254,6 +281,7 @@ safe. It is evidence for the named authority boundary.
 
 ## Practitioner references
 
+- [Procedure coverage map](procedures/)
 - [Technical controls and order](index.md)
 - [Cargo ReAPI worked example](examples/cargo-reapi.md)
 - [Evidence record](../shared/evidence-record.md)

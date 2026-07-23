@@ -8,6 +8,7 @@ import {
   type Control,
   type Example,
   type Playbook,
+  type Procedure,
   documentDataSchema,
 } from "./schemas.js";
 
@@ -77,6 +78,13 @@ export function validateCatalog(catalog: AssuranceCatalog): AssuranceCatalog {
       .filter((document): document is AssuranceDocument & { data: Control } => document.data.kind === "control")
       .map((document) => [document.data.id, document]),
   );
+  const procedures = new Map(
+    catalog.documents
+      .filter(
+        (document): document is AssuranceDocument & { data: Procedure } => document.data.kind === "procedure",
+      )
+      .map((document) => [document.data.id, document]),
+  );
 
   for (const playbook of playbooks.values()) {
     for (const controlId of playbook.data.controls) {
@@ -86,12 +94,27 @@ export function validateCatalog(catalog: AssuranceCatalog): AssuranceCatalog {
         throw new Error(`${control.relativePath}: belongs to ${control.data.playbook}, not ${playbook.data.id}`);
       }
     }
+    for (const procedureId of playbook.data.procedures) {
+      const procedure = procedures.get(procedureId);
+      if (!procedure) throw new Error(`${playbook.relativePath}: unknown procedure "${procedureId}"`);
+      if (procedure.data.playbook !== playbook.data.id) {
+        throw new Error(`${procedure.relativePath}: belongs to ${procedure.data.playbook}, not ${playbook.data.id}`);
+      }
+    }
   }
 
   for (const document of controls.values()) {
     const playbook = playbooks.get(document.data.playbook);
     if (!playbook) throw new Error(`${document.relativePath}: unknown playbook "${document.data.playbook}"`);
     if (!playbook.data.controls.includes(document.data.id)) {
+      throw new Error(`${document.relativePath}: is not listed by playbook "${document.data.playbook}"`);
+    }
+  }
+
+  for (const document of procedures.values()) {
+    const playbook = playbooks.get(document.data.playbook);
+    if (!playbook) throw new Error(`${document.relativePath}: unknown playbook "${document.data.playbook}"`);
+    if (!playbook.data.procedures.includes(document.data.id)) {
       throw new Error(`${document.relativePath}: is not listed by playbook "${document.data.playbook}"`);
     }
   }

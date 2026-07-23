@@ -17,6 +17,15 @@ controls:
   - codebase-dependency-boundaries
   - codebase-operational-failure
   - codebase-proven-gate
+procedures:
+  - codebase-agree-product
+  - codebase-review-design
+  - codebase-reproduce-path
+  - codebase-design-counterexamples
+  - codebase-exercise-composition
+  - codebase-exercise-operations
+  - codebase-install-gate
+  - codebase-make-decision
 ---
 # Codebase Assurance
 
@@ -72,6 +81,12 @@ and human sign-off for both methods.
 
 The [worked acceptance outcomes](../shared/acceptance-examples.md) show how to
 distinguish completion, proxy theatre, blockage, and scope expansion.
+
+## Executable procedures
+
+The [procedure coverage map](procedures/) links every field-guide phase to a
+human sequence, copyable agent prompt, required output, evidence, stop
+conditions, and review test.
 
 ## Worked example
 

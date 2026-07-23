@@ -200,6 +200,10 @@ Use the [Codebase Assurance field guide](field-guide.md) to perform the method.
 It is written as a sequence of decisions and exercises, with practical
 questions, evidence, stop conditions, and examples.
 
+Every phase links to an [executable procedure card](procedures/) containing the
+same instructions for a human operator and a copyable prompt for a supervised
+agent.
+
 Begin with the shared [acceptance criteria](../shared/acceptance-criteria.md).
 Use the [Moria example](examples/moria.md) as a model for preserving
 contradictions and unknowns without turning the whole project into a failure.

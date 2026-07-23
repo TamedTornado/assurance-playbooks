@@ -30,6 +30,9 @@ broad scan.
 
 ## Phase 1: Agree what the product is
 
+Executable procedure: [Agree what the product must
+prove](procedures/agree-product.md).
+
 **Decision:** Which product claims matter enough to challenge?
 
 Talk to the decision owner, product owner, operators, and people who handle
@@ -63,6 +66,9 @@ product; the executable was a public-interface consumer; the future game was
 out. That made privileged demo paths rejectable.
 
 ## Phase 2: Make the design tell one story
+
+Executable procedure: [Review the design for incompatible
+meanings](procedures/review-design.md).
 
 **Decision:** Could two competent implementers follow the available contract
 and build materially different systems?
@@ -103,6 +109,9 @@ contradictions](controls/design-coherence.md).
 
 ## Phase 3: Reproduce the consequential path
 
+Executable procedure: [Reproduce the consequential
+path](procedures/reproduce-path.md).
+
 **Decision:** Can another engineer observe the relevant behavior from pinned
 inputs?
 
@@ -127,6 +136,9 @@ using an old artifact because a clean build is slow; silently fixing the
 baseline and forgetting how it first failed.
 
 ## Phase 4: Find the cheaper implementation
+
+Executable procedure: [Discover invariants and design
+counterexamples](procedures/design-counterexamples.md).
 
 **Decision:** Can the current evidence reject a plausible system in which the
 important claim is false?
@@ -159,6 +171,9 @@ absurd to represent a real failure.
 
 ## Phase 5: Exercise composition and dependency reality
 
+Executable procedure: [Exercise composition and dependency
+reality](procedures/exercise-composition.md).
+
 **Decision:** Do locally correct parts preserve the claim when composed with
 real dependencies?
 
@@ -183,6 +198,9 @@ failures and stale success as equally bad.
 
 ## Phase 6: Make operations part of the claim
 
+Executable procedure: [Exercise operational failure and
+recovery](procedures/exercise-operations.md).
+
 **Decision:** Can the organization detect, contain, and recover from the
 selected failure?
 
@@ -202,6 +220,9 @@ observability; inferring recovery from code inspection; testing a reset that
 destroys the state whose recovery mattered.
 
 ## Phase 7: Install a gate that changes acceptance
+
+Executable procedure: [Select, install, and prove the product
+gate](procedures/install-gate.md).
 
 **Decision:** Which observed failure is valuable enough to become permanently
 rejectable?
@@ -233,6 +254,9 @@ the demo path; adding a test stage without changing what evidence it controls.
 
 ## Phase 8: Make the decision honestly
 
+Executable procedure: [Make the bounded product
+decision](procedures/make-decision.md).
+
 Apply the pre-agreed completion rule to every claim. Summarize:
 
 - what is supported and by which evidence;
@@ -252,6 +276,7 @@ translate “the agreed work is finished” into “the whole system is safe.”
 
 ## Practitioner references
 
+- [Procedure coverage map](procedures/)
 - [Technical controls and order](index.md)
 - [Moria worked example](examples/moria.md)
 - [Evidence record](../shared/evidence-record.md)

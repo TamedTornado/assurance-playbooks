@@ -213,6 +213,8 @@ For an operator performing the work:
 
 - [Codebase Assurance field guide](content/codebase-assurance/field-guide.md)
 - [Agentic Delivery Assurance field guide](content/agentic-delivery-assurance/field-guide.md)
+- [Codebase executable procedures](content/codebase-assurance/procedures/)
+- [Agentic Delivery executable procedures](content/agentic-delivery-assurance/procedures/)
 
 For copyable engagement records:
 
