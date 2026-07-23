@@ -56,6 +56,25 @@ describe("reader-first assurance journeys", () => {
     expect(index).toContain("codebase-design-coherence");
   });
 
+  it("provides one lazy-authoring worksheet for expectations and their questions", async () => {
+    const procedure = await document(
+      "content/codebase-assurance/procedures/understand-expected-product.md",
+    );
+    const worksheet = await document(
+      "content/codebase-assurance/templates/product-expectation-worksheet.md",
+    );
+
+    expect(procedure).toContain(
+      "[product expectation worksheet](../templates/product-expectation-worksheet.md)",
+    );
+    expect(worksheet).toContain("## What the client told us");
+    expect(worksheet).toContain("## Expectations and investigation");
+    expect(worksheet).toContain("### [Expectation in the client’s words]");
+    expect(worksheet).toContain("#### Questions to investigate");
+    expect(worksheet).toContain("- [ ]");
+    expect(worksheet).not.toContain("| Expectation | Technical question");
+  });
+
   it("covers artifact identity, deployment, and rollback in agentic delivery assurance", async () => {
     const index = await document("content/agentic-delivery-assurance/index.md");
     expect(index).toContain("agentic-release-integrity");

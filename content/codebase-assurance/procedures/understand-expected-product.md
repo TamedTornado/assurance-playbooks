@@ -10,7 +10,7 @@ playbook: codebase-assurance
 phase: understand-expected-product
 purpose: Give a client who cannot independently inspect the implementation a faithful account of what will be investigated and why.
 inputs: [Client account, Repository, Available product material, Demonstrations and completion evidence, Access]
-outputs: [Product expectation brief, Source comparison, Investigation plan]
+outputs: [Product expectation worksheet, Client confirmation]
 ---
 # Understand what was supposed to be built
 
@@ -35,11 +35,18 @@ the operator to do.
 
 ## Required output
 
-This procedure produces two connected artifacts.
+This procedure produces one working document, using the copyable [product expectation worksheet](../templates/product-expectation-worksheet.md).
 
-### Product expectation brief
+The operator writes each expectation once. The source comparison and technical
+questions live underneath that expectation. Do not make a human assign IDs,
+maintain links between files, repeat an expectation across rows, or keep a
+spreadsheet cell containing a dozen questions.
 
-This is written for the client. It records:
+The document has two levels.
+
+### Client-readable expectation brief
+
+The opening is written for the client. It records:
 
 - what they believed they commissioned;
 - what they believe has been delivered;
@@ -54,9 +61,9 @@ This is written for the client. It records:
 The client confirms that this is a faithful description of their expectations
 and concerns. They do not confirm that the implementation satisfies it.
 
-### Investigation plan
+### Nested operator investigation
 
-This is owned by the operator. It translates the expectation brief into:
+Under each expectation, the operator records:
 
 - the technical questions that must be answered;
 - the relevant repositories, revisions, interfaces, workflows, environments,
@@ -67,8 +74,15 @@ This is owned by the operator. It translates the expectation brief into:
 - priorities, access requirements, and limitations; and
 - the plain-language conclusions the investigation must eventually provide.
 
-This is not the final assurance result. It is the reasoned plan for obtaining
-one.
+The client confirms the opening account and the expectations. They are welcome
+to read the nested questions, but they do not have to design or approve them.
+The worksheet is not the final assurance result. It is the reasoned plan for
+obtaining one.
+
+Nothing in this repository currently consumes individual expectation or
+question records. The worksheet is the human source of truth. If later tooling
+needs normalized records, it should generate IDs and relationships from this
+document rather than making the operator behave like a database administrator.
 
 ## Roles
 
@@ -215,11 +229,22 @@ the tested workload represents the promised scale.
 
 ### 5. Compare the available accounts
 
-Create an expectation record:
+Open one copy of the [product expectation worksheet](../templates/product-expectation-worksheet.md).
+Add one block for each material expectation:
 
-| ID | Client expectation | What they meant and why it mattered | Source | What they were shown | Project material says | Unknown or conflict |
-| --- | --- | --- | --- | --- | --- | --- |
-| E-01 |  |  |  |  |  |  |
+```markdown
+### [Expectation in the client’s words]
+
+- **What they meant:**
+- **Why it mattered:**
+- **Source:**
+- **What they were shown:**
+- **What the project material says:**
+- **Unknown or conflict:**
+```
+
+Write the expectation once. Do not assign an ID by hand. Do not open another
+file for it.
 
 Compare four things without silently forcing them to agree:
 
@@ -246,7 +271,7 @@ Useful results from this comparison include:
 
 ### 6. Draft the product expectation brief
 
-Write a short narrative before producing technical tables. Use this structure:
+Write a short narrative before adding operator detail. Use this structure:
 
 > **You commissioned:** [plain-language description of the intended product].
 >
@@ -268,8 +293,9 @@ Write a short narrative before producing technical tables. Use this structure:
 > **Our investigation therefore needs to establish:** [plain-language list of
 > the important unknowns].
 
-Follow the narrative with the expectation record. A nontechnical reader should
-be able to correct the narrative without understanding the repository.
+Follow the narrative with the expectation blocks in the same worksheet. A
+nontechnical reader should be able to correct them without understanding the
+repository.
 
 ### 7. Confirm the account with the client
 
@@ -302,11 +328,32 @@ For each consequential expectation, determine:
 - which conditions limit the conclusion; and
 - what result the client needs explained in plain language.
 
-Use this table:
+Return to each expectation block and add questions directly underneath it:
 
-| Expectation | Technical question | Evidence to seek | How it could be falsely satisfied | Conditions or limitations | Result to explain |
-| --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |
+```markdown
+#### Questions to investigate
+
+- [ ] Does the reference application use private engine state?
+  - **Evidence to seek:** Package and dependency trace.
+  - **Could look successful because:** Workspace-only access gives the
+    reference application privileges another consumer would not have.
+  - **Conditions or limitations:** Supported package surface and toolchain.
+- [ ] Can an independent consumer perform the same queries and mutations?
+  - **Evidence to seek:** External-consumer build and exercised mutation path.
+  - **Could look successful because:** The reference application uses
+    demonstration-only configuration.
+  - **Conditions or limitations:** Documented consumer workflow.
+```
+
+Add as many questions as the expectation genuinely needs. A reusable-substrate
+expectation may require a dozen. The operator checks a question when the
+investigation has produced a result, not merely when somebody has looked at
+the relevant code.
+
+Do not require every sub-bullet before work can begin. Capture the question
+first. Add the evidence target and false-success path as the investigation is
+planned. Delete prompts that add no information instead of filling the
+worksheet with “not applicable.”
 
 Do not turn the expectations into user stories. A user story describes desired
 functionality. The investigation tests whether an existing promise, property,
@@ -493,8 +540,10 @@ operator then owns the technical investigation.
 Use an agent to organize source material and challenge the operator's draft,
 not to replace the client conversation or declare intent.
 
-> Prepare a product expectation brief and a separate operator investigation
-> plan from the supplied client account and project material.
+> Prepare one product expectation worksheet from the supplied client account
+> and project material. Write each expectation once and nest all of its
+> investigation questions underneath it. Do not assign IDs or create separate
+> records for questions.
 >
 > First, preserve the client's important words. Extract what they believed
 > they commissioned, what they believe was delivered, what they have directly
@@ -509,8 +558,8 @@ not to replace the client conversation or declare intent.
 > Write a short plain-language narrative that the client could correct without
 > reading the source code. Do not use assurance jargon in that narrative.
 >
-> Second, create an operator investigation plan. Translate each consequential
-> expectation into technical questions, evidence to seek, plausible
+> Second, underneath each consequential expectation, add technical questions,
+> evidence to seek, plausible
 > false-success paths, conditions, limitations, and the result that must
 > eventually be explained to the client. Do not write user stories or desired
 > features. Do not treat current tests, demonstrations, developer reports, or
@@ -529,7 +578,7 @@ Keep:
 - each confirmed revision of the product expectation brief;
 - additions made after technical orientation;
 - the client-facing coverage statement; and
-- the operator's investigation plan.
+- the nested operator investigation.
 
 The record must distinguish what the client expected before the investigation
 from interpretations introduced by the operator.
@@ -568,9 +617,9 @@ implementation. They should be able to say whether it faithfully describes:
 5. why the important expectations mattered; and
 6. what the operator will investigate.
 
-Then give the expectation brief and investigation plan to an independent
-technical reviewer. They should be able to trace every high-priority technical
-question to a client expectation or project source, identify at least one
+Then give the complete worksheet to an independent technical reviewer. They
+should be able to trace every high-priority technical question to the
+expectation directly above it or a project source, identify at least one
 false-success path for each consequential area, and explain what evidence
 would change confidence.
 

@@ -51,6 +51,7 @@ export const templateSchema = commonSchema.extend({
     "acceptance",
     "blocked-finding",
     "sign-off",
+    "product-expectation",
   ]),
 });
 
