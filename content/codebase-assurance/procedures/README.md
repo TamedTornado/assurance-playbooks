@@ -3,7 +3,7 @@
 | Field-guide phase | Executable procedure | Primary output | Worked-example anchor |
 | --- | --- | --- | --- |
 | Understand what was supposed to be built | [Reconstruct the expected product](understand-expected-product.md) | Product expectation brief and investigation plan | Moria connects reusability, GPU authority, responsiveness, and the reference game to inspectable questions |
-| Make the design tell one story | [Review the design](review-design.md) | Claim trace, contradictions, divergences | Water, diagnostics, load ownership, latency, memory |
+| Check whether the project tells one consistent story | [Review the design](review-design.md) | Design consistency review and client summary | Water, diagnostics, load ownership, latency, memory |
 | Reproduce the consequential path | [Reproduce the path](reproduce-path.md) | Baseline evidence or blocked finding | Pinned public consumer and acceptance machines |
 | Find the cheaper implementation | [Discover invariants and design counterexamples](design-counterexamples.md) | Invariants and adversarial fixtures | Invalid assets must fail through ordinary tests |
 | Exercise composition | [Exercise composition and dependencies](exercise-composition.md) | Boundary evidence and findings | Public consumer and real Bevy/native paths |

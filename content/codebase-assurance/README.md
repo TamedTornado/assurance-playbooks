@@ -62,16 +62,17 @@ confirmed does the operator translate it into technical questions, evidence
 needs, and ways the implementation could look successful while violating an
 important expectation. The client is not asked to design the investigation.
 
-### 2. Review the contract before trusting the implementation
+### 2. Check whether the project tells one consistent story
 
-The operator traces the important claims through requirements, design, public
-interfaces, state transitions, and test specifications. The question is not
-whether the documents look thorough. It is whether two competent implementers
-could follow them and produce incompatible behavior.
+For each important expectation, the operator chooses a representative
+consumer or operator behavior and follows it through the project material.
+The question is not whether the documents look thorough. It is whether two
+competent implementers could follow them and produce incompatible products.
 
 Contradictions, undefined ownership, circular dependencies, unmeasurable
-targets, and hidden privileged paths are material findings even before a line
-of code fails.
+targets, and hidden privileged paths are preserved in one design consistency
+review. The client receives a plain-language explanation of what conflicts,
+what changed, and what remains unproven.
 
 ### 3. Reproduce the real path
 

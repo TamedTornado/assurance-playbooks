@@ -75,6 +75,23 @@ describe("reader-first assurance journeys", () => {
     expect(worksheet).not.toContain("| Expectation | Technical question");
   });
 
+  it("provides one lazy-authoring design consistency review", async () => {
+    const procedure = await document("content/codebase-assurance/procedures/review-design.md");
+    const review = await document(
+      "content/codebase-assurance/templates/design-consistency-review.md",
+    );
+
+    expect(procedure).toContain(
+      "[design consistency review](../templates/design-consistency-review.md)",
+    );
+    expect(review).toContain("## Plain-language summary");
+    expect(review).toContain("## Reviews by expectation");
+    expect(review).toContain("### [Expectation from the product expectation worksheet]");
+    expect(review).toContain("#### Behavior followed");
+    expect(review).toContain("#### Conflicts, gaps, and divergences");
+    expect(review).not.toContain("Contradiction ID");
+  });
+
   it("covers artifact identity, deployment, and rollback in agentic delivery assurance", async () => {
     const index = await document("content/agentic-delivery-assurance/index.md");
     expect(index).toContain("agentic-release-integrity");

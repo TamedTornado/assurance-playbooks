@@ -75,17 +75,19 @@ GPU,” and “super performant” to the reasons those promises mattered. The
 operator then translated them into investigations of public-consumer access,
 state authority, memory scaling, workload, and user-visible latency.
 
-## Phase 2: Make the design tell one story
+## Phase 2: Check whether the project tells one consistent story
 
-Executable procedure: [Review the design for incompatible
-meanings](procedures/review-design.md).
+Executable procedure: [Follow expectations through the project
+material](procedures/review-design.md).
 
-**Decision:** Could two competent implementers follow the available contract
-and build materially different systems?
+**Question:** Could two competent implementers follow the available material
+and build materially different products?
 
-Trace each selected claim through requirements, design, data definitions,
-public APIs, state transitions, ownership, test plans, and measurement. Read
-the documents against each other rather than one at a time.
+Open the product expectation worksheet. For each high-priority expectation,
+choose a representative consumer or operator behavior. Follow it through only
+the requirements, design, public interfaces, state definitions, measurements,
+and tests that govern it. Compare sources where one part of the behavior hands
+off to another.
 
 Look for:
 
@@ -99,16 +101,18 @@ Look for:
 - a test plan unable to distinguish the promised result from a plausible
   shortcut.
 
-**Evidence to keep:** claim-to-design-to-test trace, contradiction register,
-resolutions, and explicit design divergences with approval state.
+**Evidence to keep:** expectation and behavior followed, precise source
+locators, conflicts and missing contracts, before-and-after resolutions,
+explicit design divergences, approval state, and the client summary.
 
-**Move on when:** material contradictions are resolved, or the remaining
-weaker substitute is clearly described as a divergence whose decision impact
-is owned.
+**Move on when:** high-priority expectations have representative behavior
+coverage or an explicit deferred or blocked status, and every material conflict
+found has a preserved disposition.
 
 **Ways to fool yourself:** rewarding document volume; calling ambiguity
-“implementation detail”; weakening the original claim without recording that
-the evidence will support less.
+“implementation detail”; silently choosing the interpretation that matches the
+current code; weakening the original expectation without recording that the
+evidence will support less.
 
 The Moria audit found water that was simultaneously occupied and non-solid,
 required diagnostics without a usable public API, and a library load protocol

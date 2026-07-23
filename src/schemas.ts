@@ -52,6 +52,7 @@ export const templateSchema = commonSchema.extend({
     "blocked-finding",
     "sign-off",
     "product-expectation",
+    "design-consistency",
   ]),
 });
 
