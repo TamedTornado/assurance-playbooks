@@ -53,6 +53,7 @@ export const templateSchema = commonSchema.extend({
     "sign-off",
     "product-expectation",
     "design-consistency",
+    "reproducible-baseline",
     "intent-lineage",
   ]),
 });

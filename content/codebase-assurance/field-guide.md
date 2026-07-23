@@ -121,33 +121,40 @@ that depended on a demo state. Each statement was plausible alone.
 Technical reference: [Resolve design
 contradictions](controls/design-coherence.md).
 
-## Phase 3: Reproduce the consequential path
+## Phase 3: Get the real product running
 
-Executable procedure: [Reproduce the consequential
-path](procedures/reproduce-path.md).
+Executable procedure: [Get the real product running and preserve what
+happens](procedures/reproduce-path.md).
 
-**Decision:** Can another engineer observe the relevant behavior from pinned
-inputs?
+**Decision:** Can someone who was not the original developer make the important
+promised behavior happen again from a known version?
 
-Start with a clean checkout. Record the revision, toolchain, configuration,
-generated inputs, external services, feature flags, secrets interface, cache
-state, data state, and commands. Exercise the smallest real composition that
-reaches each selected consequence.
+Choose two to five demonstrations from the expectation worksheet: something
+the client was shown, a real consumer must be able to do, or a quality claim
+that would change the client's decision. For each, state what a successful run
+would and would not establish.
 
-Preserve the first failure before repairing the environment. Classify whether
-it belongs to the product, the reproduction procedure, missing access, or an
-external dependency.
+Pin the target and follow the route the project gives a newcomer. Preserve the
+first attempt before fixing anything. Classify every proposed repair as an
+environment repair, instruction repair, or product change. A product change is
+a finding, not baseline setup.
 
-**Evidence to keep:** run-start identity, procedures, raw outputs, hashes,
-environment differences, and limitations.
+After permitted repairs, write the exact successful route and ask a second
+operator or genuinely clean environment to repeat it without oral history.
 
-**Move on when:** another engineer can repeat the selected path, or the exact
-missing capability and its decision consequence are recorded in a
-[blocked-finding record](../shared/blocked-finding.md).
+**Evidence to keep:** pinned target, first attempt, repair classification,
+repeatable route, raw receipts, independent attempt, and the boundary of the
+conclusion.
 
-**Ways to fool yourself:** substituting a mock without naming removed behavior;
-using an old artifact because a clean build is slow; silently fixing the
-baseline and forgetting how it first failed.
+**Move on when:** each selected demonstration is reproduced, failed, blocked,
+observed once, or explicitly supported only by a substitute, and every result
+has a stated decision consequence.
+
+**Ways to fool yourself:** choosing subsystem commands instead of visible
+behavior; treating a developer-only file as newcomer instructions; changing
+the product to obtain a green baseline; substituting a mock without naming the
+behavior it removes; rerunning in the same warmed environment and calling that
+independent reproduction.
 
 ## Phase 4: Find the cheaper implementation
 

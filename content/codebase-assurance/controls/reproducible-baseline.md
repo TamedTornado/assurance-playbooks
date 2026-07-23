@@ -2,10 +2,10 @@
 schemaVersion: 1
 kind: control
 id: codebase-reproducible-baseline
-title: Establish a reproducible baseline
+title: Get the real product running
 version: 0.1.0
 status: draft
-summary: Prove that another engineer can obtain and explain the relevant build and runtime behavior.
+summary: Show which important client-visible behaviors another operator can obtain from a pinned product and the real route required.
 playbook: codebase-assurance
 objective: Establish a repeatable baseline before findings or interventions are attributed to the product.
 required: true
@@ -24,10 +24,12 @@ tags: [baseline, reproducibility, build]
 ---
 # Procedure
 
-Start from a clean checkout at the pinned revision. Record tool versions,
-external services, generated inputs, secrets interfaces, and cache state.
-Exercise the smallest real path that reaches the consequential behavior.
+Choose a few demonstrations from the product expectation worksheet. Pin the
+target, follow the route supplied to a newcomer, preserve the first attempt,
+and classify every repair as environment, instructions, or product.
 
-Distinguish repository failure from environment failure. If reproduction is
-blocked, record the missing capability, attempted escalations, consequence,
-and the claims that therefore remain unproven.
+After permitted repairs, have another operator or clean environment repeat the
+written route. Keep the client-readable result in one baseline record and link
+the raw receipts. If a run fails or is blocked, preserve the consequence rather
+than changing the product or substituting a narrower path and calling it
+reproduced.

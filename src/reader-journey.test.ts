@@ -92,12 +92,15 @@ describe("reader-first assurance journeys", () => {
     expect(review).not.toContain("Contradiction ID");
   });
 
-  it("dogfoods both codebase worksheets against Moria", async () => {
+  it("dogfoods the first three codebase artifacts against Moria", async () => {
     const expectations = await document(
       "content/codebase-assurance/examples/moria-product-expectations.md",
     );
     const consistency = await document(
       "content/codebase-assurance/examples/moria-design-consistency.md",
+    );
+    const baseline = await document(
+      "content/codebase-assurance/examples/moria-baseline-record.md",
     );
 
     expect(expectations).toContain("## What the client told us");
@@ -106,6 +109,34 @@ describe("reader-first assurance journeys", () => {
     expect(consistency).toContain("## Plain-language summary");
     expect(consistency).toContain("CPU-authoritative");
     expect(consistency).toContain("## Usability observations");
+    expect(baseline).toContain("## What we tried to reproduce");
+    expect(baseline).toContain("Nothing in this record has been reproduced");
+    expect(baseline).toContain("Instruction repair");
+    expect(baseline).toContain("Status:** Not run");
+  });
+
+  it("provides one client-readable baseline record for real demonstrations", async () => {
+    const procedure = await document(
+      "content/codebase-assurance/procedures/reproduce-path.md",
+    );
+    const baseline = await document(
+      "content/codebase-assurance/templates/baseline-record.md",
+    );
+
+    expect(procedure).toContain(
+      "[baseline record](../templates/baseline-record.md)",
+    );
+    expect(procedure).toContain("What should we be able to see happen?");
+    expect(procedure).toContain("environment repair");
+    expect(procedure).toContain("instruction repair");
+    expect(procedure).toContain("product change");
+    expect(baseline).toContain("## What we were able to reproduce");
+    expect(baseline).toContain("## Demonstrations");
+    expect(baseline).toContain("### [What the client expects to see happen]");
+    expect(baseline).toContain("#### First attempt");
+    expect(baseline).toContain("#### Repeatable route");
+    expect(baseline).toContain("#### What this does and does not prove");
+    expect(baseline).not.toContain("Demonstration ID");
   });
 
   it("preserves source intent through the agentic delivery playbook", async () => {

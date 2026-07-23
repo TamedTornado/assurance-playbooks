@@ -55,8 +55,9 @@ and human sign-off for both methods.
 2. [Resolve design contradictions](controls/design-coherence.md) — align
    requirements, interfaces, states, measurements, and test contracts before
    locally plausible implementations diverge.
-3. [Establish a reproducible baseline](controls/reproducible-baseline.md) —
-   preserve observable behavior before drawing conclusions.
+3. [Get the real product running](controls/reproducible-baseline.md) — preserve
+   which promised behaviors another operator can actually reproduce before
+   drawing conclusions.
 4. [Pressure architectural invariants](controls/invariant-pressure.md) —
    challenge state, concurrency, malformed-input, and partial-failure
    boundaries.

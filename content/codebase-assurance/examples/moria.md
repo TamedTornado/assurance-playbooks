@@ -24,10 +24,13 @@ controls:
 # Moria: keeping a fast build pointed at the right product
 
 The completed playbook dogfood artifacts are available as a [product
-expectation worksheet](moria-product-expectations.md) and [design consistency
-review](moria-design-consistency.md). They apply the public procedures to
-Moria's actual source material and preserve an unresolved GPU/CPU authority
-conflict that this earlier narrative did not surface.
+expectation worksheet](moria-product-expectations.md), [design consistency
+review](moria-design-consistency.md), and [baseline
+record](moria-baseline-record.md). They apply the public procedures to Moria's
+actual source material and preserve an unresolved GPU/CPU authority conflict
+that this earlier narrative did not surface. The baseline record also makes
+clear which runtime demonstrations this documentation exercise did not execute;
+the narrative cannot turn planned commands into reproduced behavior.
 
 ## Moria was designed to move fast
 
@@ -245,7 +248,7 @@ boundaries, and kept the claims that could not yet be proved visible.
 | --- | --- | --- |
 | Product boundary | Supported | The substrate, public validation consumer, and excluded future game systems are distinguished explicitly. |
 | Design coherence | Mixed | Blocking contradictions were found and repaired; the resident-memory divergence remained dependent on stronger evidence or approval. |
-| Reproducible baseline | Supported | Tooling, commands, fixtures, and machine-profiled acceptance paths are documented at the pinned revision. |
+| Reproducible baseline | Not established by this example | Candidate commands and acceptance paths exist, but this public documentation exercise did not execute and independently repeat the selected demonstrations. |
 | Invariant pressure | Supported | Tests exercise composition across terrain, streaming, mutation, collision, persistence, and public interfaces. |
 | Verification strength | Mixed | Deliberate failure and ordinary-command registration rules are strong; exhaustive semantic mutation of every invariant is not claimed. |
 | Dependencies and platforms | Mixed | Real Bevy/native paths and named platform acceptance are represented; universal hardware and driver coverage is not. |
