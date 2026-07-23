@@ -26,11 +26,14 @@ controls:
 The completed playbook dogfood artifacts are available as a [product
 expectation worksheet](moria-product-expectations.md), [design consistency
 review](moria-design-consistency.md), and [baseline
-record](moria-baseline-record.md). They apply the public procedures to Moria's
-actual source material and preserve an unresolved GPU/CPU authority conflict
-that this earlier narrative did not surface. The baseline record also makes
-clear which runtime demonstrations this documentation exercise did not execute;
-the narrative cannot turn planned commands into reproduced behavior.
+record](moria-baseline-record.md). The [assurance
+investigation](moria-assurance-investigation.md) then turns the most important
+unknowns into concrete false-success challenges and candidate gates. These
+artifacts apply the public procedures to Moria's actual source material and
+preserve an unresolved GPU/CPU authority conflict that this earlier narrative
+did not surface. The baseline and investigation also make clear which runtime
+work this documentation exercise did not execute; the narrative cannot turn
+planned commands into reproduced behavior.
 
 ## Moria was designed to move fast
 

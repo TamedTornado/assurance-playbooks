@@ -156,144 +156,117 @@ the product to obtain a green baseline; substituting a mock without naming the
 behavior it removes; rerunning in the same warmed environment and calling that
 independent reproduction.
 
-## Phase 4: Find the cheaper implementation
+## Phase 4: Ask what convincing wrong version might still pass
 
-Executable procedure: [Discover invariants and design
-counterexamples](procedures/design-counterexamples.md).
+Executable procedure: [Challenge the existing
+evidence](procedures/design-counterexamples.md).
 
-**Decision:** Can the current evidence reject a plausible system in which the
-important claim is false?
+**Decision:** Can the ordinary acceptance route reject a plausible shortcut
+that preserves the visible result while violating the client expectation?
 
-Map each claim to the test or operational check expected to reject a violation.
-Then create safe counterexamples:
+Choose one to three consequential expectations. Name the ordinary route that
+currently gives the team confidence. Describe the easiest convincing wrong
+version, predict the intended rejection, then execute a controlled semantic
+fixture or mutation through that same route.
 
-- reverse or omit an important state transition;
-- duplicate a request or replay stale data;
-- weaken authorization or ownership;
-- mutate a leaf behavior while leaving unrelated behavior intact;
-- replace a real boundary with an inert mock;
-- skip or narrow test discovery;
-- corrupt, truncate, relocate, or mismatch an artifact;
-- introduce partial failure, timeout, restart, or concurrency; or
-- deliberately register a bad fixture and run the ordinary command.
+**Evidence to keep:** target, exact wrong version, prediction, ordinary route,
+raw result, valid-path result, and restoration.
 
-Do not merely inspect the test implementation. Execute the counterexample
-through the same route that accepts real work.
+**Move on when:** each selected expectation has survived a meaningful
+challenge, produced a finding, or remains explicitly unproven.
 
-**Evidence to keep:** exact mutation or fixture, target identity, expected
-rejection, observed result, raw receipts, and the claim affected.
+**Ways to fool yourself:** counting coverage; accepting an unregistered helper;
+using an absurd mutation; treating any red output as the intended rejection;
+changing the expectation beside the implementation.
 
-**Move on when:** every high-risk claim has survived at least one credible
-falsification attempt, failed with a finding, or remains explicitly unproven.
+## Phase 5: Follow the promise across real boundaries
 
-**Ways to fool yourself:** counting coverage; accepting a helper test nobody
-runs; changing both implementation and expected output; using a mutation too
-absurd to represent a real failure.
+Executable procedure: [Exercise real
+boundaries](procedures/exercise-composition.md).
 
-## Phase 5: Exercise composition and dependency reality
+**Decision:** Does the expectation survive the material handoffs between the
+caller and visible result?
 
-Executable procedure: [Exercise composition and dependency
-reality](procedures/exercise-composition.md).
+Draw one line from person or caller to visible result. Keep only boundaries
+that own material identity, state, ordering, authority, or dependency behavior.
+Exercise the most realistic stale, duplicate, delayed, mismatched, partial, or
+unavailable case through the closest safe real interface.
 
-**Decision:** Do locally correct parts preserve the claim when composed with
-real dependencies?
+**Evidence to keep:** both sides of the handoff, identities, state and ordering,
+raw result, failure direction, substitute limits, and repeated valid route.
 
-Follow the selected path across stores, queues, services, generated code,
-native libraries, model APIs, build artifacts, caches, and external providers.
-Exercise version skew, duplicate delivery, timeout, partial availability,
-corruption, relocation, restart, and recovery where relevant.
+**Move on when:** every material boundary on the selected route is exercised,
+supported only by a narrower named result, or retained as unproven.
 
-Compare test substitutes with the behavior the real dependency owns. Use
-production-like interfaces where the protocol itself matters.
+**Ways to fool yourself:** inventorying dependencies instead of following the
+promise; treating a unit test as composed evidence; using a mock that removes
+the relevant behavior; calling a loud error safe after state diverged.
 
-**Evidence to keep:** dependency and data-flow map, composed execution receipts,
-failure-direction notes, and artifact provenance.
+## Phase 6: See what the real operator sees
 
-**Move on when:** material dependencies either support the claim under the
-observed conditions, contradict it, fail closed with a known consequence, or
-remain bounded as unproven.
-
-**Ways to fool yourself:** treating a unit test as a global invariant; calling
-a loud exception safe after business state has diverged; treating extra
-failures and stale success as equally bad.
-
-## Phase 6: Make operations part of the claim
-
-Executable procedure: [Exercise operational failure and
+Executable procedure: [Exercise failure and
 recovery](procedures/exercise-operations.md).
 
-**Decision:** Can the organization detect, contain, and recover from the
-selected failure?
+**Decision:** Can the actual responsible person notice, contain, and recover
+the selected failure while preserving consequential product state?
 
-Exercise startup with missing or malformed dependencies, interruption during
-work, resource exhaustion, delayed responses, partial writes, rollback, and
-recovery. Observe the system through the logs, metrics, traces, controls, and
-business records a real operator has.
+Write the expected operator story before the exercise: first signal, location,
+protected state, action, recovery, and proof of health. Then record the actual
+timeline through the interfaces that person really has.
 
-**Evidence to keep:** failure matrix, operator timeline, affected business
-state, recovery or rollback receipts, and unresolved exposure.
+**Evidence to keep:** failure identity, operator-visible signals, state before
+and after, actions, recovery or rollback target, and repeated baseline receipt.
 
-**Move on when:** the failure is demonstrably visible, contained, and
-recoverable—or the missing operational capability is an explicit finding.
+**Move on when:** the selected failure has a bounded operator story, a material
+finding, or an explicit statement that operation is outside the evidence.
 
-**Ways to fool yourself:** equating “an exception was logged” with
-observability; inferring recovery from code inspection; testing a reset that
-destroys the state whose recovery mattered.
+**Ways to fool yourself:** inventing an operations team; equating a log line
+with useful visibility; using private diagnostics as operator evidence;
+checking process health instead of product state.
 
-## Phase 7: Install a gate that changes acceptance
+## Phase 7: Make one important wrong result permanently rejectable
 
-Executable procedure: [Select, install, and prove the product
+Executable procedure: [Install and prove the
 gate](procedures/install-gate.md).
 
-**Decision:** Which observed failure is valuable enough to become permanently
-rejectable?
+**Decision:** Which observed false success should the product refuse to accept
+in the future?
 
-Choose one material high-risk path. Before implementing the gate, agree:
+Choose a demonstrated weakness with consequence, leverage, a safe fixture, and
+a durable owner. Freeze the bad and valid fixtures, route, target, predicted
+reason, and rollback. Show the weakness before implementation. Install the
+smallest authoritative gate, repeat the identical comparison, rerun the
+baseline, and try realistic bypasses.
 
-- the preserved bad fixture;
-- a valid-success fixture;
-- the exact before behavior;
-- the reject and accept conditions;
-- who owns the gate and who may change or bypass it;
-- how the comparison remains like-for-like; and
-- rollback.
+**Evidence to keep:** [intervention record](../shared/intervention.md), frozen
+comparison, before and after receipts, valid-path and baseline proof, bypass
+attempts, owner, exception authority, and rollback.
 
-Implement the smallest durable boundary: an integration test, invariant
-checker, replay harness, artifact validator, deployment check, or operational
-sentinel.
+**Move on when:** the same wrong result escapes before and is rejected
+afterward for the intended reason, valid behavior remains, and the real
+acceptance route cannot silently omit the gate.
 
-**Evidence to keep:** [intervention record](../shared/intervention.md), reviewed
-change, before-and-after receipts, bypass attempts, valid-path proof, and
-rollback.
+**Ways to fool yourself:** choosing an easy but irrelevant check; rewriting the
+fixture; accepting an unrelated failure; installing an optional command;
+leaving the producer as sole exception authority.
 
-**Move on when:** the same bad result passes before and fails after for the
-intended reason; valid behavior still passes; the producer cannot silently
-approve an exception.
+## Phase 8: Tell the client what the evidence permits
 
-**Ways to fool yourself:** rewriting the fixture after the change; fixing only
-the demo path; adding a test stage without changing what evidence it controls.
-
-## Phase 8: Make the decision honestly
-
-Executable procedure: [Make the bounded product
+Executable procedure: [Make the bounded
 decision](procedures/make-decision.md).
 
-Apply the pre-agreed completion rule to every claim. Summarize:
+Return to the client's original decision. Give every expectation an independent
+supported, failed, blocked, unproven, or not-applicable result with its evidence
+and decision consequence. Then state proceed, proceed with conditions, do not
+proceed, or defer in the client's language.
 
-- what is supported and by which evidence;
-- what is contradicted;
-- what is blocked and what would unblock it;
-- what is excluded or not applicable and why;
-- what remains unproven;
-- what the installed gate rejects;
-- what the gate does not cover; and
-- who owns the residual risk.
-
+Name the gate's exact authority, conditions and their owners, review triggers,
+residual risk, and the evidence that would change each important non-pass.
 The independent operator and decision owner sign separately using the
 [assurance sign-off](../shared/sign-off.md).
 
-A complete record may contain failures. Do not average statuses into a score or
-translate “the agreed work is finished” into “the whole system is safe.”
+A complete engagement may support a decision not to proceed. No score and no
+unrelated pass can erase that result.
 
 ## Practitioner references
 

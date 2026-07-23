@@ -54,6 +54,7 @@ export const templateSchema = commonSchema.extend({
     "product-expectation",
     "design-consistency",
     "reproducible-baseline",
+    "investigation",
     "intent-lineage",
   ]),
 });

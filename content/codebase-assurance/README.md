@@ -74,57 +74,76 @@ targets, and hidden privileged paths are preserved in one design consistency
 review. The client receives a plain-language explanation of what conflicts,
 what changed, and what remains unproven.
 
-### 3. Reproduce the real path
+### 3. Get the real product running
 
-The selected revision is built and exercised from documented inputs. Tooling,
-configuration, generated assets, external services, cache state, and
-environment differences are recorded.
+The client and operator choose a few demonstrations from the expectation
+worksheet: something the client was shown, a real consumer must do, or a
+quality claim that would change the decision. They state what each successful
+run would and would not prove.
 
-A mock or reduced local command may be useful, but it cannot stand in for a
-production boundary without stating what behavior it removes. If required
-access cannot be obtained, the claim remains unproven or becomes an evidenced
-blocked finding.
+The operator follows the route supplied to a newcomer and preserves the first
+attempt. Every repair is classified as environment, instructions, or product.
+A product change cannot be smuggled into setup merely to obtain a green
+baseline. A second operator or clean environment then attempts the written
+route without oral history.
 
-### 4. Ask the existing evidence to say “no”
+### 4. Ask what convincing wrong version might still pass
 
-Each material claim is mapped to the check that should reject a violation. The
-operator introduces safe semantic mutations, malformed inputs, races, stale
-state, partial failures, dependency changes, or other plausible bad
-implementations.
+For each selected expectation, the operator names the ordinary route that
+currently gives the team confidence. They then create a small plausible
+shortcut: a privileged consumer, stale artifact, skipped validator, weakened
+workload, wrong authority boundary, convenient proxy, or other false success.
 
-A test that executes code but accepts the changed behavior is not evidence of
-the claim. A green suite can be useful and still be incapable of detecting the
-failure the decision owner cares about.
+The expected rejection is written before the experiment. The wrong version is
+run through the same route that accepts real work. Arbitrary red output,
+coverage, code inspection, and unused test helpers do not count as rejection
+evidence.
 
-### 5. Exercise composition and operations
+### 5. Follow the promise across real boundaries
 
-Important failures often live between locally correct components: retries,
-duplicate delivery, authorization boundaries, generated artifacts, caches,
-startup and shutdown, rollback, recovery, resource limits, and observable
-business state.
+The operator draws one line from the person or caller to the visible result and
+keeps only the handoffs that own important behavior. They exercise realistic
+identity, state, ordering, dependency, and artifact failures through the
+closest safe real boundary.
 
-The operator follows the composed system through those transitions using the
-interfaces available to a real consumer or operator.
+The result records whether the product refused safely, became visibly
+unavailable, did extra work, served stale success, silently corrupted state, or
+granted excess authority. Locally correct components do not inherit a composed
+pass.
 
-### 6. Install one useful rejection boundary
+### 6. See what the real operator sees
 
-The team selects a high-value observed failure. The exact bad fixture and a
-valid-success fixture are agreed before the change.
+One decision-relevant failure is exercised with the actual person responsible
+for the product in mind. The expected operator story is written first: how they
+learn of the failure, what they protect, what action they take, and how they
+know consequential product state recovered.
 
-The smallest durable gate is installed or hardened: perhaps an integration
-test, invariant checker, replay harness, deployment check, artifact validator,
-or operational sentinel. The same bad fixture must pass before and fail after;
-the valid path must continue to succeed.
+The evidence follows the timeline through visibility, containment, recovery,
+and repetition of the baseline behavior. A healthy process or container is not
+proof that the product state is healthy.
 
-### 7. Make the decision without erasing uncertainty
+### 7. Make one important wrong result permanently rejectable
 
-The final record states which claims are supported, contradicted, blocked,
-excluded, or unproven. It explains what the new gate covers and what it does
-not. The independent operator and decision owner sign separately.
+The client selects an observed false success worth refusing in the future. The
+bad fixture, valid fixture, route, target, expected reason, and rollback are
+frozen before implementation. The weakness is demonstrated before the change.
 
-Completion of the work does not mean the system received a blanket pass. A
-completed assurance record may contain a failed or blocked claim. That is
-useful information, not an engagement failure.
+The smallest durable gate is installed at a boundary with authority to refuse
+acceptance. The identical bad result must escape before and fail afterward for
+the intended reason; valid behavior and the baseline must still work.
+Realistic bypasses and exception authority are tested explicitly.
+
+### 8. Tell the client what the evidence lets them do next
+
+The final record returns to the client's original decision. Every expectation
+receives its own supported, failed, blocked, unproven, or not-applicable result
+and decision consequence. No claim inherits another claim's pass.
+
+The decision says proceed, proceed with conditions, do not proceed, or defer in
+the client's language. It explains the gate's narrow authority, assigns owners
+and review triggers to conditions and residual risk, and says what new evidence
+would change the decision. The independent operator and decision owner approve
+separately.
 
 ## A real example
 

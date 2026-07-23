@@ -102,6 +102,9 @@ describe("reader-first assurance journeys", () => {
     const baseline = await document(
       "content/codebase-assurance/examples/moria-baseline-record.md",
     );
+    const investigation = await document(
+      "content/codebase-assurance/examples/moria-assurance-investigation.md",
+    );
 
     expect(expectations).toContain("## What the client told us");
     expect(expectations).toContain("## Expectations and investigation");
@@ -113,6 +116,10 @@ describe("reader-first assurance journeys", () => {
     expect(baseline).toContain("Nothing in this record has been reproduced");
     expect(baseline).toContain("Instruction repair");
     expect(baseline).toContain("Status:** Not run");
+    expect(investigation).toContain("## What we challenged");
+    expect(investigation).toContain("CPU-authoritative");
+    expect(investigation).toContain("Not exercised");
+    expect(investigation).toContain("## Best candidate for a durable gate");
   });
 
   it("provides one client-readable baseline record for real demonstrations", async () => {
@@ -137,6 +144,54 @@ describe("reader-first assurance journeys", () => {
     expect(baseline).toContain("#### Repeatable route");
     expect(baseline).toContain("#### What this does and does not prove");
     expect(baseline).not.toContain("Demonstration ID");
+  });
+
+  it("uses one working investigation record across challenge, boundaries, and failure", async () => {
+    const challenge = await document(
+      "content/codebase-assurance/procedures/design-counterexamples.md",
+    );
+    const composition = await document(
+      "content/codebase-assurance/procedures/exercise-composition.md",
+    );
+    const operations = await document(
+      "content/codebase-assurance/procedures/exercise-operations.md",
+    );
+    const investigation = await document(
+      "content/codebase-assurance/templates/assurance-investigation.md",
+    );
+
+    for (const procedure of [challenge, composition, operations]) {
+      expect(procedure).toContain(
+        "[assurance investigation](../templates/assurance-investigation.md)",
+      );
+    }
+    expect(challenge).toContain("What convincing wrong version might still pass?");
+    expect(composition).toContain("Where does the demonstration leave the code we control?");
+    expect(operations).toContain("What would the person responsible for this product actually see?");
+    expect(investigation).toContain("## What we challenged");
+    expect(investigation).toContain("## Challenges");
+    expect(investigation).toContain("#### Convincing wrong version");
+    expect(investigation).toContain("#### Real boundary exercised");
+    expect(investigation).toContain("#### What the operator saw and did");
+    expect(investigation).not.toContain("Challenge ID");
+  });
+
+  it("turns one observed weakness into a proven gate and bounded client decision", async () => {
+    const gate = await document(
+      "content/codebase-assurance/procedures/install-gate.md",
+    );
+    const decision = await document(
+      "content/codebase-assurance/procedures/make-decision.md",
+    );
+
+    expect(gate).toContain("Which wrong result do we refuse to accept again?");
+    expect(gate).toContain("Show the weakness before changing it");
+    expect(gate).toContain("Freeze the comparison");
+    expect(gate).toContain("Try to bypass the gate");
+    expect(decision).toContain("What does the evidence let the client do next?");
+    expect(decision).toContain("Revisit the client’s original decision");
+    expect(decision).toContain("No claim inherits another claim’s pass");
+    expect(decision).toContain("Say what would change the decision");
   });
 
   it("preserves source intent through the agentic delivery playbook", async () => {
