@@ -122,6 +122,7 @@ the expectation.
 
 For the chosen behavior, locate:
 
+- the preserved client/product source and current public description;
 - where the product promise is stated;
 - where input enters the system;
 - which interface a real consumer uses;
@@ -134,7 +135,9 @@ For the chosen behavior, locate:
 
 Stop gathering when new material merely repeats an existing definition. Start
 with likely load-bearing sources; do not read every document before forming a
-question.
+question. Do not begin and end with the current TDD: an internally coherent
+technical design can still implement a different product from the preserved
+expectation or public description.
 
 Under the expectation, record a short source list:
 
@@ -242,6 +245,11 @@ Do not use “divergence” as a polite label for an accidental contradiction. A
 divergence names the original expectation, the substitute, why it is weaker,
 and who is authorized to accept it.
 
+An unrecorded change to a load-bearing architecture is also a divergence even
+when the replacement design is coherent. Compare the current design with
+preserved source expectations and public descriptions; do not assume the
+newest technical document automatically has product authority.
+
 An observed mismatch between code and a coherent design may become an
 implementation finding in later phases. Record it here only if the implemented
 interface or state definition is itself being used as part of the available
@@ -276,6 +284,13 @@ client what could go wrong.
 Do not assign a contradiction ID manually. Keep the issue under the
 expectation and behavior it affects. If tooling later needs identifiers, it
 can generate them.
+
+When a preserved review record already contains the complete history of a
+resolved issue, use a shorter block containing the type, conflict and
+consequence, status and resolution, link to the full record, and remaining
+implementation test. Do not duplicate history merely to satisfy the template.
+Keep the full form for unresolved issues, changed product meaning, and weaker
+substitutes.
 
 ### 7. Decide who can resolve it
 
@@ -469,9 +484,10 @@ The client did not receive “the design is complicated.” They received:
 > Using the confirmed product expectation worksheet and supplied project
 > material, draft one design consistency review. Work expectation by
 > expectation. For each important expectation, choose one or more concrete
-> consumer or operator behaviors that should make it real. Locate only the
-> sources governing input, public interface, authoritative state, transition
-> ownership, observable result, failure, measurement, and rejecting test.
+> consumer or operator behaviors that should make it real. Locate the preserved
+> source expectation, current public description, and only the sources
+> governing input, public interface, authoritative state, transition ownership,
+> observable result, failure, measurement, and rejecting test.
 >
 > Tell each behavior as a short sequence. Compare the sources at their joins.
 > Record every material ambiguity, contradiction, missing contract, or
@@ -487,7 +503,9 @@ The client did not receive “the design is complicated.” They received:
 > plain-language summary of what is consistent, what conflicts, what was
 > narrowed, what remains unproven, and what the implementation phases must
 > still test. Treat generated analysis as a draft for operator review, not as
-> evidence that the design is coherent.
+> evidence that the design is coherent. Treat a coherent but unapproved change
+> to a load-bearing architecture as a divergence rather than allowing the
+> newest document to redefine the product silently.
 
 ## Preserve as evidence
 

@@ -92,6 +92,22 @@ describe("reader-first assurance journeys", () => {
     expect(review).not.toContain("Contradiction ID");
   });
 
+  it("dogfoods both codebase worksheets against Moria", async () => {
+    const expectations = await document(
+      "content/codebase-assurance/examples/moria-product-expectations.md",
+    );
+    const consistency = await document(
+      "content/codebase-assurance/examples/moria-design-consistency.md",
+    );
+
+    expect(expectations).toContain("## What the client told us");
+    expect(expectations).toContain("## Expectations and investigation");
+    expect(expectations).toContain("GPU-resident");
+    expect(consistency).toContain("## Plain-language summary");
+    expect(consistency).toContain("CPU-authoritative");
+    expect(consistency).toContain("## Usability observations");
+  });
+
   it("covers artifact identity, deployment, and rollback in agentic delivery assurance", async () => {
     const index = await document("content/agentic-delivery-assurance/index.md");
     expect(index).toContain("agentic-release-integrity");

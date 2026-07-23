@@ -23,6 +23,12 @@ controls:
 ---
 # Moria: keeping a fast build pointed at the right product
 
+The completed playbook dogfood artifacts are available as a [product
+expectation worksheet](moria-product-expectations.md) and [design consistency
+review](moria-design-consistency.md). They apply the public procedures to
+Moria's actual source material and preserve an unresolved GPU/CPU authority
+conflict that this earlier narrative did not surface.
+
 ## Moria was designed to move fast
 
 Moria began with an unusually ambitious first product: a reusable Rust/Bevy

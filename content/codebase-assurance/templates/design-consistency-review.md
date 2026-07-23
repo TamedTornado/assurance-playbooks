@@ -12,7 +12,9 @@ for: design-consistency
 
 Use one copy for the engagement. Keep behavior traces and conflicts underneath
 the expectation they affect. Do not assign IDs manually or attempt to document
-the whole architecture.
+the whole architecture. Delete prompts that add no information. When a
+preserved review record already contains the full history of a resolved issue,
+use a short summary and link to that record instead of copying every field.
 
 ## Plain-language summary
 
@@ -76,6 +78,15 @@ Copy this block for each material issue.
 - **Status:** [Unresolved, resolved, accepted divergence, or blocked.]
 - **Authority needed or approval received:**
 - **Sources changed:**
+- **What remains to be tested:**
+
+For a previously resolved issue with a complete preserved review record, this
+short form is sufficient:
+
+- **Type:**
+- **What conflicted and why it mattered:**
+- **Status and resolution:**
+- **Full review record:**
 - **What remains to be tested:**
 
 #### Coverage
