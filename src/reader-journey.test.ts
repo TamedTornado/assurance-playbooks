@@ -146,10 +146,35 @@ describe("reader-first assurance journeys", () => {
     expect(procedure).not.toContain("client’s decision");
   });
 
-  it("uses one working investigation record across challenge, boundaries, and failure", async () => {
-    const challenge = await document(
+  it("maps product capabilities against what existing verification establishes", async () => {
+    const verification = await document(
       "content/codebase-assurance/procedures/design-counterexamples.md",
     );
+
+    expect(verification).toContain(
+      "# Map what the product does against what its tests verify",
+    );
+    expect(verification).toContain("### 1. Inventory the application surface");
+    expect(verification).toContain(
+      "### 2. Organize the surface into product capabilities",
+    );
+    expect(verification).toContain(
+      "### 3. Inventory what the existing verification establishes",
+    );
+    expect(verification).toContain("### 4. Join the inventories and report the gaps");
+    expect(verification).toContain("Declared");
+    expect(verification).toContain("Wired");
+    expect(verification).toContain("Reachable");
+    expect(verification).toContain("Observed");
+    expect(verification).toContain("Tested");
+    expect(verification).toContain("Do not enumerate the full cross-product");
+    expect(verification).toContain("capability-to-verification map");
+    expect(verification).not.toContain("### 5.");
+    expect(verification).not.toContain("semantic mutation");
+    expect(verification).not.toContain("mutation count");
+  });
+
+  it("uses one working investigation record across boundaries and failure", async () => {
     const composition = await document(
       "content/codebase-assurance/procedures/exercise-composition.md",
     );
@@ -160,12 +185,11 @@ describe("reader-first assurance journeys", () => {
       "content/codebase-assurance/templates/assurance-investigation.md",
     );
 
-    for (const procedure of [challenge, composition, operations]) {
+    for (const procedure of [composition, operations]) {
       expect(procedure).toContain(
         "[assurance investigation](../templates/assurance-investigation.md)",
       );
     }
-    expect(challenge).toContain("What convincing wrong version might still pass?");
     expect(composition).toContain("Where does the demonstration leave the code we control?");
     expect(operations).toContain("What would the person responsible for this product actually see?");
     expect(investigation).toContain("## What we challenged");

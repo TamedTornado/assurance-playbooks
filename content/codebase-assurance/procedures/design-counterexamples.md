@@ -2,271 +2,393 @@
 schemaVersion: 1
 kind: procedure
 id: codebase-design-counterexamples
-title: See whether the evidence can catch a convincing wrong product
+title: Map what the product does against what its tests verify
 version: 0.1.0
 status: draft
-summary: Challenge important expectations with plausible wrong versions that can still look finished.
+summary: Independently inventory product capabilities and existing verification then expose the gaps between them.
 playbook: codebase-assurance
 phase: design-counterexamples
-purpose: Determine whether the existing checks distinguish the promised product from a cheaper convincing imitation.
-inputs: [Product expectation worksheet, Design consistency review, Baseline record, Existing tests and acceptance routes]
-outputs: [Assurance investigation, Preserved challenge receipts, Findings]
+purpose: Determine which product capabilities the existing verification meaningfully protects and which remain weak falsely protected or untested.
+inputs: [Product expectation worksheet, Design consistency review, Product audit record, Application source, Existing tests and CI configuration]
+outputs: [Application capability inventory, Verification inventory, Capability-to-verification map, Verification findings]
 ---
-# See whether the evidence can catch a convincing wrong product
+# Map what the product does against what its tests verify
 
-A product can build, run, and look right while still violating the reason the
-client commissioned it. The useful question is:
+The functional audit established what the delivered product can and cannot do
+now. This phase asks a different question:
 
-> What convincing wrong version might still pass?
+> What does the existing test and acceptance system actually protect?
 
-This is not a hunt for bizarre edge cases. It is an attempt to build or expose
-the shortcuts a rushed developer or optimizing agent might plausibly take:
-hard-code the demonstration, use a stale artifact, move authority to an easier
-layer, test a helper that the product never calls, weaken a workload, or report
-a convenient proxy as though it were the promised result.
+That cannot be answered by reading test names, counting tests, or looking at
+coverage alone. It requires two independently constructed inventories:
 
-Record the work in the same [assurance
-investigation](../templates/assurance-investigation.md) used by the next two
-phases. Keep each challenge under the client expectation it affects. Do not
-create a separate matrix, catalogue, and evidence document unless the volume
-genuinely requires it.
+```text
+What the product does
+            compared with
+What the existing verification establishes
+            reveals
+Verification gaps
+```
+
+If the audit begins from the tests, it inherits the test authors' view of the
+product. Anything they forgot remains invisible. If it inventories only the
+application, it cannot distinguish missing protection from protection that
+already exists.
+
+This phase evaluates the existing verification. It does not require the
+consultant to write replacement integration tests.
 
 ## Inputs
 
 Bring:
 
-- the client's expectation worksheet;
-- the design conflicts and unresolved questions;
-- the baseline demonstrations and their limits;
-- the ordinary test, build, benchmark, deployment, or review route that
-  currently accepts the product; and
-- any suspiciously convenient implementation choice already encountered.
-
-Start with the high-consequence expectations. Do not attempt to mutate the
-whole repository.
+- the product expectation worksheet;
+- the design consistency review;
+- the product audit record;
+- the application source and runnable product;
+- repository test configuration and ordinary test commands;
+- continuous-integration configuration;
+- test reports and coverage data where available; and
+- access to the environment needed to discover and run the existing suite.
 
 ## Human procedure
 
-### 1. Choose the promise worth challenging
+### 1. Inventory the application surface
 
-Ask the client:
+Build the application inventory independently of the tests.
 
-> If this looked right in a demonstration but was secretly false, which version
-> would make you feel most misled?
+Use static structure and runtime inspection to discover the supported ways a
+person or another system can cause the product to do something:
 
-Choose one to three expectations whose false success would change the client's
-decision. Use the expectation in their language.
+- user-interface routes, views, forms, controls, and navigation;
+- API, RPC, webhook, command-line, and event entry points;
+- background jobs, scheduled work, queues, and event consumers;
+- roles, permissions, tenancy boundaries, and guards;
+- state transitions, durable writes, and generated artifacts;
+- external integrations and provider callbacks;
+- feature flags, configuration-dependent behavior, and deployment modes; and
+- operator actions such as import, migration, backup, restore, and recovery.
 
-For Moria, examples include:
+For each discovered surface, record:
 
-- another game can use it as a reusable substrate;
-- edits remain responsive under the intended workload;
-- the voxels remain authoritative where promised; and
-- the acceptance report measures the quality it names.
+- where it enters the product;
+- who or what can reach it;
+- the guard or precondition;
+- the implementation path it is wired to;
+- its consequential state or output;
+- downstream work or integration it triggers;
+- material configuration or feature flags; and
+- evidence supporting the description.
 
-### 2. Name the ordinary acceptance route
+Preserve different levels of certainty:
 
-For each expectation, identify the check that currently gives the team
-confidence:
+- **Declared:** Documentation, UI text, schema, or configuration says it
+  exists.
+- **Wired:** Static structure connects the entry point to an implementation.
+- **Reachable:** The entry point can actually be reached in the running
+  product.
+- **Observed:** Executing it produced the recorded product behavior and state.
+- **Tested:** Existing verification exercises and meaningfully asserts some
+  part of it.
 
-- a repository test command;
-- a consumer build;
-- a demo;
-- a benchmark or generated report;
-- a pull-request check;
-- a deployment rule; or
-- a human review.
+Do not promote one level into another. A route in source is not necessarily
+reachable. A reachable form is not necessarily functional. Code executed by a
+test is not necessarily meaningfully asserted.
 
-Run or cite the exact route. A test helper, validator function, or fixture that
-exists but is not reached by the ordinary route is not a gate.
+Agents can deterministically collect much of this inventory: routes, handlers,
+call edges, guards, jobs, schema effects, registrations, feature flags, test
+targets, and runtime traces. The operator reviews ambiguous reachability and
+product meaning rather than manually discovering every file.
 
-If nobody can say what is supposed to reject a wrong result, record that
-directly. The expectation is presently supported by belief or inspection, not
-an acceptance boundary.
+### 2. Organize the surface into product capabilities
 
-### 3. Describe a convincing wrong version
+A flat list of routes and handlers is not yet a description of the product.
+Group related surfaces into capabilities:
 
-Ask:
+> An actor enters through a supported surface, performs an action, and expects
+> a consequential product result.
 
-> What is the easiest way to make the visible result pass without delivering
-> the underlying promise?
+Use a hierarchy that a product owner can recognize:
 
-The wrong version should be plausible enough that someone could create it
-accidentally or under delivery pressure. Useful patterns include:
+```text
+[Product area]
+└── [Capability]
+    ├── Entry points
+    ├── Preconditions and roles
+    ├── Consequential results
+    ├── Downstream work
+    └── Important dimensions
+```
 
-- hard-code the expected demonstration or test fixture;
-- keep the visible output but move authoritative state to the wrong layer;
-- make the public consumer a privileged friend of the implementation;
-- skip registering the rejecting test in the ordinary command;
-- validate a manifest but deploy or load a different artifact;
-- replay an old passing report;
-- lower, narrow, or move the measurement after seeing the result;
-- mock the dependency that owns the behavior;
-- ignore one state transition, retry, restart, or boundary case;
-- treat missing evidence as success; or
-- emit the right shape with invented or self-reported values.
+For a CRM, one capability might look like:
 
-Write the wrong version in one or two sentences. Then explain why it could fool
-a reasonable reviewer. If it is absurd, harmless, or unrelated to the client's
-decision, choose a better challenge.
+```text
+Sales
+└── Convert a lead
+    ├── Entry points
+    │   ├── Lead detail interface
+    │   └── POST /leads/{id}/convert
+    ├── Preconditions
+    │   ├── Lead is open
+    │   └── User has conversion permission
+    ├── Consequential results
+    │   ├── Account resolved or created
+    │   ├── Contact resolved or created
+    │   ├── Opportunity created
+    │   ├── Lead marked converted
+    │   └── Reporting and background work updated
+    └── Important dimensions
+        ├── Existing or new account
+        ├── Duplicate contact
+        ├── Missing permission
+        ├── Retry
+        └── Background-job failure
+```
 
-### 4. Predict what should reject it
+Record the base capability once. Treat roles, lifecycle states, data shapes,
+volumes, dependency modes, and failure cases as dimensions underneath it.
 
-Before changing anything, record:
+Do not enumerate the full cross-product. Expand a dimension into a separate
+scenario only when it changes the product's behavior, risk, or verification.
+For example, “existing account plus duplicate contact” needs its own scenario
+only if that combination has a distinct consequential result or code path.
 
-- the exact ordinary command or decision route;
-- the expected failure;
-- the message, field, or observable result that should identify the reason;
-- what valid behavior must continue to pass; and
-- the safe boundary for the experiment.
+Keep traceability back to the discovered surfaces so an operator can inspect
+the routes, handlers, transitions, and effects behind the human-readable
+capability. Tooling should generate identifiers and relationships; the human
+should not maintain joins by hand.
 
-This prediction prevents the operator from accepting any red output as proof.
-A compilation error caused by malformed syntax does not show that a semantic
-gate rejected the wrong product.
+The product expectation worksheet and functional audit help determine whether
+the grouping is complete. The application inventory may also reveal
+undocumented capabilities, dead surfaces, or implemented scope that was never
+authorized. Preserve those rather than silently treating their existence as
+product approval.
 
-### 5. Create the smallest safe challenge
+### 3. Inventory what the existing verification establishes
 
-Prefer a controlled fixture or semantic mutation that preserves everything
-except the promise being tested.
+Construct the verification inventory independently from the application
+capability grouping.
 
-Examples:
+First determine what the project actually runs:
 
-- register an invalid asset with the right filename and ask the ordinary test
-  command to reject its content;
-- make an external consumer attempt the same behavior without private access;
-- keep a benchmark report structurally valid but mismatch its commit or
-  workload identity;
-- replace one authoritative read with a stale mirror while leaving the visible
-  happy path intact;
-- bypass one required registration step and run the normal acceptance command;
-- replay a duplicate request or load an older state after a newer one; or
-- produce a report under a different machine profile and ask the comparison
-  tool to refuse equivalence.
+- ordinary local test commands;
+- continuous-integration jobs;
+- package- or service-specific suites;
+- browser or system suites;
+- deployment and artifact checks;
+- benchmark validators;
+- manual acceptance procedures; and
+- tests present in the repository but absent from normal execution.
 
-Do not change both the implementation and the expected result. Do not weaken a
-real fixture merely to make the challenge convenient.
+Run the existing verification where safe and collect machine-readable discovery
+and results where available. A test file that exists but is never discovered
+does not protect the product.
 
-### 6. Run it through the ordinary route
+For each existing test or coherent test group, record:
 
-Execute the same route that accepts real work. Preserve:
+- how it is discovered and invoked;
+- its setup, actor, data, and starting state;
+- the product entry point it exercises;
+- how far through the product the execution travels;
+- which components and dependencies are real;
+- which components are replaced, mocked, or bypassed;
+- the resulting behavior or state it observes;
+- the assertions that determine pass or failure;
+- the roles, lifecycle states, data shapes, loads, and failure conditions it
+  represents; and
+- whether the ordinary repository or CI route runs it.
 
-- the pinned target and exact mutation or fixture;
-- the prediction;
-- the command or human decision route;
-- the raw result; and
-- the unchanged valid-path result.
+Separate four facts that are often collapsed into “covered”:
 
-Classify the outcome:
+1. code belonging to the capability executed;
+2. a product entry point was exercised;
+3. the test reached the consequential result;
+4. the test asserted that the consequential result was correct.
 
-- **Rejected for the intended reason:** the existing boundary noticed the
-  violated promise.
-- **Rejected for an unrelated reason:** the experiment did not reach the
-  intended boundary.
-- **Accepted:** the convincing wrong version passed.
-- **Not exercised:** the route could not safely or meaningfully test it.
-- **Inconclusive:** the result cannot distinguish the wrong version from a
-  valid one.
+Coverage can support the first fact. It does not establish the other three.
+Likewise, a test named “lead conversion integration” may call a service
+directly, replace the database and queue, and assert only a returned object
+shape.
 
-An accepted challenge is not an embarrassing test failure to clean up. It is
-the evidence that identifies a valuable assurance gap.
+Use execution traces, coverage, framework discovery, assertions, fixture
+construction, database effects, network boundaries, and CI configuration as
+evidence. Agent summaries may organize these facts, but do not accept an
+agent's judgment that a test “looks comprehensive” as evidence.
 
-### 7. Explain the consequence without inflating it
+### 4. Join the inventories and report the gaps
 
-For every accepted or inconclusive challenge, state:
+Map existing verification onto the product capability hierarchy.
 
-- which client expectation remains unsupported;
-- how the wrong version could occur in normal delivery;
-- what a user, operator, or owner would experience;
-- whether the failure is visible or silently successful;
-- the narrowest gate that could reject it; and
-- what evidence would change the conclusion.
+Attach a test to a capability only at the level its executed route and
+assertions support. A test may protect the base happy path while leaving
+particular roles, data shapes, transitions, integrations, or failure conditions
+unprotected.
 
-Promote a material result to a shared finding record only when it needs its own
-owner or decision. The working investigation can retain smaller observations
-without making the operator maintain a file per thought.
+For each capability and important dimension, classify the existing
+verification:
 
-### 8. Select the next boundary, not every possible mutation
+- **Meaningfully protected:** Existing verification reaches and asserts the
+  consequential behavior through a representative product path.
+- **Touched but not established:** Relevant code executes, but the important
+  result or state is not asserted.
+- **Isolated only:** A component is tested without the composition required by
+  the capability.
+- **Reduced path:** A mock, fake, bypass, or smaller environment removes
+  behavior material to the capability.
+- **Happy path only:** The base behavior is protected but important roles,
+  states, data shapes, or failure conditions are absent.
+- **Not in the ordinary route:** Relevant tests exist but normal repository or
+  CI execution does not run them.
+- **Unprotected:** No meaningful existing verification was found.
+- **Indeterminate:** Available evidence is insufficient to determine what the
+  test establishes.
 
-Stop when each selected high-consequence expectation has:
+Also perform the comparison in the opposite direction. Identify tests that:
 
-- survived at least one convincing challenge;
-- produced a finding;
-- been marked unproven because no meaningful rejecting route exists; or
-- been deferred with a stated decision consequence.
+- protect obsolete behavior;
+- describe capabilities absent from the product expectations;
+- exercise dead or unreachable surfaces;
+- duplicate large amounts of low-value implementation detail; or
+- give apparent verification weight to unauthorized scope.
 
-The aim is evidence about the strength of the current checks, not a mutation
-count.
+Tests for an invented subsystem do not legitimize the subsystem. They may
+instead be evidence that scope drift became embedded in the repository.
+
+Present the result as a capability-to-verification map organized for progressive
+disclosure:
+
+```text
+[Capability]
+├── What the product does
+├── Entry points and consequential effects
+├── Important dimensions
+├── Existing verification
+├── What that verification actually asserts
+├── Real and replaced boundaries
+└── Gaps and limits
+```
+
+The summary should make the consequential gaps visible without flattening the
+application into an enormous spreadsheet. Detailed route, test, trace, and
+assertion evidence can remain linked underneath each capability.
+
+Do not produce a single coverage or test-quality score. State what the existing
+verification does and does not earn.
 
 ## A Moria-shaped example
 
-Expectation:
+For Moria, the application inventory would include:
 
-> A future game can rely on Moria as a reusable substrate.
+- the public Rust crate facade;
+- the walkable validation consumer;
+- world observation and edit commands;
+- save and load;
+- benchmark and report entry points;
+- curator and asset-validation commands;
+- background generation, streaming, presentation, and persistence work; and
+- the named platform acceptance routes.
 
-Convincing wrong version:
+Those surfaces can be grouped into recognizable capabilities:
 
-> The demo looks correct because it reads private world storage, while an
-> external consumer cannot obtain the same information through the public
-> crate.
+- external consumption as a reusable substrate;
+- generation and observation of a continuous material world;
+- editing and visible reconciliation;
+- exact save and restore;
+- bounded streaming and responsiveness;
+- comparable acceptance evidence; and
+- the commissioned state and computation authority.
 
-The challenge is not “delete a random public method.” Build the smallest
-external consumer that performs the representative observation and edit from
-the baseline. Separately ensure the demo cannot import private source modules.
-Run both checks through the repository's ordinary test route.
+The verification inventory would then determine, for example, whether tests
+described as external-consumer coverage:
 
-If the external consumer fails but the demo passes, the reusable-substrate
-expectation has not survived. If a private import compiles because the boundary
-test is never registered in `cargo test`, the repository has a validator-shaped
-object rather than a gate. If both wrong cases are rejected for their intended
-reasons and the valid consumer still passes, that specific boundary has earned
-evidence.
+- actually compile outside the implementation package;
+- enter through the public facade;
+- perform meaningful observation and mutation;
+- assert the resulting state;
+- retain or replace Bevy, storage, presentation, and GPU boundaries; and
+- run in the ordinary `cargo test` route.
 
-The same reasoning applies to the GPU-resident expectation. A beautiful edit
-does not distinguish GPU-authoritative state from a CPU-authoritative
-implementation. The challenge must vary or inspect the authority boundary in a
-way that the promised architecture requires and the easier substitute cannot
-satisfy. If no current acceptance route can do that, the correct result is
-unproven—not a creative inference from the demo.
+A test that imports the public facade but asserts only that a type can be
+constructed touches external consumption. It does not establish that a
+downstream game can perform the representative product workflow.
+
+Similarly, a headed benchmark test may protect report generation while
+replacing the real graphics boundary or using a smaller workload. The map must
+retain that reduced boundary rather than marking performance “covered.”
+
+If the repository contains extensive tests for forest simulation, skeletal
+animation, third-person controllers, or physics that have no support in the
+approved product expectations, the inverse comparison exposes them as
+verification attached to unauthorized scope. Test volume cannot turn those
+systems into product requirements.
 
 ## Copyable agent prompt
 
-> Using the supplied expectation worksheet, design review, and baseline record,
-> choose one to three client expectations whose false success would change the
-> decision. For each, identify the ordinary route that currently accepts the
-> product and ask: “What convincing wrong version might still pass?” Propose a
-> small plausible semantic mutation or fixture that preserves the visible
-> happy path while violating the underlying promise. Before execution, state
-> the expected rejection, intended reason, safe boundary, and valid behavior
-> that must remain green. Wait for operator authorization before applying a
-> mutation. Execute through the ordinary acceptance route, preserve the exact
-> change and raw result, and classify it as rejected for the intended reason,
-> rejected for an unrelated reason, accepted, not exercised, or inconclusive.
-> Draft the result into the shared assurance investigation. Do not treat code
-> inspection, coverage, an unregistered helper, or arbitrary red output as
-> rejection evidence.
+> Audit the supplied application's existing verification without writing new
+> tests. First inventory the application independently of its tests: user
+> interfaces, APIs, commands, events, jobs, roles, guards, state transitions,
+> durable effects, integrations, feature flags, operator actions, and
+> reachability. Preserve whether each surface is declared, wired, reachable,
+> observed, or tested. Group the surfaces into product capabilities expressed
+> as actor, supported entry, action, and consequential result. Record important
+> roles, states, data shapes, loads, dependencies, and failure conditions as
+> dimensions; do not enumerate their full cross-product. Separately discover
+> and run the existing verification through the project's ordinary and CI
+> routes. For each test or coherent group, record its invocation, setup, entry
+> point, execution depth, real and replaced components, asserted result, covered
+> dimensions, and whether it actually runs normally. Map tests to capabilities
+> only at the level supported by executed routes and assertions. Classify each
+> capability as meaningfully protected, touched but not established, isolated
+> only, reduced path, happy path only, absent from the ordinary route,
+> unprotected, or indeterminate. Also identify tests for obsolete, unreachable,
+> or unauthorized product behavior. Produce a capability-to-verification map
+> with linked evidence. Do not treat names, counts, coverage, or visual
+> inspection as proof that consequential behavior is verified.
 
 ## Required output
 
-Update the [assurance investigation](../templates/assurance-investigation.md)
-with the selected promises, convincing wrong versions, predictions, executed
-results, valid-path checks, consequences, and candidate gates. Create separate
-[finding records](../../shared/finding.md) only for material issues that need
-individual ownership or decision.
+Produce:
+
+- an application surface inventory with certainty and evidence;
+- a hierarchical product capability inventory with important dimensions;
+- an existing-verification inventory describing execution and assertions;
+- a capability-to-verification map;
+- consequential verification gaps and limitations;
+- tests absent from ordinary execution; and
+- verification attached to obsolete, unreachable, or unauthorized behavior.
+
+Keep the human report organized by product capability. Preserve detailed
+machine-generated inventories and relationships as linked evidence rather than
+asking the operator to maintain them manually.
 
 ## Preserve as evidence
 
-Preserve the exact target, mutation or fixture, ordinary route, predicted
-failure, raw result, valid-path result, and restoration or isolation method.
+Preserve application and test target identity, inventory tool versions,
+ordinary and CI commands, test discovery and results, coverage or execution
+traces where used, assertions inspected, real and replaced boundaries,
+capability mappings, uncertainty, and review corrections.
 
 ## Stop and escalate
 
-Stop before an experiment can affect production, customer data, uncontrolled
-infrastructure, or an irreversible artifact. Stop when the proposed mutation
-is too broad to attribute its result, or when running it would require changing
-the acceptance rule being evaluated.
+Stop or bound the inventory when:
+
+- running existing verification could affect real customers or uncontrolled
+  production state;
+- required source, test configuration, or test environments are unavailable;
+- application generation prevents stable surface enumeration;
+- test discovery is materially incomplete;
+- a capability grouping requires product authority not present in the supplied
+  sources; or
+- the application is too large to inventory safely without agreed
+  prioritization.
+
+Record the resulting areas as incomplete or indeterminate. Do not silently
+generalize from the visible subset.
 
 ## Review test
 
-A skeptical reviewer can explain why the wrong version is plausible, why it
-would matter to the client, whether the ordinary route reached it, and exactly
-what distinguished—or failed to distinguish—it from the promised product.
+A product owner can see what the application does and which important behavior
+has weak or absent protection. A technical reviewer can trace every mapping to
+the actual application surface, existing test route, real or replaced
+boundaries, and consequential assertion. Coverage, test volume, and agent
+opinion cannot create a stronger conclusion than that evidence supports.
