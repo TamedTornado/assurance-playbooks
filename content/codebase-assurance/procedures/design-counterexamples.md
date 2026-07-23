@@ -169,6 +169,56 @@ product approval.
 Construct the verification inventory independently from the application
 capability grouping.
 
+#### Establish that the tests are safe to run
+
+Do not begin by executing the project's test command. Existing verification is
+part of the codebase being audited and may itself be dangerously configured.
+Test discovery can also execute setup modules, framework hooks, application
+bootstrap code, or provider initialization.
+
+Before running discovery or tests, resolve:
+
+- configuration precedence and the environment selected by the test command;
+- database hosts, names, users, schemas, and reset or migration behavior;
+- queue brokers, topics, namespaces, consumers, and purge behavior;
+- object stores, buckets, prefixes, filesystems, and cleanup behavior;
+- service, webhook, email, SMS, payment, analytics, and model endpoints;
+- credential sources and which accounts they authorize;
+- customer or production data that could be read, changed, copied, or exposed;
+- background workers, schedulers, and processes started by the suite;
+- external side effects the suite can create;
+- destructive setup and teardown behavior; and
+- whether parallel runs can collide with shared state.
+
+Inspect configuration, scripts, composition roots, CI variables, fixtures,
+setup hooks, and provider initialization without printing or copying secret
+values. Resolve where credentials and endpoints lead, not merely whether an
+environment variable has a test-looking name.
+
+Classify the suite or test group:
+
+- **Safe to run:** It uses isolated resources and cannot affect live customers,
+  production state, or uncontrolled external systems.
+- **Conditionally safe:** It becomes isolated only after explicit setup such as
+  provisioning an ephemeral database, selecting a provider sandbox, disabling
+  outbound delivery, or assigning a unique namespace.
+- **Unsafe to run:** It resolves to live production, customer data, shared
+  consequential state, real delivery endpoints, or destructive operations that
+  cannot be safely contained.
+- **Indeterminate:** The audit cannot establish the actual targets or side
+  effects from the available configuration and access.
+
+Do not run test discovery until this preflight is complete. For a conditionally
+safe suite, record and apply the isolation conditions before execution. Do not
+run an unsafe or indeterminate suite. Preserve its configuration and resolved
+targets as evidence without exposing secrets, and report why the verification
+could not be executed safely.
+
+An unsafe suite is itself a verification finding. Do not repair its
+configuration silently and then describe the existing suite as safe. A
+separately isolated audit run may still establish what the tests do, but the
+original unsafe behavior remains part of the audit result.
+
 First determine what the project actually runs:
 
 - ordinary local test commands;
@@ -436,10 +486,15 @@ systems into product requirements.
 > observed, or tested. Group the surfaces into product capabilities expressed
 > as actor, supported entry, action, and consequential result. Record important
 > roles, states, data shapes, loads, dependencies, and failure conditions as
-> dimensions; do not enumerate their full cross-product. Separately discover
-> and run the existing verification through the project's ordinary and CI
-> routes. For each test or coherent group, record its invocation, setup, entry
-> point, execution depth, real and replaced components, asserted result, covered
+> dimensions; do not enumerate their full cross-product. Before running test
+> discovery, resolve the suite's selected environment, databases, queues,
+> storage, endpoints, credential accounts, workers, external side effects, and
+> destructive setup or teardown. Classify it safe, conditionally safe, unsafe,
+> or indeterminate. Apply and record required isolation for conditionally safe
+> tests; do not execute unsafe or indeterminate tests. Separately discover and
+> run safe existing verification through the project's ordinary and CI routes.
+> For each test or coherent group, record its invocation, setup, entry point,
+> execution depth, real and replaced components, asserted result, covered
 > dimensions, and whether it actually runs normally. For every integration or
 > system claim, reconstruct the required production path and the path actually
 > taken by the test. Classify each material component as production
@@ -462,6 +517,8 @@ Produce:
 
 - an application surface inventory with certainty and evidence;
 - a hierarchical product capability inventory with important dimensions;
+- a verification safety preflight with resolved targets, side effects, and
+  isolation conditions;
 - an existing-verification inventory describing execution and assertions;
 - a production-system participation map for integration and system tests;
 - approved replacement boundaries and the behavior each replacement removes;
@@ -477,18 +534,22 @@ asking the operator to maintain them manually.
 ## Preserve as evidence
 
 Preserve application and test target identity, inventory tool versions,
-ordinary and CI commands, test discovery and results, coverage or execution
-traces where used, assertions inspected, production composition, test
-composition, runtime participation, approved replacement boundaries,
-substitution behavior, capability mappings, uncertainty, and review
-corrections.
+configuration precedence, resolved resource and provider targets, credential
+account identity without secret values, side-effect analysis, isolation
+conditions, safety classification, ordinary and CI commands, test discovery
+and results, coverage or execution traces where used, assertions inspected,
+production composition, test composition, runtime participation, approved
+replacement boundaries, substitution behavior, capability mappings,
+uncertainty, and review corrections.
 
 ## Stop and escalate
 
 Stop or bound the inventory when:
 
-- running existing verification could affect real customers or uncontrolled
-  production state;
+- the safety preflight cannot establish where tests connect or what side
+  effects they can produce;
+- existing verification resolves to live production, customer data, shared
+  consequential state, or uncontrolled external systems;
 - required source, test configuration, or test environments are unavailable;
 - application generation prevents stable surface enumeration;
 - test discovery is materially incomplete;
