@@ -50,16 +50,18 @@ decision, and states the edge of the evidence.
 
 ## What happens in practice
 
-### 1. Agree what the product is
+### 1. Define the decision and assurance case
 
-The decision owner and operator identify the product boundary, intended users,
-consequential outcomes, explicit non-goals, representative environment, and
-the claims that would change the decision if false.
+The decision owner names the action this work will inform. The operator then
+extracts claims the product already makes, decomposes the consequential ones
+into investigable propositions, and gives each an evidence question and a
+falsification question.
 
-This often resolves more than expected. AI-built systems commonly contain
-several plausible products at once: a reusable library plus a privileged demo,
-a service plus a manually maintained data path, or a user-visible feature plus
-an administrative shortcut. Assurance requires one explicit boundary.
+This is not backlog writing or an attempt to define the whole product.
+Conditions and exclusions are attached only where needed to interpret a
+claim. AI-built systems often contain a credible promise plus a cheaper
+implementation that the demo and existing tests cannot distinguish. The claim
+map makes those alternatives explicit before repository analysis begins.
 
 ### 2. Review the contract before trusting the implementation
 

@@ -18,7 +18,7 @@ controls:
   - codebase-operational-failure
   - codebase-proven-gate
 procedures:
-  - codebase-agree-product
+  - codebase-define-assurance-case
   - codebase-review-design
   - codebase-reproduce-path
   - codebase-design-counterexamples

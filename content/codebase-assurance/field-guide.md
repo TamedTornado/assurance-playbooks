@@ -28,31 +28,33 @@ criteria](../shared/acceptance-criteria.md). If the decision owner cannot yet
 say what decision the work informs, help frame that question before starting a
 broad scan.
 
-## Phase 1: Agree what the product is
+## Phase 1: Define the decision and assurance case
 
-Executable procedure: [Agree what the product must
-prove](procedures/agree-product.md).
+Executable procedure: [Map the claims the decision relies
+on](procedures/define-assurance-case.md).
 
 **Decision:** Which product claims matter enough to challenge?
 
-Talk to the decision owner, product owner, operators, and people who handle
-failure. Ask for outcomes, not component names:
+This is not a requirements exercise. Extract claims the product already makes
+or that somebody is about to rely upon:
 
-- What must remain true for customers?
+- What decision will this work change?
+- What does the product say or imply is true now?
 - What failure would stop the launch, migration, acquisition, or authority
   increase?
 - What does the demo or UI appear to prove that the underlying system may not?
-- Which behavior is a real product boundary and which is a temporary shortcut?
-- What is explicitly not being built or supported?
+- What could remain false while the demonstration and current tests look
+  successful?
 
-Turn the answers into falsifiable statements. “Payments are reliable” becomes
-“replaying a confirmed charge request cannot charge the same order twice.”
-“This is a reusable library” becomes “the validation application can use every
-required capability through the public interface.”
+Preserve the original language, then decompose broad promises into factual
+propositions. “This is a reusable library” may require the proposition “the
+reference application uses no capability unavailable to an independent
+consumer.” Give every proposition an evidence question, a falsification
+question, and only the conditions and exclusions needed to interpret it.
 
-**Evidence to keep:** decision statement, product boundary, non-goals,
-consequential claims, owners, consequences, and plausible ways each claim could
-be false.
+**Evidence to keep:** decision statement, source promises, claim map,
+consequences, evidence and falsification questions, conditions, exclusions,
+disagreements, and owner confirmation.
 
 **Move on when:** the decision owner agrees that a failure of any selected
 claim would affect the decision and that exclusions are explicit.
@@ -61,9 +63,10 @@ claim would affect the decision and that exclusions are explicit.
 exist; accepting “the whole platform” as a scope; treating a polished demo as
 the product contract.
 
-Moria’s first assurance result was this boundary: the voxel substrate was the
-product; the executable was a public-interface consumer; the future game was
-out. That made privileged demo paths rejectable.
+Moria’s top-level proposition was that it was a reusable voxel substrate, not
+application-specific machinery hidden by a convincing demo. Five selected
+propositions exposed ways that claim could be undeserved. The future game was
+not turned into a backlog inside the assurance work.
 
 ## Phase 2: Make the design tell one story
 
