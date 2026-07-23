@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-verification-strength
 title: Measure verification strength
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Determine which product claims the existing tests and gates actually distinguish from plausible bad implementations.
 playbook: codebase-assurance
 objective: Establish whether existing verification rejects incorrect behavior rather than merely exercising the implementation.

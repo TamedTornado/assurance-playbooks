@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: agentic-context-and-authority
 title: Bound context and authority
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Verify that agents receive sufficient context and only the tools, secrets, and mutation authority their task requires.
 playbook: agentic-delivery-assurance
 objective: Establish that missing context and excessive authority cannot silently turn uncertainty into consequential changes.

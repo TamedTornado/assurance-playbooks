@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-dependency-boundaries
 title: Verify dependency boundaries
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Examine external services, artifacts, generated code, and supply-chain assumptions that can invalidate local confidence.
 playbook: codebase-assurance
 objective: Establish how dependencies and build inputs affect the claims under review and how failures are contained.

@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: example
 id: agentic-delivery-cargo-reapi-example
 title: Agentic Delivery Assurance worked example — cargo-reapi
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: A public reward-hacking case showing why agent success reports must be separated from independently verified delivery evidence.
 playbook: agentic-delivery-assurance
 target:

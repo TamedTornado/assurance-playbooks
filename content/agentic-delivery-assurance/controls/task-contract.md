@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: agentic-task-contract
 title: Make the task contract falsifiable
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Establish whether agent tasks carry observable intent, constraints, acceptance evidence, and escalation boundaries.
 playbook: agentic-delivery-assurance
 objective: Ensure task completion can be judged against intent independently of the agent narrative.

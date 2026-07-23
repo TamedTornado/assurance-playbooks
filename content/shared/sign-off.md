@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: template
 id: assurance-sign-off
 title: Assurance sign-off
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: The human completion decision and explicit residual-risk statement.
 for: sign-off
 ---

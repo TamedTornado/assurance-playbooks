@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: playbook
 id: agentic-delivery-assurance
 title: Agentic Delivery Assurance
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Establish whether an agentic delivery system produces independently verified work and prove a material rejection gate.
 audience: Engineering leaders using coding agents where throughput has outrun confidence in review and verification.
 outcome: An evidence-backed delivery assessment and one installed or hardened gate proven against a material agent failure mode.

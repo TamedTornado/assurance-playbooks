@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-reproducible-baseline
 title: Establish a reproducible baseline
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Prove that another engineer can obtain and explain the relevant build and runtime behavior.
 playbook: codebase-assurance
 objective: Establish a repeatable baseline before findings or interventions are attributed to the product.

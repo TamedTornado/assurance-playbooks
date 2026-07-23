@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-operational-failure
 title: Exercise operational failure
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Establish whether the system fails observably and recoverably under realistic operational stress.
 playbook: codebase-assurance
 objective: Test startup shutdown overload degradation recovery and operator visibility on the agreed path.

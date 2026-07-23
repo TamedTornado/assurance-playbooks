@@ -1,5 +1,6 @@
+import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
-import { relative, resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import matter from "gray-matter";
 import {
   type AssuranceCatalog,
@@ -27,7 +28,15 @@ export async function loadCatalog(contentRoot: string): Promise<AssuranceCatalog
   const documents: AssuranceDocument[] = [];
   for (const file of await markdownFiles(root)) {
     const source = await readFile(file, "utf8");
+    for (const match of source.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)) {
+      const target = match[1];
+      if (!target || /^(?:https?:|mailto:|#)/.test(target)) continue;
+      const localTarget = decodeURIComponent(target.split(/[?#]/, 1)[0] ?? "");
+      if (!localTarget || existsSync(resolve(dirname(file), localTarget))) continue;
+      throw new Error(`${relative(root, file)}: broken Markdown link "${target}"`);
+    }
     const parsed = matter(source);
+    if (Object.keys(parsed.data).length === 0) continue;
     const result = documentDataSchema.safeParse(parsed.data);
     if (!result.success) {
       const details = result.error.issues

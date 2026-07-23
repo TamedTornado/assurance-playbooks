@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: template
 id: evidence-record
 title: Evidence record
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: A provenance-preserving record for one piece of assurance evidence.
 for: evidence
 ---

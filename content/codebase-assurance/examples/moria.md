@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: example
 id: codebase-assurance-moria-example
 title: Codebase Assurance worked example — Moria
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: A public application of the method to Moria with evidence limits preserved instead of converted into a blanket pass.
 playbook: codebase-assurance
 target:

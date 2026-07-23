@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: agentic-independent-verification
 title: Enforce independent verification
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Establish that the producer cannot define, weaken, or approve the evidence used to accept its own work.
 playbook: agentic-delivery-assurance
 objective: Separate implementation authority from acceptance authority at every material delivery boundary.

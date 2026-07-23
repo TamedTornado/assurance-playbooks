@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: template
 id: intervention-record
 title: Intervention record
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: A before-and-after record proving what an assurance intervention changed.
 for: intervention
 ---

@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: template
 id: assurance-protocol
 title: Shared assurance protocol
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: The evidence and decision protocol shared by every assurance engagement.
 for: scope
 ---

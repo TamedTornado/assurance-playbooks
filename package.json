@@ -1,6 +1,6 @@
 {
   "name": "assurance-playbooks",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Open assurance methods for AI-built codebases and agentic delivery systems",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE-CODE",

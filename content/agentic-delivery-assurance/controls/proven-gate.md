@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: agentic-proven-gate
 title: Install and prove the delivery gate
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Harden one material agent-delivery boundary and demonstrate rejection of the preserved failure mode.
 playbook: agentic-delivery-assurance
 objective: Leave an executable independently governed gate that changes which agent work can enter the trusted system.

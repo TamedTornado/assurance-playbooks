@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-invariant-pressure
 title: Pressure architectural invariants
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Test whether important invariants survive state transitions, concurrency, malformed inputs, and partial failure.
 playbook: codebase-assurance
 objective: Challenge system invariants at boundaries where locally correct code can still produce globally incorrect behavior.

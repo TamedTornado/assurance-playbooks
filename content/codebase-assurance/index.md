@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: playbook
 id: codebase-assurance
 title: Codebase Assurance
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Establish what a consequential AI-built codebase can support and prove one high-risk assurance gate.
 audience: Founders and technical owners whose AI-built product now has consequential users or revenue.
 outcome: A defensible evidence package and one installed or hardened gate demonstrated on an agreed high-risk path.

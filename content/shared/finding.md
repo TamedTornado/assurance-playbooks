@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: template
 id: finding-record
 title: Finding record
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: A structured distinction between observations, inference, and risk.
 for: finding
 ---

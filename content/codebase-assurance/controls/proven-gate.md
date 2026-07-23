@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-proven-gate
 title: Install and prove the assurance gate
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Harden one agreed high-risk verification path and demonstrate that it rejects the preserved failure.
 playbook: codebase-assurance
 objective: Leave behind an executable assurance boundary that distinguishes required behavior from a material counterexample.

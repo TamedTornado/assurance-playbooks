@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: codebase-claim-map
 title: Map consequential claims
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Turn product expectations into bounded claims with owners, consequences, and falsification strategies.
 playbook: codebase-assurance
 objective: Establish the claims that matter and the evidence capable of showing each claim is false.

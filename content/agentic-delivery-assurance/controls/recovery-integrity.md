@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: agentic-recovery-integrity
 title: Verify recovery integrity
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Establish that retries repairs interruptions and handoffs preserve intent provenance and already-valid work.
 playbook: agentic-delivery-assurance
 objective: Test whether the pipeline can recover from failure without hiding state loss duplicating work or laundering evidence.

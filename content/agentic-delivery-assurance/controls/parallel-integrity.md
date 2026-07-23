@@ -3,8 +3,8 @@ schemaVersion: 1
 kind: control
 id: agentic-parallel-integrity
 title: Preserve parallel-work integrity
-version: 1.0.0
-status: stable
+version: 0.1.0
+status: draft
 summary: Test whether concurrent agent work remains isolated, composable, attributable, and safe to integrate.
 playbook: agentic-delivery-assurance
 objective: Establish that throughput from parallelism does not hide interference stale assumptions or unreviewed integration.
