@@ -5,8 +5,9 @@ organization understands—and whether the available evidence will survive the
 next consequential change.
 
 Codebase Assurance is a method for examining a product that has become too
-important to trust on appearance alone. It begins with the outcomes customers,
-operations, revenue, or a pending decision depend on. It then follows those
+important to trust on appearance alone. It begins with the concern that made
+assurance necessary and identifies the action its evidence could change. It
+then follows the claims behind that action
 claims through the product boundary, design, implementation, tests,
 dependencies, runtime behavior, and failure handling.
 
@@ -27,8 +28,11 @@ Use this method when somebody accountable needs to decide:
 - whether a known fragility is a reachable risk or merely unattractive code; or
 - which remaining unknowns must be accepted, contained, or resolved.
 
-The decision is written down before the repository is examined. “Assess the
-codebase” is not enough. A useful decision sounds like: “Can we move recurring
+The client does not need to arrive with that decision already written. They
+may arrive because a launch is approaching, agents built code they no longer
+trust, or a previous failure might recur. The operator converts that trigger
+into a decision before examining the repository. “Assess the codebase” is not
+enough. A useful decision sounds like: “Can we move recurring
 billing to this service without creating duplicate charges under retry?” or
 “Can this substrate be consumed through its public interface without the demo
 depending on privileged internals?”
@@ -52,10 +56,11 @@ decision, and states the edge of the evidence.
 
 ### 1. Define the decision and assurance case
 
-The decision owner names the action this work will inform. The operator then
-extracts claims the product already makes, decomposes the consequential ones
-into investigable propositions, and gives each an evidence question and a
-falsification question.
+The sponsor explains why assurance is needed now and what concerns them. The
+operator helps formulate the action the evidence could enable, narrow, delay,
+or prevent. The operator then extracts claims the product already makes,
+decomposes the consequential ones into investigable propositions, and gives
+each an evidence question and a falsification question.
 
 This is not backlog writing or an attempt to define the whole product.
 Conditions and exclusions are attached only where needed to interpret a
@@ -177,9 +182,11 @@ Read the full [Moria worked example](examples/moria.md).
 
 ## What this method asks of your team
 
-The decision owner must identify the outcome that matters and accept the
-remaining risk. A technical owner must provide the real system, people,
-environments, and dependencies—or own the consequence when those are blocked.
+The sponsor must explain the consequential concern and have authority to act
+on the result. The operator helps turn that concern into an explicit decision;
+the client is not expected to bring one fully formed. A technical owner must
+provide the real system, people, environments, and dependencies—or own the
+consequence when those are blocked.
 
 The operator needs freedom to preserve failed evidence, challenge existing
 tests, and distinguish an uncomfortable result from incomplete work. The

@@ -9,12 +9,13 @@ produces evidence for the next one. If the evidence says the product claim is
 false, preserve that result. The purpose is not to shepherd every row toward
 green.
 
-## Start with a decision, not a repository
+## Start with the reason for assurance, not the repository
 
 Before opening the code, name:
 
-- the person authorized to make the resulting risk decision;
-- the product or operational decision the work supports;
+- the trigger or concern that made assurance necessary;
+- the person authorized to act on the result;
+- the product or operational action the evidence could change;
 - the users, money, data, safety, or authority exposed if the claim is false;
 - the exact repositories, revisions, services, environments, and workloads in
   scope;
@@ -24,9 +25,10 @@ Before opening the code, name:
 - the evidence, reject conditions, completion rule, and escalation path.
 
 Record these in the shared [acceptance
-criteria](../shared/acceptance-criteria.md). If the decision owner cannot yet
-say what decision the work informs, help frame that question before starting a
-broad scan.
+criteria](../shared/acceptance-criteria.md). The client need not arrive with a
+formal decision. If they arrive with “we no longer trust this AI-built
+codebase,” help determine what evidence could enable, narrow, delay, or prevent
+before starting a broad scan.
 
 ## Phase 1: Define the decision and assurance case
 

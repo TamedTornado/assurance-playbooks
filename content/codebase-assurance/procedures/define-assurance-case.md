@@ -9,17 +9,24 @@ summary: Identify the claims a real decision relies on and define how each claim
 playbook: codebase-assurance
 phase: define-assurance-case
 purpose: Give the assurance work a finite set of consequential propositions to investigate without turning the engagement into product discovery or backlog writing.
-inputs: [Decision owner, Pending decision, Product promises, Available product material]
+inputs: [Accountable sponsor, Engagement trigger, Consequential concern, Product promises, Available product material]
 outputs: [Decision statement, Claim map, Selected assurance case, Conditions and exclusions]
 ---
 # Define the decision and assurance case
 
 This procedure establishes what the assurance work will investigate.
 
-It does not ask the product owner to design a proof, and it does not ask the
-operator to define the whole product. It identifies the claims already being
-made, finds the consequential decision that relies on them, and turns the
-important claims into propositions that evidence can support or defeat.
+It does not require the client to arrive with a neatly formulated decision. A
+client usually arrives with a trigger: an approaching launch, an AI-built
+system they no longer understand, a proposed increase in agent authority, or a
+claim they are becoming nervous about. The operator turns that trigger into
+the specific action or trust decision the evidence must inform.
+
+The procedure does not ask the product owner to design a proof, and it does not
+ask the operator to define the whole product. It identifies claims already
+being made, formulates the consequential decision that relies on them, and
+turns the important claims into propositions that evidence can support or
+defeat.
 
 A user story describes something somebody wants a product to do. An assurance
 proposition describes something people already believe, promise, or rely upon
@@ -44,14 +51,17 @@ At the end, the decision owner and operator should have:
 5. conditions and exclusions attached to individual claims; and
 6. an agreed list of claims this assurance engagement will investigate.
 
-Agreement means that the claims accurately represent the pending decision. It
-does not mean that the decision owner has declared them true.
+Agreement means that the decision statement captures what the sponsor may do
+and that the claims accurately represent what the action relies upon. It does
+not mean that the sponsor has declared the claims true.
 
 ## Roles
 
-**Decision owner:** the person authorized to act on the result. They explain
-the pending decision, the consequences of error, and the promises being relied
-upon. They confirm the final assurance case.
+**Sponsor and eventual decision owner:** the person authorized to act on the
+result. They explain why the work is happening now, what concerns them, what
+actions are available, and the consequences of error. They are not expected to
+arrive with a formal decision statement. They confirm the one developed with
+the operator and confirm the final assurance case.
 
 **Operator:** the person running this procedure. They extract claims, expose
 assumptions, decompose broad language, propose falsification strategies, and
@@ -67,11 +77,26 @@ silently weaken a claim after an uncomfortable challenge appears.
 
 The minimum inputs are:
 
-- a named decision owner;
-- a pending decision;
+- an accountable sponsor who can act on the result;
+- a concrete trigger or consequential concern;
 - the product, release, migration, or operating change under consideration;
 - the material used to describe or justify it; and
 - access to at least one person who understands how it is used or operated.
+
+A trigger explains why the assurance work is being considered. A decision
+states what somebody may do differently after seeing the evidence. The trigger
+is an input; formulating the decision is part of this procedure.
+
+| Client arrives with this trigger | Operator helps formulate this assurance decision |
+| --- | --- |
+| “Agents built most of this and I no longer know what I can trust.” | Which capabilities may remain under agent delivery authority, and which require a human or executable gate before release? |
+| “We are about to put our first enterprise customer on the service.” | Can we place that customer on this release under the promised isolation, recovery, and data-handling conditions? |
+| “The tests pass, but retries have caused incidents before.” | Can recurring billing move to this service without duplicate charges or false success under the named retry and provider-failure paths? |
+| “We are about to implement Moria with many parallel agents.” | Is Moria’s product and design contract coherent enough to authorize parallel implementation, and which propositions must become executable gates? |
+| “We want to describe this repository as a reusable platform.” | Does the current evidence justify that public claim, or only a narrower claim about its reference application? |
+
+The right-hand column is not boilerplate to accept immediately. It illustrates
+the more precise action the operator must develop and confirm with the sponsor.
 
 Useful source material includes:
 
@@ -88,15 +113,25 @@ the sources is useful evidence.
 
 ## Prepare the working record
 
-Before the discussion, create these three empty tables.
+Before the discussion, create these four empty tables.
 
-### Decision
+### Engagement trigger
 
 | Field | Record |
 | --- | --- |
-| Decision owner | Who can act on the result? |
-| Pending decision | What may be launched, adopted, trusted, migrated, or expanded? |
-| Decision date or trigger | What event makes the answer necessary? |
+| Accountable sponsor | Who can act on the result? |
+| Why now? | What launch, incident, claim, authority change, investment, or uncertainty triggered the work? |
+| Consequential concern | What might be wrongly trusted? |
+| Product or change | What is creating the concern? |
+| Exposure | Which users, money, data, operations, reputation, safety, or authority could be affected? |
+
+### Decision to formulate
+
+| Field | Record |
+| --- | --- |
+| Action the evidence could change | What might be launched, adopted, trusted, migrated, narrowed, delayed, or given more authority? |
+| Decision owner | Who has authority over that action? |
+| Decision date or trigger | When will the action be taken or reconsidered? |
 | Consequence of a false positive | What happens if assurance says yes when it should not? |
 | Consequence of a false negative | What happens if assurance says no when the product was adequate? |
 
@@ -117,17 +152,23 @@ vague, but its vagueness and source still matter.
 
 ## Human procedure
 
-### 1. Fix the decision
+### 1. Turn the trigger into a decision
 
 Open with:
 
 > We are not going to define every feature or review the whole repository in
-> this session. We are identifying the claims that must be trustworthy for the
-> decision you are about to make.
+> this session. Let us start with why you called us. Then we will identify what
+> you might do differently depending on the evidence and which claims that
+> action would rely upon.
 
 Ask:
 
-- What will you do differently because of this assurance work?
+- Why is this work being considered now?
+- What are you worried may not be true?
+- What is currently blocked, approaching, or becoming more consequential?
+- If the evidence increases your confidence, what action becomes possible?
+- If it weakens your confidence, what would you stop, narrow, delay, or put
+  behind a stronger gate?
 - What exactly might be released, adopted, sold, migrated, or given more
   authority?
 - Who can approve that action?
@@ -141,8 +182,11 @@ Write one sentence:
 > for [named use or environment], knowing that an incorrect approval could
 > [consequence].**
 
-Reject answers such as "understand the codebase," "improve quality," or "make
-it safe." Those are activities or aspirations, not decisions.
+If the sponsor begins with "understand the codebase," "improve quality," or
+"make it safe," do not simply reject the answer. Ask what new action that
+understanding or confidence would enable, and what action a bad result would
+prevent. The consultant is responsible for helping convert the concern into a
+decision.
 
 If there are several independent decisions, record them separately. Do not
 hide a programme of work inside one sentence.
@@ -168,8 +212,9 @@ Enter the words actually used in the candidate-claims table, with their source
 and consequence. An implication belongs in the table too, but label it as the
 operator's interpretation until the decision owner confirms it.
 
-The purpose is not to list every behavior. Prefer claims that somebody is
-about to rely upon and whose failure would change the pending decision.
+The purpose is not to list every behavior. Prefer claims that somebody would
+rely upon when taking the newly formulated action and whose failure would
+change it.
 
 ### 3. Choose the top-level proposition
 
@@ -317,7 +362,7 @@ still several propositions.
 
 Select a proposition when:
 
-- the pending decision relies on it;
+- the newly formulated decision relies on it;
 - its failure has a material consequence;
 - there is meaningful uncertainty or a plausible cheaper implementation; and
 - the engagement can obtain evidence that changes confidence in it.
@@ -371,10 +416,24 @@ explicitly. Never expand the case silently.
 
 The following is abbreviated, but it shows who does the reasoning.
 
-**Operator:** What decision will this work change?
+**Operator:** Why are you asking for assurance now?
 
-**Decision owner:** Whether Moria is ready to release as a reusable engine and
-serve as the base for later game development.
+**Decision owner:** We are preparing to implement Moria with many parallel
+agents. A contradiction could produce a great deal of plausible but
+incompatible code before we see it.
+
+**Operator:** If the contract is coherent, what will you authorize? If it is
+not, what changes?
+
+**Decision owner:** We will release the decomposed implementation work to the
+agents only when the design supports one product and the important claims have
+gates. Otherwise we will stop and repair the contract first.
+
+The operator records:
+
+> The decision owner must decide whether to authorize parallel implementation
+> of Moria under the reviewed product contract, knowing that an incorrect
+> approval could multiply contradictory implementations across the codebase.
 
 **Operator:** What are you asking somebody adopting it to believe?
 
@@ -426,8 +485,11 @@ propositions are true. The remaining phases investigate that.
 > user stories, invent desired features, or infer product intent from the test
 > suite. From the supplied material, extract exact statements and implications
 > that people currently rely upon. Preserve each statement's source and label
-> your own interpretations. Identify the named pending decision and the
-> consequence of incorrect approval. Propose one factual top-level proposition
+> your own interpretations. Begin with the engagement trigger and consequential
+> concern. Propose the specific action the evidence could enable, narrow,
+> delay, or prevent; name who has authority over it; and state the consequence
+> of incorrect approval. Do not assume the client has already formulated this
+> decision. Propose one factual top-level proposition
 > that explains what must be credible for that decision. Decompose it into
 > present-tense propositions whose failure would materially weaken it. For each
 > proposition, supply: its parent claim, source, consequence, evidence
