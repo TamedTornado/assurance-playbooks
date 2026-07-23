@@ -42,7 +42,15 @@ export const exampleSchema = commonSchema.extend({
 
 export const templateSchema = commonSchema.extend({
   kind: z.literal("template"),
-  for: z.enum(["scope", "evidence", "finding", "intervention", "sign-off"]),
+  for: z.enum([
+    "scope",
+    "evidence",
+    "finding",
+    "intervention",
+    "acceptance",
+    "blocked-finding",
+    "sign-off",
+  ]),
 });
 
 export const documentDataSchema = z.discriminatedUnion("kind", [

@@ -28,6 +28,9 @@ that the entire product is safe.
 
 - **A claim map.** The important things the system is expected to do, who
   depends on them, and what evidence could show they are false.
+- **A bounded acceptance record.** The scope, reject conditions, evidence
+  requirements, dependencies, and completion rule agreed before results are
+  known.
 - **A reproducible baseline.** The target revision, environment, procedures,
   and artifacts needed to observe the important behavior again.
 - **An evidence ledger.** Support, contradiction, uncertainty, and provenance
@@ -61,8 +64,8 @@ that the entire product is safe.
 
 The decision owner identifies the consequences that matter, supplies access to
 the real system and knowledgeable people, resolves scope decisions, and
-accepts the residual risk. The method cannot infer business stakes from source
-code.
+accepts the residual risk. They also agree the acceptance and escalation rules
+before execution. The method cannot infer business stakes from source code.
 
 The technical operator designs and runs the experiments, preserves evidence,
 implements the selected gate, and distinguishes observation from inference.

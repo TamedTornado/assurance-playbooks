@@ -14,6 +14,12 @@ protocol](../shared/protocol.md).
 Do not begin by comparing model scores. The object under review is the delivery
 system’s ability to distinguish acceptable work from plausible imitation.
 
+Before running representative tasks, complete the shared [acceptance
+criteria](../shared/acceptance-criteria.md). Agree the target delivery system,
+claims, task samples, required provenance, reject conditions, independently
+governed gate demonstration, completion rule, and escalation rule before the
+producer can optimize against them.
+
 ## Phase 1: Define the delivery contract
 
 **Purpose:** Make completion independently rejectable.
@@ -26,7 +32,7 @@ require human escalation.
 Ask whether a reviewer could reject a superficially plausible result without
 reading the producer’s explanation.
 
-**Artifact:** Task-contract matrix.
+**Artifacts:** Task-contract matrix and agreed acceptance criteria.
 
 **Exit condition:** Material requirements have observable evidence and unknowns
 have an explicit escalation path.
@@ -70,6 +76,11 @@ target revision, and acceptance evidence.
 Interrupt representative work before implementation, after partial changes,
 during verification, and during integration. Exercise retry, repair,
 reassignment, and human takeover.
+
+If access, representative work, or an external platform prevents a required
+observation after the agreed escalation attempts, create a [blocked-finding
+record](../shared/blocked-finding.md). Do not narrow the task or replace the
+platform without recording that the original claim remains unproven.
 
 **Artifacts:** Delivery trace, parallel-work map, and recovery-state map.
 
@@ -165,6 +176,8 @@ of autonomy.
 Record the tasks, repositories, environments, models, tools, and failure modes
 covered by the demonstrated gate. List every blocked and unproven boundary.
 State which additional evidence would justify greater authority.
+Apply the agreed completion rule to every claim. Completion of the record does
+not convert failed or blocked delivery claims into earned authority.
 
 **Artifact:** [Human assurance sign-off](../shared/sign-off.md).
 

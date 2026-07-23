@@ -59,10 +59,15 @@ and human sign-off for both methods.
 
 ## Required records
 
+- [Acceptance criteria](../shared/acceptance-criteria.md)
 - [Evidence record](../shared/evidence-record.md)
 - [Finding record](../shared/finding.md)
+- [Blocked-finding record](../shared/blocked-finding.md)
 - [Intervention record](../shared/intervention.md)
 - [Assurance sign-off](../shared/sign-off.md)
+
+The [worked acceptance outcomes](../shared/acceptance-examples.md) show how to
+distinguish completion, proxy theatre, blockage, and scope expansion.
 
 ## Worked example
 

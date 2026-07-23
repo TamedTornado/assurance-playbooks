@@ -19,6 +19,13 @@ Every control receives one status: **pass**, **fail**, **blocked**,
 engineer can inspect. Not-applicable and blocked require a rationale, owner,
 and consequence. Silence is never a passing result.
 
+Before execution, write the shared [acceptance
+criteria](acceptance-criteria.md): the decision and scope, consequential
+claims, accept and reject conditions, evidence provenance, independence rules,
+gate demonstration, completion rule, and change control. A material dependency
+may become blocked only through an evidenced [blocked-finding
+record](blocked-finding.md) after the agreed escalation attempts.
+
 Evidence records identify their source, target revision, environment,
 collection command or procedure, timestamp, collector, and content hash.
 Findings distinguish observed fact from inference and record severity,

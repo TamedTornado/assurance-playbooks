@@ -30,6 +30,9 @@ parallel-agent harness.
 
 - **A delivery contract map.** The path from task intent through context,
   authority, implementation, verification, integration, and human acceptance.
+- **A bounded acceptance record.** The tasks, reject conditions, evidence
+  provenance, dependencies, and completion rule agreed before the pipeline is
+  challenged.
 - **A reward-surface map.** The signals an agent can optimize and the shortcuts
   those signals permit.
 - **A set of preserved adversarial fixtures.** Plausible bad results that the
@@ -63,7 +66,8 @@ parallel-agent harness.
 The engineering owner provides representative work, repositories, CI and
 review context, known failures, and the authority model the team wants to
 reach. They decide which failure is consequential enough to become the
-demonstrated gate.
+demonstrated gate and agree the acceptance and escalation rules before
+execution.
 
 The operator observes rather than trusting agent summaries, designs adversarial
 attempts, preserves provenance, and implements the selected intervention. The

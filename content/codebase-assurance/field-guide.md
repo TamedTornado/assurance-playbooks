@@ -15,6 +15,13 @@ Create an engagement record using the shared [assurance
 protocol](../shared/protocol.md). Every claim and control will eventually be
 marked pass, fail, blocked, not applicable, or unproven.
 
+Before collecting evidence, complete the shared [acceptance
+criteria](../shared/acceptance-criteria.md) with the decision owner. Pin the
+decision, scope, target, participants, required evidence, accept and reject
+conditions, gate demonstration, completion rule, and escalation rule. This is
+what prevents the meaning of completion from changing after the results are
+known.
+
 ## Phase 1: Frame the stakes
 
 **Purpose:** Decide which system claims are consequential enough to test.
@@ -27,7 +34,7 @@ For each claim, record the owner, affected users or operations, plausible
 failure, boundary, assumptions, and evidence that could falsify it. Rank claims
 by consequence, reachability, uncertainty, and evidence cost.
 
-**Artifact:** Claim map and agreed scope.
+**Artifacts:** Claim map and agreed acceptance criteria.
 
 **Exit condition:** The decision owner agrees that the selected claims express
 the important consequences and that exclusions are explicit.
@@ -50,7 +57,9 @@ selected claim.
 
 Preserve failures. Do not repair the environment until the original state has
 been recorded. Distinguish a product failure from missing access or an
-unavailable dependency.
+unavailable dependency. When the pre-agreed escalation attempts are exhausted,
+use a [blocked-finding record](../shared/blocked-finding.md); do not substitute
+a mock and call the original claim passed.
 
 **Artifact:** Reproduction receipt and baseline evidence records.
 
@@ -165,6 +174,9 @@ gate](controls/proven-gate.md).
 Summarize supported, contradicted, blocked, excluded, and unproven claims.
 Identify the installed gate, its owner, and what it does not cover. State the
 next most valuable interventions without pretending they were completed.
+Apply the pre-agreed completion rule row by row. A completed engagement record
+may contain failed or blocked claims; those statuses cannot be averaged into a
+passing system verdict.
 
 **Artifact:** [Human assurance sign-off](../shared/sign-off.md).
 

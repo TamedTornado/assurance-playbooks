@@ -242,6 +242,15 @@ Both methods use the same public standards:
   from inference, severity, and confidence.
 - [Intervention record](content/shared/intervention.md) — how before and after
   evidence is kept comparable.
+- [Acceptance criteria](content/shared/acceptance-criteria.md) — how scope,
+  evidence, rejection, completion, and change control are agreed before
+  execution.
+- [Blocked finding](content/shared/blocked-finding.md) — how an unavailable
+  dependency remains visible without becoming either a fake pass or an
+  unlimited obligation.
+- [Worked acceptance outcomes](content/shared/acceptance-examples.md) — valid
+  completion, invalid proxy completion, legitimate blockage, and attempted
+  scope expansion.
 - [Human sign-off](content/shared/sign-off.md) — how completion and residual
   risk are accepted without claiming universal safety.
 

@@ -102,4 +102,28 @@ ${body}`;
     const root = await fixture({ "one.md": source, "two.md": source });
     await expect(loadCatalog(root)).rejects.toThrow("Duplicate document id");
   });
+
+  it.each(["acceptance", "blocked-finding"])(
+    "loads a %s template as a first-class shared record",
+    async (templateFor) => {
+      const root = await fixture({
+        "template.md": `---
+schemaVersion: 1
+kind: template
+id: example-${templateFor}
+title: Example ${templateFor} template
+version: 1.0.0
+status: stable
+summary: A sufficiently descriptive shared assurance template for testing.
+for: ${templateFor}
+---
+${body}`,
+      });
+      const catalog = await loadCatalog(root);
+      expect(catalog.documents[0]?.data).toMatchObject({
+        kind: "template",
+        for: templateFor,
+      });
+    },
+  );
 });
